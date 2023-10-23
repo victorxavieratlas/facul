@@ -168,3 +168,17 @@ def pesquisar():
         else:
             print("Nenhum filme encontrado com essa palavra-chave.")
             
+    elif escolha == 2:
+        titulo('Generos disponíveis:')
+        generos = listar_generos_numerico()
+        try:
+            escolha_genero = int(input("Digite o número correspondente ao gênero desejado: "))
+            genero_escolhido = generos[escolha_genero - 1]  # -1 porque a lista começa em 0, mas a exibição começa em 1
+        except (ValueError, IndexError):
+            print("Número inválido.")
+            return
+
+        titulo(f"Filmes de {genero_escolhido}")
+        for filme in filmes[genero_escolhido]:
+            print(f"- {filme['titulo']} ({filme['ano']})")
+            
