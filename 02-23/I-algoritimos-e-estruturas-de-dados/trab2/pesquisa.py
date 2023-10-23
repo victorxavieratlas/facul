@@ -182,3 +182,24 @@ def pesquisar():
         for filme in filmes[genero_escolhido]:
             print(f"- {filme['titulo']} ({filme['ano']})")
             
+    elif escolha == 3:
+        ano_escolhido = int(input("Digite o ano de lançamento: "))
+        encontrados = []
+        
+        for lista_filmes in filmes.values():
+            for filme in lista_filmes:
+                if filme['ano'] == ano_escolhido:
+                    encontrados.append(filme)
+                    
+        if encontrados:
+            titulo(f"Filmes lançados em {ano_escolhido}")
+            for filme in encontrados:
+                print(f"- {filme['titulo']} ({filme['ano']})")
+        else:
+            print(f"Nenhum filme encontrado lançado em {ano_escolhido}.")
+    
+    else:
+        print("Opção inválida.")
+
+    print("\n")
+
