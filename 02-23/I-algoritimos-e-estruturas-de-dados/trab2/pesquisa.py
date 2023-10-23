@@ -31,16 +31,7 @@ def extrair_filmes(texto):
     return filme_dict
 
 response = requests.get("https://minhaseriefavorita.com/os-100-melhores-filmes-da-netflix/")
+soup = BeautifulSoup(response.content, "html.parser")
+texto = soup.body.get_text().strip()[1651:4320]
+filmes = extrair_filmes(texto)
 
-# obtém o código HTML da página "requisitada"
-html = response.text
-
-# faz um "parse" (conversão/ajuste) da página HTML
-soup = BeautifulSoup(html, "html.parser")
-
-# obtém apenas o texto do código do "body" da página 
-texto = soup.body.get_text().strip()
-
-print(texto[1651:4320])
-#print(texto[:-8000])
-# print(texto)
