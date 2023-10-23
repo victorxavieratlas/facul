@@ -48,3 +48,9 @@ def listar_generos():
         print(f"- {genero}")
     print("\n")
 
+def listar_generos_numerico():
+    generos = list(filmes.keys())
+    for index, genero in enumerate(generos, start=1):
+        print(f"{index}. {genero}")
+    return generos
+
