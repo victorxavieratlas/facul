@@ -78,3 +78,19 @@ def listar_generos_alfabetica():
         print(f"- {genero}")
     print("\n")
 
+def listar_filmes_por_genero_alfabetica():
+    titulo('Lista de filmes por gênero em ordem alfabética')
+    
+    # Ordenando os gêneros alfabeticamente
+    generos_ordenados = sorted(filmes.keys())
+    
+    for genero in generos_ordenados:
+        print(genero)
+        
+        # Ordenando os filmes do gênero atual alfabeticamente
+        lista_filmes_ordenados = sorted(filmes[genero], key=lambda x: x['titulo'])
+        
+        for filme in lista_filmes_ordenados:
+            print(f"- {filme['titulo']} ({filme['ano']})")
+        print("\n")
+
