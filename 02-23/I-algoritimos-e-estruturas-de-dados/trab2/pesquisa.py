@@ -35,3 +35,10 @@ soup = BeautifulSoup(response.content, "html.parser")
 texto = soup.body.get_text().strip()[1651:4320]
 filmes = extrair_filmes(texto)
 
+def listar_filmes():
+    titulo('Lista de filmes')
+    todos_filmes = [filme['titulo'] for lista in filmes.values() for filme in lista]
+    for nome in todos_filmes:
+        print(f"- {nome}")
+    print("\n")
+
