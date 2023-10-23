@@ -115,3 +115,32 @@ def agrupar_contar_filmes_por_ano():
         print(f"{ano}: {anos_dict[ano]} filmes")
     print("\n")
 
+def listar_generos_filmes_unicos_ano():
+    titulo('Gêneros e filmes únicos por ano de lançamento')
+    
+    # Criando um dicionário para agrupar os filmes por ano
+    filmes_por_ano = {}
+    for genero, lista_filmes in filmes.items():
+        for filme in lista_filmes:
+            ano = filme['ano']
+            if ano not in filmes_por_ano:
+                filmes_por_ano[ano] = []
+            filmes_por_ano[ano].append({"titulo": filme['titulo'], "genero": genero})
+    
+    # Filtrando os anos que possuem apenas um filme
+    anos_com_filme_unico = {ano: info[0] for ano, info in filmes_por_ano.items() if len(info) == 1}
+    
+    # Exibindo os filmes únicos organizados por gênero
+    generos_agrupados = {}
+    for ano, filme in anos_com_filme_unico.items():
+        genero = filme["genero"]
+        if genero not in generos_agrupados:
+            generos_agrupados[genero] = []
+        generos_agrupados[genero].append(filme["titulo"] + f" ({ano})")
+    
+    for genero, lista_filmes in generos_agrupados.items():
+        print(genero)
+        for titulo_ano in lista_filmes:
+            print(f"- {titulo_ano}")
+        print("\n")
+
