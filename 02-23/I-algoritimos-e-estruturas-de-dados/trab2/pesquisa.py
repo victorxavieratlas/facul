@@ -54,3 +54,12 @@ def listar_generos_numerico():
         print(f"{index}. {genero}")
     return generos
 
+def listar_filmes_por_genero():
+    titulo('Lista de filmes por gênero')
+    # Printando o dicionário de forma organizada
+    for genero, lista_filmes in filmes.items():
+        print(genero)
+        for filme in lista_filmes:
+            print(f"- {filme['titulo']} ({filme['ano']})")
+        print("\n")
+
