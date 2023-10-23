@@ -94,3 +94,10 @@ def listar_filmes_por_genero_alfabetica():
             print(f"- {filme['titulo']} ({filme['ano']})")
         print("\n")
 
+def agrupar_contar_filmes_por_genero():
+    titulo('Número de filmes por gênero')
+    
+    for genero, lista_filmes in filmes.items():
+        print(f"{genero}: {len(lista_filmes)} filmes")
+    print("\n")
+    
