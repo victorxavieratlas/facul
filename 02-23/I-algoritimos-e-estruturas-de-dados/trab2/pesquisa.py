@@ -101,3 +101,17 @@ def agrupar_contar_filmes_por_genero():
         print(f"{genero}: {len(lista_filmes)} filmes")
     print("\n")
     
+def agrupar_contar_filmes_por_ano():
+    titulo('Número de filmes por ano')
+    
+    anos_dict = {}
+    for lista_filmes in filmes.values():
+        for filme in lista_filmes:
+            ano = filme['ano']
+            anos_dict[ano] = anos_dict.get(ano, 0) + 1
+
+    # Ordenando os anos e imprimindo o resultado
+    for ano in sorted(anos_dict.keys()):
+        print(f"{ano}: {anos_dict[ano]} filmes")
+    print("\n")
+
