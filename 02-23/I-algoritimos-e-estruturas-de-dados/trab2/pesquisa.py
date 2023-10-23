@@ -216,3 +216,16 @@ def listar_filme_por_ano_cre():
         print(f"- {filme['titulo']} ({filme['ano']})")
     print("\n")
 
+def listar_filme_por_ano_dec():
+    titulo('Lista de filmes por ordem decrescente de ano')
+    
+    # Criando uma lista única de todos os filmes
+    todos_filmes = [filme for lista in filmes.values() for filme in lista]
+    
+    # Ordenando os filmes pelo ano de lançamento em ordem decrescente
+    filmes_ordenados = sorted(todos_filmes, key=lambda x: x['ano'], reverse=True)
+    
+    for filme in filmes_ordenados:
+        print(f"- {filme['titulo']} ({filme['ano']})")
+    print("\n")
+
