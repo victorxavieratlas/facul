@@ -63,3 +63,11 @@ def listar_filmes_por_genero():
             print(f"- {filme['titulo']} ({filme['ano']})")
         print("\n")
 
+def listar_filmes_alfabetica():
+    titulo('Lista de filmes em ordem alfabética')
+    todos_filmes = [filme['titulo'] for lista in filmes.values() for filme in lista]
+    todos_filmes.sort()
+    for nome in todos_filmes:
+        print(f"- {nome}")
+    print("\n")
+
