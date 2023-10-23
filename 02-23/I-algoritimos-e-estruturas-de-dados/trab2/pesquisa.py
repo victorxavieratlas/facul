@@ -42,3 +42,9 @@ def listar_filmes():
         print(f"- {nome}")
     print("\n")
 
+def listar_generos():
+    titulo('Lista de gêneros')
+    for genero in filmes.keys():
+        print(f"- {genero}")
+    print("\n")
+
