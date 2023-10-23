@@ -144,3 +144,27 @@ def listar_generos_filmes_unicos_ano():
             print(f"- {titulo_ano}")
         print("\n")
 
+def pesquisar():
+    titulo("Pesquisa de filmes")
+    print("1. Pesquisar por palavras-chave no nome do filme")
+    print("2. Pesquisar por gênero")
+    print("3. Pesquisar por ano de lançamento")
+    
+    escolha = int(input("Escolha uma opção: "))
+    
+    if escolha == 1:
+        keyword = input("Titulo do filme: ").lower()
+        encontrados = []
+        
+        for lista_filmes in filmes.values():
+            for filme in lista_filmes:
+                if keyword in filme['titulo'].lower():
+                    encontrados.append(filme)
+        
+        if encontrados:
+            titulo("Filmes encontrados")
+            for filme in encontrados:
+                print(f"- {filme['titulo']} ({filme['ano']})")
+        else:
+            print("Nenhum filme encontrado com essa palavra-chave.")
+            
