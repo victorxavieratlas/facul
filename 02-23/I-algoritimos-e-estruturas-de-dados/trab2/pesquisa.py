@@ -203,3 +203,16 @@ def pesquisar():
 
     print("\n")
 
+def listar_filme_por_ano_cre():
+    titulo('Lista de filmes por ordem crescente de ano')
+    
+    # Criando uma lista única de todos os filmes
+    todos_filmes = [filme for lista in filmes.values() for filme in lista]
+    
+    # Ordenando os filmes pelo ano de lançamento em ordem crescente
+    filmes_ordenados = sorted(todos_filmes, key=lambda x: x['ano'])
+    
+    for filme in filmes_ordenados:
+        print(f"- {filme['titulo']} ({filme['ano']})")
+    print("\n")
+
