@@ -229,3 +229,46 @@ def listar_filme_por_ano_dec():
         print(f"- {filme['titulo']} ({filme['ano']})")
     print("\n")
 
+# ------------------------------------------------- Programa Principal
+while True:
+    titulo("Conjuntos: Manipulação dos melhores filmes da Netflix")
+    print("1.  Listar filmes")
+    print("2.  Listar gêneros")
+    print("3.  Listar filmes separados por gênero")
+    print("4.  Listar filmes em ordem alfabética")
+    print("5.  Listar gêneros em ordem alfabética")
+    print("6.  Listar filmes separados por gênero em ordem alfabética")
+    print("7.  Agrupar e contar número de filmes por gênero")
+    print("8.  Agrupar e contar número de filmes por ano")
+    print("9.  Listar quais gêneros e filmes possuem lançamento único no ano")
+    print("10. Pesquisar filmes por palavras-chave, ano ou gênero")
+    print("11. Listar filme por ano de lançamento crescente")
+    print("12. Listar filme por ano de lançamento decrescente")
+    print("13. Sair")
+    opcao = int(input("Opção: "))
+    if opcao == 1:
+        listar_filmes()
+    elif opcao == 2:
+        listar_generos()
+    elif opcao == 3:
+        listar_filmes_por_genero()
+    elif opcao == 4:
+        listar_filmes_alfabetica()
+    elif opcao == 5:
+        listar_generos_alfabetica()
+    elif opcao == 6:
+        listar_filmes_por_genero_alfabetica()
+    elif opcao == 7:
+        agrupar_contar_filmes_por_genero()
+    elif opcao == 8:
+        agrupar_contar_filmes_por_ano()
+    elif opcao == 9:
+        listar_generos_filmes_unicos_ano()
+    elif opcao == 10:
+        pesquisar()
+    elif opcao == 11:
+        listar_filme_por_ano_cre()
+    elif opcao == 12:
+        listar_filme_por_ano_dec()
+    else:
+        break
