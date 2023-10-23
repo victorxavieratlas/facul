@@ -71,3 +71,10 @@ def listar_filmes_alfabetica():
         print(f"- {nome}")
     print("\n")
 
+def listar_generos_alfabetica():
+    titulo('Lista de generos em ordem alfabética')
+    generos_ordenados = sorted(filmes.keys())
+    for genero in generos_ordenados:
+        print(f"- {genero}")
+    print("\n")
+
