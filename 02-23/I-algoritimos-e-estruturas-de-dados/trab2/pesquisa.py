@@ -7,26 +7,51 @@ def titulo(texto, sublinhado="-"):
     print(sublinhado*40)
 
 def extrair_filmes(texto):
+    # Lista de gêneros de filmes do texto.
     generos = [
         "Ação e Aventura", "Filmes de Animações", "Filmes de comédia",
         "Documentários", "Dramas", "Ficção Científica", "Filmes de Guerra",
         "Filmes Históricos", "Romances", "Terror e Suspense"
     ]
     
+    # Inicia um dicionário vazio para armazenar os filmes por gênero
     filme_dict = {}
+    
+    # Passa sobre cada gênero na lista de gêneros.
     for genero in generos:
+        # Encontra a posição de início da seção do gênero no texto
+        # A posição é a soma da posição onde o gênero começa mais o comprimento do nome do gênero
         inicio = texto.find(genero) + len(genero)
+        
+        # Encontra a posição de fim da seção do gênero no texto
+        # Se o gênero atual não for o último da lista, o fim é a posição onde começa o próximo gênero
+        # Caso contrário, o fim é None (final do texto)
         fim = texto.find(generos[generos.index(genero) + 1]) if generos.index(genero) + 1 < len(generos) else None
+        
+        # Extrai a seção de filmes do texto usando as posições de início e fim, e em seguida divide os filmes
+        # usando o caracter ")" como separador. O último filme (ou item vazio) é descartado com [0:-1]
         filmes = texto[inicio:fim].split(")")[0:-1] if fim else texto[inicio:].split(")")
         
+        # Inicia uma lista vazia para armazenar os filmes do gênero atual
         filme_dict[genero] = []
+        
+        # Passa sobre cada filme extraído da seção
         for filme in filmes:
+            # Divide o filme em título e ano usando a última ocorrência de '(' como separador
             split_data = filme.rsplit('(', 1)
+            
+            # Verifica se a divisão produziu ao menos dois elementos (título e ano)
             if len(split_data) > 1:
+                # Extrai o título do filme e remove espaços em branco
                 titulo = split_data[0].strip()
+                
+                # Extrai o ano do filme, remove o caractere ')' e converte para inteiro
                 ano = int(split_data[1].replace(')', '').strip())
+                
+                # Adiciona o filme (título e ano) ao dicionário sob o gênero atual
                 filme_dict[genero].append({"titulo": titulo, "ano": ano})
     
+    # Retorna o dicionário completo com filmes por gênero
     return filme_dict
 
 response = requests.get("https://minhaseriefavorita.com/os-100-melhores-filmes-da-netflix/")
@@ -55,7 +80,7 @@ def listar_generos_numerico():
 
 def listar_filmes_por_genero():
     titulo('Lista de filmes por gênero')
-    # Printando o dicionário de forma organizada
+    # Print do dicionário de forma organizada
     for genero, lista_filmes in filmes.items():
         print(genero)
         for filme in lista_filmes:
@@ -80,13 +105,13 @@ def listar_generos_alfabetica():
 def listar_filmes_por_genero_alfabetica():
     titulo('Lista de filmes por gênero em ordem alfabética')
     
-    # Ordenando os gêneros alfabeticamente
+    # Ordena os gêneros alfabeticamente
     generos_ordenados = sorted(filmes.keys())
     
     for genero in generos_ordenados:
         print(genero)
         
-        # Ordenando os filmes do gênero atual alfabeticamente
+        # Ordena os filmes do gênero atual alfabeticamente
         lista_filmes_ordenados = sorted(filmes[genero], key=lambda x: x['titulo'])
         
         for filme in lista_filmes_ordenados:
@@ -117,7 +142,7 @@ def agrupar_contar_filmes_por_ano():
 def listar_generos_filmes_unicos_ano():
     titulo('Gêneros e filmes únicos por ano de lançamento')
     
-    # Criando um dicionário para agrupar os filmes por ano
+    # Cria um dicionário para agrupar os filmes por ano
     filmes_por_ano = {}
     for genero, lista_filmes in filmes.items():
         for filme in lista_filmes:
@@ -126,10 +151,10 @@ def listar_generos_filmes_unicos_ano():
                 filmes_por_ano[ano] = []
             filmes_por_ano[ano].append({"titulo": filme['titulo'], "genero": genero})
     
-    # Filtrando os anos que possuem apenas um filme
+    # Filtra os anos que possuem apenas um filme
     anos_com_filme_unico = {ano: info[0] for ano, info in filmes_por_ano.items() if len(info) == 1}
     
-    # Exibindo os filmes únicos organizados por gênero
+    # Exibe os filmes únicos organizados por gênero
     generos_agrupados = {}
     for ano, filme in anos_com_filme_unico.items():
         genero = filme["genero"]
