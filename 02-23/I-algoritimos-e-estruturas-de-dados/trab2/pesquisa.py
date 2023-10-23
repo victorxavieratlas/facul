@@ -2,9 +2,11 @@ from bs4 import BeautifulSoup
 
 import requests
 
-# requests web page
-# response = requests.get("https://www.google.com/search?q=chas+para+emagrecer")
-# response = requests.get("https://ge.globo.com/futebol/brasileirao-serie-a/")
+def titulo(texto, sublinhado="-"):
+    print()
+    print(texto)
+    print(sublinhado*40)
+
 response = requests.get("https://minhaseriefavorita.com/os-100-melhores-filmes-da-netflix/")
 
 # obtém o código HTML da página "requisitada"
