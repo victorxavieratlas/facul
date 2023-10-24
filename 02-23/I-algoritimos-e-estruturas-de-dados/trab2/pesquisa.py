@@ -15,7 +15,7 @@ def extrair_filmes(texto):
     ]
     
     # Inicia um dicionário vazio para armazenar os filmes por gênero
-    filme_dict = {}
+    filme_dicionario = {}
     
     # Passa sobre cada gênero na lista de gêneros.
     for genero in generos:
@@ -33,7 +33,7 @@ def extrair_filmes(texto):
         filmes = texto[inicio:fim].split(")")[0:-1] if fim else texto[inicio:].split(")")
         
         # Inicia uma lista vazia para armazenar os filmes do gênero atual
-        filme_dict[genero] = []
+        filme_dicionario[genero] = []
         
         # Passa sobre cada filme extraído da seção
         for filme in filmes:
@@ -49,10 +49,10 @@ def extrair_filmes(texto):
                 ano = int(split_data[1].replace(')', '').strip())
                 
                 # Adiciona o filme (título e ano) ao dicionário sob o gênero atual
-                filme_dict[genero].append({"titulo": titulo, "ano": ano})
+                filme_dicionario[genero].append({"titulo": titulo, "ano": ano})
     
     # Retorna o dicionário completo com filmes por gênero
-    return filme_dict
+    return filme_dicionario
 
 response = requests.get("https://minhaseriefavorita.com/os-100-melhores-filmes-da-netflix/")
 soup = BeautifulSoup(response.content, "html.parser")
