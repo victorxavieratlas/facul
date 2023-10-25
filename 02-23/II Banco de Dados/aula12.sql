@@ -15,3 +15,12 @@ CREATE TABLE forum (
     data_criacao DATE
 )ENGINE=InnoDB;
 
+CREATE TABLE postagem (
+    usuario_id INT PRIMARY KEY,
+    forum_id INT PRIMARY KEY,
+    mensagem TEXT NOT NULL,
+    data_postagem DATE,
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+    FOREIGN KEY (forum_id) REFERENCES forum(id)
+)ENGINE=InnoDB;
+
