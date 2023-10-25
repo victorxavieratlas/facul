@@ -1,3 +1,11 @@
 DROP SCHEMA IF EXISTS aula12;
 CREATE SCHEMA aula12;
 USE aula12;
+
+CREATE TABLE usuario (
+    id INT PRIMARY KEY,
+    nome VARCHAR(45) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    fone VARCHAR(20)
+)ENGINE=InnoDB;
+
