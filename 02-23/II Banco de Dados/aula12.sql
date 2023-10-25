@@ -9,3 +9,9 @@ CREATE TABLE usuario (
     fone VARCHAR(20)
 )ENGINE=InnoDB;
 
+CREATE TABLE forum (
+    id INT PRIMARY KEY,
+    titulo VARCHAR(45) NOT NULL,
+    data_criacao DATE
+)ENGINE=InnoDB;
+
