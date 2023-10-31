@@ -58,3 +58,27 @@ def compara_paises():
     print("-"*70)
     print(f"\nBillionários do(a) {pais2}: {conta2}")
 
+def agrupa_atividade():
+    titulo("Agrupar por Atividade")
+
+    atividades = []
+    numeros = []
+
+    for rico in ricos:
+        # Agrupar vai contando as atividades e contando o número se tiver
+        if rico['industry'] in atividades:
+            indice = atividades.index(rico['industry'])
+            numeros[indice] += 1
+        else:
+            atividades.append(rico['industry'])
+            numeros.append(1)
+
+    # ordena as lista o zip la de dentro junta as variáveis colocando o número na frete
+    # depois o sorted ordena e o zip com * separa novamente as variáveis
+    numeros2, atividades2 = zip(*sorted(zip(numeros, atividades), reverse=True))
+
+    print("Atividade....................: Bilionários:")
+
+    for ativ, num in zip(atividades2, numeros2):
+        print(f"{ativ:30} {num:8d}")
+
