@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+import csv
+
+ricos = []
 
 def carrega_dados():
     with open('forbes_2640_billionaires.csv', mode='r') as csv_file:
@@ -116,3 +120,23 @@ def grafico_atividades():
     plt.show()
 
 
+# --------------------- programa principal
+carrega_dados()
+while True:
+    titulo("Forbes: Dados de Billionários 2023")
+    print("1. Top 20 Billionários")
+    print("2. Comparativo entre 2 países")
+    print("3. Agrupar por Atividade")
+    print("4. Gráfico Comparativo de Atividade")
+    print("5. Finalizar")
+    opcao = int(input("Opção: "))
+    if opcao == 1:
+        top_20()
+    elif opcao == 2:
+        compara_paises()
+    elif opcao == 3:
+        agrupa_atividade()
+    elif opcao == 4:
+        grafico_atividades()
+    else:
+        break
