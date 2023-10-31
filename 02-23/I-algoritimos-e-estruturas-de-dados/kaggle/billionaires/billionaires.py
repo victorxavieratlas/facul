@@ -5,3 +5,8 @@ def carrega_dados():
         for linha in csv_reader:
             ricos.append(linha) # lista de dicioários
 
+def titulo(texto, traco="="):
+    print()
+    print(texto)
+    print(traco*40)
+
