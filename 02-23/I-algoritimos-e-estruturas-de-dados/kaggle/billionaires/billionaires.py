@@ -10,3 +10,15 @@ def titulo(texto, traco="="):
     print(texto)
     print(traco*40)
 
+def top_20():
+    titulo("Lista dos 20 Maiores Billionários")
+
+    print("Nº Nome.......................... País................ Atividade............ Fortuna")
+
+    contador = 0
+    for rico in ricos:
+        contador += 1
+        print(f"{contador:2d}. {rico['name'][0:30]:30} {rico['country']:20} {rico['industry']:21} {rico['net_worth']:>5}")
+        if contador == 20:
+            break
+
