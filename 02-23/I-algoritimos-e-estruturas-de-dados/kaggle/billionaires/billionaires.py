@@ -82,3 +82,37 @@ def agrupa_atividade():
     for ativ, num in zip(atividades2, numeros2):
         print(f"{ativ:30} {num:8d}")
 
+def grafico_atividades():
+    titulo("Gráfico por Atividade - Top 8")
+
+    atividades = []
+    numeros = []
+
+    for rico in ricos:
+        # Agrupar vai contando as atividades e contando o número se tiver
+        if rico['industry'] in atividades:
+            indice = atividades.index(rico['industry'])
+            numeros[indice] += 1
+        else:
+            atividades.append(rico['industry'])
+            numeros.append(1)
+
+    # ordena a lista - zip interno junta as variáveis colocando o número na frete
+    # depois o sorted ordena e o zip externo com * separa novamente as variáveis
+    numeros2, atividades2 = zip(*sorted(zip(numeros, atividades), reverse=True))
+
+    fig, ax = plt.subplots()
+
+    bar_colors = ['tab:red', 'tab:blue', 'tab:green', 'tab:orange', 'tab:cyan', 'tab:olive', 'tab:purple', 'tab:brown']
+
+    ax.bar(atividades2[0:8], numeros2[0:8], color=bar_colors)
+
+    ax.set_ylabel('Nº de Bilionários')
+    ax.set_title('Gráfico: Top 8 Atividades dos Bilionários')
+
+    plt.xticks(rotation=75)
+    plt.tight_layout()
+
+    plt.show()
+
+
