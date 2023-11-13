@@ -70,3 +70,30 @@ def  acidentes_bairro():
     #     print(f"Bairro:....................... Acidentes:")
     #     print(f"{bai:30} {cont2}")
 
+def grafico_bairro():
+    titulo("Gráfico por Bairro/Ano")
+
+def grafico_mf():
+    titulo("Gráfico por Mortos/Feridos")
+
+
+# --------------------- programa principal
+carrega_dados()
+while True:
+    titulo("Acidentes Automotivos: New York", "=")
+    print("1. Visão Geral")
+    print("2. Acidentes por Bairro")
+    print("3. Gráfico por Bairro/Ano")
+    print("4. Gráfico por Mortos/Feridos")
+    print("5. Finalizar")
+    opcao = int(input("Opção: "))
+    if opcao == 1:
+        visao_geral()
+    elif opcao == 2:
+        acidentes_bairro()
+    elif opcao == 3:
+        grafico_bairro()
+    elif opcao == 4:
+        grafico_mf()
+    else:
+        break
