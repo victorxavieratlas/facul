@@ -170,7 +170,9 @@ while True:
     print("2. Comparativo entre 2 países")
     print("3. Agrupar por Atividade")
     print("4. Gráfico Comparativo de Atividade")
-    print("5. Finalizar")
+    print("5. Gráfico Comparativo de Idades")
+    print("6. Gráfico de Violino por Idades")
+    print("7. Finalizar")
     opcao = int(input("Opção: "))
     if opcao == 1:
         top_20()
@@ -180,5 +182,9 @@ while True:
         agrupa_atividade()
     elif opcao == 4:
         grafico_atividades()
+    elif opcao == 5:
+        grafico_idades()
+    elif opcao == 6:
+        grafico_violinos()
     else:
         break
