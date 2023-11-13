@@ -147,6 +147,20 @@ def grafico_idades():
 
     plt.show()
 
+def grafico_violinos():
+    titulo("Gráfico de Violino por Idades")
+
+    idades = []
+
+    for rico in ricos:
+        #se o campo idade tiver conteúdo
+        if rico["age"]:
+            idade.append(float(rico["age"]))
+
+    fig, ax = plt.subplots()
+    ax.violinplot(idades)
+
+    plt.show()
 
 # --------------------- programa principal
 carrega_dados()
