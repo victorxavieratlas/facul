@@ -40,3 +40,33 @@ def visao_geral():
     print(f"Nº Total de Feridos: {total_feridos:,.0f}".replace("_", "."))
     print(f"Nº Total de Mortos: {total_mortos:,.0f}".replace("_", "."))
 
+def  acidentes_bairro():
+    titulo("Acidentes por Bairro")
+
+    bairros = []
+    numeros = []
+
+    for acidente in acidentes:
+        if acidente["BOROUGH"] in bairros:              
+            indice = bairros.index(acidente["BOROUGH"])
+            numeros[indice] += 1
+        else:
+            bairros.append(acidente["BOROUGH"])
+            numeros.append(1)
+
+    numeros2, bairros2 = zip(*sorted(zip(numeros, bairros), reverse=True))
+    
+    print(f"Bairros:............. Acidentes:")
+    
+    for bai, num in zip(bairros2, numeros2):
+        if bai == "":
+            bai = "Sem Bairro"
+        print(f"{bai:20} {num:>11d}")
+
+    # for bairro in bairros:
+    #     print(f"{bairro}")
+        
+    # for bai, cont2 in (bairros, cont):
+    #     print(f"Bairro:....................... Acidentes:")
+    #     print(f"{bai:30} {cont2}")
+
