@@ -119,6 +119,34 @@ def grafico_atividades():
 
     plt.show()
 
+def grafico_idades():
+    titulo("Gráfico Comparativo por Idades")
+
+    labels = [" Até 40", "Entre 41 e 50", "Entre 61 e 70", "Acima de 70"]
+    faixas = [0, 0, 0, 0, 0]
+
+    for rico in ricos:
+        #se o campo idade tiver conteúdo
+        if rico["age"]:
+            idade = float(rico["age"])
+            if idade <= 40:
+                faixas[0] += 1
+            elif idade <= 50:
+                faixas[1] += 1
+            elif idade <= 60:
+                faixas[2] += 1
+            elif idade <= 70:
+                faixas[3] += 1
+            else:
+                faixas[4] += 1
+            
+    explode = (0, 0, 0, 0.1, 0)
+
+    fig, ax = plt.subplots()
+    ax.pie(faixas, labels=labels, autopct="%.1f%%", explode=explode, shadow=True)
+
+    plt.show()
+
 
 # --------------------- programa principal
 carrega_dados()
