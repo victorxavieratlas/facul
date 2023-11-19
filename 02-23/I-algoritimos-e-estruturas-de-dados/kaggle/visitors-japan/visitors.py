@@ -59,7 +59,43 @@ def compara_2():
 
 def compara_3():
 # de 2017 até 2023 compara entre 3 países com gráfico de linhas
-    pass
+    titulo("Gráfico Comparando Visitantes Estrangeiros de 3 Países")
+
+    pais1 = input("1º País: ").upper()
+    pais2 = input("2º País: ").upper()
+    pais3 = input("3º País: ").upper()
+
+    anos = ['2017', '2018', '2019', '2020', '2021', '2022', '2023']
+    num1 = [0,       0,      0,      0,      0,      0,      0]
+    num2 = [0,       0,      0,      0,      0,      0,      0]
+    num3 = [0,       0,      0,      0,      0,      0,      0]
+
+    for linha in visitantes:
+        if linha["Country"].upper() == pais1:
+            indice = anos.index(linha['Year'])
+            num1[indice] += int(linha['Visitor'])
+        elif linha["Country"].upper() == pais2:
+            indice = anos.index(linha['Year'])
+            num2[indice] += int(linha['Visitor'])
+        elif linha["Country"].upper() == pais3:
+            indice = anos.index(linha['Year'])
+            num3[indice] += int(linha['Visitor'])
+
+    # Criar figura e eixos
+    fig, ax = plt.subplots()
+
+    # Plotar os dados
+    ax.plot(anos, num1, label=pais1)
+    ax.plot(anos, num2, label=pais2)
+    ax.plot(anos, num3, label=pais3)
+
+    # Mostrar os rótulos dos eixos e a legenda do gráfico
+    ax.set_xlabel('Ano')
+    ax.set_ylabel('Nº de Visitantes')
+    ax.legend()
+
+    # Exibir o gráfico pronto
+    plt.show()
 
 def compara_4():
 # total de visitantes compara entre 4 países com gráfico de pizza
