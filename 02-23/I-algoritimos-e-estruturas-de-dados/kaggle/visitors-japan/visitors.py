@@ -75,7 +75,6 @@ def compara_2():
     # plot data in grouped manner of bar type 
     plt.bar(x-0.2, num1, width, color='red') 
     plt.bar(x+0.2, num2, width, color='blue') 
-    plt.bar(x+0.2, y3, width, color='green') 
     plt.xticks(x, anos) 
     plt.xlabel("Anos") 
     plt.ylabel("Nº: Visitantes") 
