@@ -15,13 +15,38 @@ def titulo(texto, traco="="):
     print(texto)
     print(traco*40)
 
-# número total de visitantes
-def top_20():
-# Nº   País  Nº Visitantes
-    pass
 
-# grouped bars
+def top_20():
+# número total de visitantes
+   titulo("Top 20: Países com maior número de Visitantes")
+
+    paises = []
+    numeros = []
+
+    for linha in visitantes:
+        if linha['Country'] in paises:
+            indice = paises.index(linha['Country'])
+            numeros[indice] += int(linha['Visitor'])
+        else:
+            paises.append(linha['Country'])
+            numeros.append(int(linha['Visitor']))
+
+    # ordena as listas
+    numeros2, paises2 = zip(*sorted(zip(numeros, paises), reverse=True))
+
+    print("Nº País Estrangeiro........: Nº Visitantes")
+    contador = 0
+
+    for pais, num in zip(paises2, numeros2):
+        contador += 1
+        # uso do separador de milhares (_), substituindo-o por .
+        print(f"{contador:2d} {pais:25} {num:_.0f}".replace("_", "."))
+        if contador == 20:
+            break
+
+
 def compara_2():
+# grouped bars
     titulo("Gráfico Comparando Visitantes Estrangeiros de 2 Países")
 
     pais1 = input("1º País: ").upper()
