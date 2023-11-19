@@ -99,7 +99,33 @@ def compara_3():
 
 def compara_4():
 # total de visitantes compara entre 4 países com gráfico de pizza
-    pass
+    titulo("Gráfico Comparando Visitantes Estrangeiros de 4 Países")
+
+    pais1 = input("1º País: ").upper()
+    pais2 = input("2º País: ").upper()
+    pais3 = input("3º País: ").upper()
+    pais4 = input("4º País: ").upper()
+
+    # poderia ser total1 = 0, total2 = 0...
+    totais = [0, 0, 0, 0]
+
+    for linha in visitantes:
+        if linha["Country"].upper() == pais1:
+            totais[0] += int(linha['Visitor'])
+        elif linha["Country"].upper() == pais2:
+            totais[1] += int(linha['Visitor'])
+        elif linha["Country"].upper() == pais3:
+            totais[2] += int(linha['Visitor'])
+        elif linha["Country"].upper() == pais4:
+            totais[3] += int(linha['Visitor'])
+        
+    # converte as strings em list
+    paises = f"{pais1}_{pais2}_{pais3}_{pais4}".split("_")
+
+    fig, ax = plt.subplots()
+    ax.pie(totais, labels=paises, autopct="%.1f%%")
+
+    plt.show()
 
 # --------------------- programa principal
 carrega_dados()
