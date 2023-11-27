@@ -105,3 +105,21 @@ def compara_PL():
     plt.legend([anos[0], anos[1], anos[2], anos[3], anos[4], anos[5]]) 
     plt.show() 
 
+# --------------------- programa principal
+carrega_dados()
+
+while True:
+    titulo("Visitantes Estrangeiros no Japão")
+    print("1. Resumo das Transações")
+    print("2. Comparativo dos 4 Maiores Compradores")
+    print("3. Comparativo das Transferências da Premier League de 2012-2013 até 2018-2019")
+    print("4. Finalizar")
+    opcao = int(input("Opção: "))
+    if opcao == 1:
+        resumo()
+    elif opcao == 2:
+        compara_4()
+    elif opcao == 3:
+        compara_PL()
+    else:
+        break
