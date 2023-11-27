@@ -1,4 +1,9 @@
+import matplotlib.pyplot as plt
+import numpy as np 
 import csv
+
+transaction = []
+
 def carrega_dados():
     with open('top250-00-19.csv', mode='r', encoding='utf-8') as csv_file:
         csv_reader = csv.DictReader(csv_file)
