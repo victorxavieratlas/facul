@@ -33,3 +33,33 @@ def resumo():
     print(f"Maior valor: {maior_tran}")
 
 
+def compara_4():
+# Comparativo dos Maiores Compradores (Gráfico de Pizza 
+#relacionando as 4 equipes que mais compraram jogadores)
+# – (coluna Team_to)
+
+    titulo("Comparativo dos 4 Maiores Compradores")
+
+    clubes = []
+    num = []
+
+    for linha in transaction:
+        if linha["Team_to"] in clubes:
+            indice = clubes.index(linha["Team_to"])
+            num[indice] += 1
+        else:
+            clubes.append(linha["Team_to"])
+            num.append(1)
+
+    
+    num2, clube2 = zip(*sorted(zip(num, clubes), reverse=True))
+
+    times = f"{clube2[0]}_{clube2[1]}_{clube2[2]}_{clube2[3]}".split("_")
+    valores = [int(num[0]), int(num[1]), int(num[2]), int(num[3]),]
+
+    print(times, valores)
+    fig, ax = plt.subplots()
+    ax.pie(valores, labels=times, autopct="%.1f%%")
+
+    plt.show()
+
