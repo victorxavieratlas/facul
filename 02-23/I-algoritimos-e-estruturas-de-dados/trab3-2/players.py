@@ -90,6 +90,52 @@ def states():
 
     plt.show()
 
+def seasons():
+    titulo("Comparativo de Drafts de Time Específico por Temporada")
+    print()
+
+    sigla = input("Sigla do Time: ").upper()
+
+    anos = ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22']
+    temps = [0, 0, 0, 0, 0, 0]
+
+    for linha in players:
+        if linha["team_abbreviation"].upper() == sigla:
+            if linha["season"] == anos[0]:
+                temps[0] += 1
+            elif linha["season"] == anos[1]:
+                temps[1] += 1
+            elif linha["season"] == anos[2]:
+                temps[2] += 1
+            elif linha["season"] == anos[3]:
+                temps[3] += 1
+            elif linha["season"] == anos[4]:
+                temps[4] += 1
+            elif linha["season"] == anos[5]:
+                temps[5] += 1
+
+    print()
+    print(f"Drafts do time {sigla}")
+    print()
+    print(anos[0], anos[1], anos[2], anos[3], anos[4], anos[5],)
+    print(f"{temps[0]:<7} {temps[1]:<7} {temps[2]:<7} {temps[3]:<7} {temps[4]:<7} {temps[5]:<7}")
+    x = np.arange(6)
+
+    width = 0.2
+    # plot data in grouped manner of bar type 
+    plt.bar(x-0.3, temps[0], width, color='red') 
+    plt.bar(x-0.2, temps[1], width, color='blue')
+    plt.bar(x-0.1, temps[2], width, color='green')
+    plt.bar(x+0.1, temps[3], width, color='yellow')
+    plt.bar(x+0.2, temps[4], width, color='orange')
+    plt.bar(x+0.3, temps[5], width, color='purple')
+
+    plt.xticks(x, anos) 
+    plt.xlabel("Anos") 
+    plt.ylabel("Quantidade de jogadores") 
+    plt.legend([anos[0], anos[1], anos[2], anos[3], anos[4], anos[5]]) 
+    plt.show() 
+
 
 # --------------------- programa principal
 carrega_dados()
