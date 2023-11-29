@@ -58,6 +58,38 @@ def resumo():
     print(f"Maior Jogador: {maior_jogador_nome:20} {maior_jogador_time:6} {maior_jogador_epoca:6} {round(maior_jogador, 2):6}cm")
 
 
+def states():
+    # Gráfico de Pizza
+    titulo("Comparativo das 4 Maiores Faculdades Formadoras")
+
+    faculdades = []
+    num = []
+
+    for player in players:
+        if player["college"] in faculdades:
+            indice = faculdades.index(player["college"])
+            num[indice] += 1
+        else:
+            faculdades.append(player["college"])
+            num.append(1)
+
+    
+    num2, faculdade2 = zip(*sorted(zip(num, faculdades), reverse=True))
+
+    melhores_faculdades = f"{faculdade2[0]}_{faculdade2[1]}_{faculdade2[2]}_{faculdade2[3]}".split("_")
+    valores = int(num2[0]), int(num2[1]), int(num2[2]), int(num2[3])
+
+    print("Faculdades...:  Drafts..:")
+    print(f"{melhores_faculdades[0]:15} {valores[0]}")
+    print(f"{melhores_faculdades[1]:15} {valores[1]}")
+    print(f"{melhores_faculdades[2]:15} {valores[2]}")
+    print(f"{melhores_faculdades[3]:15} {valores[3]}")
+
+    fig, ax = plt.subplots()
+    ax.pie(valores, labels=melhores_faculdades, autopct="%.1f%%")
+
+    plt.show()
+
 
 # --------------------- programa principal
 carrega_dados()
