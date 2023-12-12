@@ -62,3 +62,17 @@ CREATE USER 'rimidalg'@'localhost' IDENTIFIED BY 'cheesebebum';
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON av2a.uf, av2a.cidade, av2a.atleta TO 'rimidalg'@'localhost';
 
+
+DROP USER 'arnlod'@'localhost' IF EXISTS;
+CREATE USER 'arnlod'@'localhost' IDENTIFIED BY 'cheesesalada';
+
+GRANT SELECT (apelido) ON av2a.atleta TO 'arnlod'@'localhost';
+
+
+DROP USER 'oicede'@'localhost' IF EXISTS;
+CREATE USER 'oicede'@'localhost' IDENTIFIED BY 'ovoebacon';
+
+GRANT SELECT, INSERT ON av2a.atleta TO 'oicede'@'localhost';
+GRANT SELECT ON av2a.cidade TO 'oicede'@'localhost';
+
+REVOKE INSERT ON av2a.atleta TO 'oicede'@'localhost';
