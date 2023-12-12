@@ -57,3 +57,6 @@ INSERT INTO atleta(cidade_id, apelido, altura, peso) VALUES(1, "Açafrão Fagund
 INSERT INTO atleta(cidade_id, apelido, altura, peso) VALUES(2, "Mangelstron Duracel", 1.70, 79.00);
 INSERT INTO atleta(cidade_id, apelido, altura, peso) VALUES(1, "Rotsenaidil Silva", 1.75, 75.08);
 
+DROP USER 'rimidalg'@'localhost' IF EXISTS;
+CREATE USER 'rimidalg'@'localhost' IDENTIFIED BY 'cheesebebum';
+
