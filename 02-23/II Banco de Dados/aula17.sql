@@ -32,3 +32,10 @@ INSERT INTO uf(sigla) VALUES('SP');
 INSERT INTO uf(sigla) VALUES('RJ');
 INSERT INTO uf(sigla) VALUES('MG');
 
+INSERT INTO cidade(uf_id, nome, capital) VALUES(1, "Porto Alegre", TRUE);
+INSERT INTO cidade(uf_id, nome, capital) VALUES(1, "Pelotas", FALSE);
+INSERT INTO cidade(uf_id, nome, capital) VALUES(4, "Belo Horizonte", TRUE);
+INSERT INTO cidade(uf_id, nome, capital) VALUES(3, "Rio de Janeiro", TRUE);
+INSERT INTO cidade(uf_id, nome, capital) VALUES(2, "São Paulo", TRUE);
+INSERT INTO cidade(uf_id, nome, capital) VALUES(2, "Campinas", FALSE);
+
