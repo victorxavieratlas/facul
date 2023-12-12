@@ -17,3 +17,13 @@ CREATE TABLE cidade (
  FOREIGN KEY (uf_id) REFERENCES uf(id)
 );
 
+CREATE TABLE atleta (
+ id         INT AUTO_INCREMENT,
+ cidade_id  INT NOT NULL,
+ apelido    VARCHAR(45) NOT NULL,
+ altura     DECIMAL(10,2),
+ peso       DECIMAL(10,2),
+ PRIMARY KEY (id),
+ FOREIGN KEY (cidade_id) REFERENCES cidade (id)
+);
+
