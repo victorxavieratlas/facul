@@ -60,3 +60,5 @@ INSERT INTO atleta(cidade_id, apelido, altura, peso) VALUES(1, "Rotsenaidil Silv
 DROP USER 'rimidalg'@'localhost' IF EXISTS;
 CREATE USER 'rimidalg'@'localhost' IDENTIFIED BY 'cheesebebum';
 
+GRANT SELECT, INSERT, UPDATE, DELETE ON av2a.uf, av2a.cidade, av2a.atleta TO 'rimidalg'@'localhost';
+
