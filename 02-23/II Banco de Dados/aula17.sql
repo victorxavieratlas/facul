@@ -27,3 +27,8 @@ CREATE TABLE atleta (
  FOREIGN KEY (cidade_id) REFERENCES cidade (id)
 );
 
+INSERT INTO uf(sigla) VALUES('RS');
+INSERT INTO uf(sigla) VALUES('SP');
+INSERT INTO uf(sigla) VALUES('RJ');
+INSERT INTO uf(sigla) VALUES('MG');
+
