@@ -8,3 +8,12 @@ CREATE TABLE uf (
  PRIMARY KEY (id)
 );
 
+CREATE TABLE cidade (
+ id      INT AUTO_INCREMENT,
+ uf_id   INT NOT NULL,
+ nome    VARCHAR(45) NOT NULL,
+ capital BOOLEAN,
+ PRIMARY KEY (id),
+ FOREIGN KEY (uf_id) REFERENCES uf(id)
+);
+
