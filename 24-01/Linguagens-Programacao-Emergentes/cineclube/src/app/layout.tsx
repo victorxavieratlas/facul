@@ -18,7 +18,7 @@ export default function RootLayout({
       <head>
        <link rel="shortcut icon" href="./logo.png" type="image/x-icon" />
       </head>
-      <body>
+      <body className=" bg-gray-800">
         <Titulo />
         {children}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
