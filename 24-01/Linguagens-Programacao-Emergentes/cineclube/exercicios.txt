@@ -1,0 +1,3 @@
+Exercícios:
+- Acrescentar "Novo Cadastro" (link) na tela de login
+- Criar o form de cadastro de um novo cliente
