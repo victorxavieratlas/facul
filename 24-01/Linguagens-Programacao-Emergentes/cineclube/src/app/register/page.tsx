@@ -1,6 +1,12 @@
-export default function Login() {
+export default function Register() {
     return (
-        <form className="max-w-sm mx-auto mt-24">
+        <form className="max-w-sm mx-auto mt-24 border border-gray-200 p-20">
+            <div className="mb-5">
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-200">
+                    Nome:
+                </label>
+                <input type="text" id="name" className="bg-gray-50 border border-gray-300 text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+            </div>
             <div className="mb-5">
                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-200">
                     Email:
