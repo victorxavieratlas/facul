@@ -4,7 +4,7 @@ import Pesquisa from "./Pesquisa";
 
 function Titulo() {
     return (
-        <nav className=" bg-gray-800 border-solid border-b-2 border-gray-400">
+        <nav className=" bg-gray-900 border-solid border-b-2 border-gray-400">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src="./logo.png" className="h-12" alt="Logo Cineclube" />
