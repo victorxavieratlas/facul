@@ -17,13 +17,15 @@ model Carro {
   id        Int      @id @default(autoincrement())
   modelo    String   @db.VarChar(50)
   marca     String   @db.VarChar(30)
-  ano       Int   
-  preco       Float   
-  cor       String?     @db.VarChar(30)
+  ano       Int
+  preco     Float
+  cor       String?  @db.VarChar(30)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@map("carros")
 }
+
 // @@map("carros") serve para definir o nome da tabela
 // se não imformado, matém o nome da model(no singular)
 // conectar o banco por tunel ssh https://dev.mysql.com/doc/mysql-shell-gui/en/configure-ssh-tunnel.html

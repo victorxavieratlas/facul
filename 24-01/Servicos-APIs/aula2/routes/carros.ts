@@ -29,5 +29,40 @@ router.post("/", async (req, res) => {
     })
     res.status(201).json(carro)
 })
+
+router.put("/:id", async (req, res) => {
+
+    const { id } = req.params
+
+    if (!id) {
+        res.status(400).json({"erro": "Informe modelo, marca, ano, preco e cor"})
+        return
+    }
+
+    const carro = await prisma.carro.update({
+        where: { id: Number(id)},
+        data: {
+
+        }
+    })
+    res.status(200).json(carro)
+})
+
+router.delete("/:id", async (req, res) => {
+
+    const { id } = req.params
+
+    if (!id) {
+        res.status(400).json({"erro": "Informe modelo, marca, ano, preco e cor"})
+        return
+    }
+
+    const carro = await prisma.carro.delete({
+        where: {
+            id: Number(id)
+        },
+    })
+    res.status(200).json(carro)
+})
 //Crias as rotas e os métodos para excluir e alterar os carros
 export default router
