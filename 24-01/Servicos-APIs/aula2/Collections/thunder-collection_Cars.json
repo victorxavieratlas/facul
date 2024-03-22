@@ -1,0 +1,82 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Cars",
+    "dateExported": "2024-03-22T20:53:14.389Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "b364811f-3f38-4697-9158-e010979b23b6",
+            "colId": "5089d2de-5b89-4aad-b8fd-ad7d4e8555d2",
+            "containerId": "",
+            "name": "Carros",
+            "url": "http://localhost:3000/carros",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2024-03-22T11:39:08.722Z",
+            "modified": "2024-03-22T20:27:04.653Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "1538d18a-0cc0-4159-9a68-fe4a01f7f26c",
+            "colId": "5089d2de-5b89-4aad-b8fd-ad7d4e8555d2",
+            "containerId": "",
+            "name": "Carros",
+            "url": "http://localhost:3000/carros",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-03-22T20:30:15.096Z",
+            "modified": "2024-03-22T20:32:37.032Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"modelo\": \"Sandero\",\n  \"marca\": \"Renault\",\n  \"ano\": 2019,\n  \"preco\": 58900,\n  \"cor\": \"Branco\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "8ea904a3-0f7f-48f7-9270-58feed232d77",
+            "colId": "5089d2de-5b89-4aad-b8fd-ad7d4e8555d2",
+            "containerId": "",
+            "name": "Carros",
+            "url": "http://localhost:3000/carros/{id}",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2024-03-22T20:40:41.479Z",
+            "modified": "2024-03-22T20:41:07.542Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "",
+                    "isPath": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "46923de7-4df2-4847-baba-f72026e105a5",
+            "colId": "5089d2de-5b89-4aad-b8fd-ad7d4e8555d2",
+            "containerId": "",
+            "name": "Carros",
+            "url": "http://localhost:3000/carros/{id}",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2024-03-22T20:41:18.819Z",
+            "modified": "2024-03-22T20:41:27.222Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "",
+                    "isPath": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}
