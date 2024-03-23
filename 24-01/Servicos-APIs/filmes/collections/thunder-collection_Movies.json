@@ -1,0 +1,92 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Movies",
+    "dateExported": "2024-03-23T00:40:54.609Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "d61b42cc-8aad-4b53-8bf1-c99112f9053e",
+            "colId": "478db1a0-060e-4f64-bc3f-0709070ac7bc",
+            "containerId": "",
+            "name": "Movies",
+            "url": "https://mmg3tsx9-3000.brs.devtunnels.ms/filmes",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2024-03-22T23:24:17.191Z",
+            "modified": "2024-03-23T00:31:55.514Z",
+            "headers": [
+                {
+                    "name": "__Host-user_session_same_site",
+                    "value": "BlpE7qYzBLR9L4-MZQGA8E60yMgArLD0pPVCSyqM3qPWKpHp"
+                },
+                {
+                    "name": "saved_user_sessions",
+                    "value": "90327179%3ABlpE7qYzBLR9L4-MZQGA8E60yMgArLD0pPVCSyqM3qPWKpHp"
+                },
+                {
+                    "name": "user_session",
+                    "value": "BlpE7qYzBLR9L4-MZQGA8E60yMgArLD0pPVCSyqM3qPWKpHp"
+                },
+                {
+                    "name": "Authorization",
+                    "value": ""
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "",
+                "bearerPrefix": "Token"
+            },
+            "tests": []
+        },
+        {
+            "_id": "08d9b939-0263-4f9b-b967-2e37f67ed2c2",
+            "colId": "478db1a0-060e-4f64-bc3f-0709070ac7bc",
+            "containerId": "",
+            "name": "Movies",
+            "url": "https://mmg3tsx9-3000.brs.devtunnels.ms/filmes",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-03-22T23:39:23.999Z",
+            "modified": "2024-03-22T23:48:16.103Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"titulo\": \"Procurando Nemo\",\n  \"descricao\": \"Filme de animação infantil\",\n  \"genero\": \"Animação\",\n  \"duracao\": 102,\n  \"preco\": 19.2\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "e004e0a1-7e62-4924-bf77-3fb6d3d22ee1",
+            "colId": "478db1a0-060e-4f64-bc3f-0709070ac7bc",
+            "containerId": "",
+            "name": "Movies",
+            "url": "https://mmg3tsx9-3000.brs.devtunnels.ms/filmes",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2024-03-23T00:04:15.916Z",
+            "modified": "2024-03-23T00:04:26.671Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "7cbc54ad-b46d-4c64-9df3-2e4e7cff5e50",
+            "colId": "478db1a0-060e-4f64-bc3f-0709070ac7bc",
+            "containerId": "",
+            "name": "Movies",
+            "url": "https://mmg3tsx9-3000.brs.devtunnels.ms/filmes",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2024-03-23T00:04:36.700Z",
+            "modified": "2024-03-23T00:04:41.701Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
