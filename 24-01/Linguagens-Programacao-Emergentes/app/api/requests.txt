@@ -1,0 +1,28 @@
+Requests para Chrome DevTools
+
+
+Get -> 
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes')
+  .then(res => res.json())
+  .then(console.log)
+
+
+Post ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes', {
+method: 'POST',
+body: JSON.stringify({
+    titulo: 'Meu Malvado Favorito 4',
+    genero: 'animacao',
+    duracao: 123,
+    preco: 19.99,
+    sinopse: 'Filme de animação e comédia infantil.',
+    foto: 'https://cinepop.com.br/wp-content/uploads/2024/02/meumalvadofavorito4_2.jpg.webp'
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
