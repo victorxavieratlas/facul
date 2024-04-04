@@ -1,11 +1,4 @@
-interface filmeProps {
-    id: number
-    titulo: string
-    genero: string
-    preco: number
-    duracao: number
-    foto: string
-}
+import { filmeProps } from "../page"
 
 function ItemFilme({filme}: {filme: filmeProps}) {
     return (
