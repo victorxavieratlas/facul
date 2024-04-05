@@ -1,14 +1,14 @@
 Requests para Chrome DevTools
 
 
-Get -> 
+GET -> 
 
 fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes')
   .then(res => res.json())
   .then(console.log)
 
 
-Post ->
+POST ->
 
 fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes', {
 method: 'POST',
@@ -26,3 +26,58 @@ body: JSON.stringify({
 })
 .then(res => res.json())
 .then(console.log)
+
+
+DELETE -> 
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes', {
+method: 'DELETE',
+})
+  .then(res => res.json())
+  .then(console.log)
+
+
+----------------------------------------------------
+CLIENTE
+GET -> 
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/clientes')
+  .then(res => res.json())
+  .then(console.log)
+
+
+POST ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/clientes', {
+method: 'POST',
+body: JSON.stringify({
+    nome: 'Manoela Neves',
+    email: 'manu@email.com',
+    senha: 'Manu123.'
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+
+-----------------------------------------------
+LOGIN
+POST ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/login', {
+method: 'POST',
+body: JSON.stringify({
+    email: 'manu@email.com',
+    senha: 'Manu123.'
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome
