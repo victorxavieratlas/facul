@@ -1,0 +1,85 @@
+Requests para Chrome DevTools
+
+
+GET -> 
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes')
+  .then(res => res.json())
+  .then(console.log)
+
+
+POST ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes', {
+method: 'POST',
+body: JSON.stringify({
+    titulo: 'Meu Malvado Favorito 4',
+    genero: 'animacao',
+    duracao: 123,
+    preco: 19.99,
+    sinopse: 'Filme de animação e comédia infantil.',
+    foto: 'https://cinepop.com.br/wp-content/uploads/2024/02/meumalvadofavorito4_2.jpg.webp'
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+
+DELETE -> 
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/filmes', {
+method: 'DELETE',
+})
+  .then(res => res.json())
+  .then(console.log)
+
+
+----------------------------------------------------
+CLIENTE
+GET -> 
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/clientes')
+  .then(res => res.json())
+  .then(console.log)
+
+
+POST ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/clientes', {
+method: 'POST',
+body: JSON.stringify({
+    nome: 'Manoela Neves',
+    email: 'manu@email.com',
+    senha: 'Manu123.'
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+
+-----------------------------------------------
+LOGIN
+POST ->
+
+fetch('https://mmg3tsx9-3000.brs.devtunnels.ms/viagens', {
+method: 'POST',
+body: JSON.stringify({
+    destino: 'Punta Cana',
+    transporte: 'Aereo',
+    preco: 9999.99,
+    duracao: 7,
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome
