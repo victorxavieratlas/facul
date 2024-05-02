@@ -1,0 +1,97 @@
+POST ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis', {
+method: 'POST',
+body: JSON.stringify({
+    nome: 'Novidade',
+    endereco: 'Dom Joaquim',
+    bairro: 'centro',
+    dorm: 4,
+    preco: 300000.00,
+    habitat: 'Apto'
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+
+GET -> 
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis')
+  .then(res => res.json())
+  .then(console.log)
+
+
+
+PUT ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis/2', {
+method: 'PUT',
+body: JSON.stringify({
+    nome: 'Novidade',
+    endereco: 'Dom Joaquim',
+    bairro: 'centro',
+    dorm: 4,
+    preco: 250000.00,
+    habitat: 'Apto'
+}),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+
+
+DELETE ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis/3', {
+method: 'DELETE',
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8'
+  }
+})
+.then(res => res.json())
+.then(console.log)
+
+
+
+GET por nome ->
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis/pesq/dade')
+  .then(res => res.json())
+  .then(console.log)
+
+
+GET por preco + habitat
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis/pesquisa/filtro/800000/Apto')
+.then(res => res.json())
+.then(console.log)
+
+
+GET por ordem imovel
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis/ordem/imovel')
+.then(res => res.json())
+.then(console.log)
+
+
+GET por dados gerais
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis/dados/gerais')
+.then(res => res.json())
+.then(console.log)
+
+
+GET por grupos
+
+fetch('https://mmg3tsx9-3004.brs.devtunnels.ms/imoveis/grupos/habitat')
+.then(res => res.json())
+.then(console.log)
+
+
