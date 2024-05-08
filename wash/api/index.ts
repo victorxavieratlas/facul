@@ -1,17 +1,22 @@
 import express from 'express'
 const app = express()
-const port = 3000
+const port = 3007
 
+// import marcasRoutes from './routes/marcas'
+// import vinhosRoutes from './routes/vinhos'
 import usersRoutes from './routes/users'
+import profilesRoutes from './routes/profiles'
 
 app.use(express.json())
-
-app.use('/users', usersRoutes)
+// app.use("/marcas", marcasRoutes)
+// app.use("/vinhos", vinhosRoutes)
+app.use("/users", usersRoutes)
+app.use("/profiles", profilesRoutes)
 
 app.get('/', (req, res) => {
-  res.send('API Wash')
+  res.send('API is running')
 })
 
 app.listen(port, () => {
-  console.log(`Servidor executando na porta: ${port}`)
+  console.log(`Running in: ${port}`)
 })
