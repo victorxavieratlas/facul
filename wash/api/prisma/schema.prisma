@@ -14,16 +14,146 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @db.VarChar(48)
-  name      String   @unique
-  email     String   @unique
-  password  String   @db.VarChar(128)
-  address   String   @db.VarChar(128)
-  cep       Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String?
+  role      Role      @default(USER)
+  profile   Profile?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@map("users")
 }
-//Adicionar cidade e melhorar endereço com número e complemento
+
+model Profile {
+  id         Int        @id @default(autoincrement())
+  bio        String?
+  phone      String?    @db.VarChar(20)
+  startDay   String?    @db.VarChar(30)
+  finalDay   String?    @db.VarChar(30)
+  minPrice   Decimal?   @db.Decimal(9, 2)
+  maxPrice   Decimal?   @db.Decimal(9, 2)
+  verified   Boolean    @default(false)
+  user       User       @relation(fields: [userId], references: [id])
+  userId     Int        @unique
+  images     Image[]
+  schedules  Schedule[]
+  cities     City[]
+  ratings    Rating[]
+  categories Category[]
+  plans      Plan[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  deletedAt  DateTime?
+
+  @@map("profiles")
+}
+
+model Image {
+  id        Int       @id @default(autoincrement())
+  url       String
+  published Boolean   @default(false)
+  profile   Profile   @relation(fields: [profileId], references: [id])
+  profileId Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("images")
+}
+
+model Schedule {
+  id           Int           @id @default(autoincrement())
+  day          Day
+  workingHours WorkingHour[]
+  profile      Profile       @relation(fields: [profileId], references: [id])
+  profileId    Int
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+
+  @@map("schedules")
+}
+
+model WorkingHour {
+  id         Int       @id @default(autoincrement())
+  start      String
+  end        String
+  schedule   Schedule  @relation(fields: [scheduleId], references: [id])
+  scheduleId Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  @@map("workinghours")
+}
+
+model Rating {
+  id        Int       @id @default(autoincrement())
+  comment   String
+  value     Int
+  total     Int
+  profile   Profile   @relation(fields: [profileId], references: [id])
+  profileId Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("ratings")
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  profiles  Profile[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("categories")
+}
+
+model City {
+  id        Int       @id @default(autoincrement())
+  name      String
+  profiles  Profile[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("cities")
+}
+
+model Plan {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  price       Decimal?  @db.Decimal(9, 2)
+  profiles    Profile[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@map("plans")
+}
+
+enum Role {
+  USER
+  ADMIN
+
+  @@map("roles")
+}
+
+enum Day {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+
+  @@map("days")
+}
