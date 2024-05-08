@@ -5,86 +5,111 @@ const prisma = new PrismaClient()
 const router = Router()
 
 router.get("/", async (req, res) => {
+  try {
     const users = await prisma.user.findMany()
     res.status(200).json(users)
-})
-
-router.post("/", async (req, res) => {
-
-    const {
-        username,
-        name,
-        email,
-        password,
-        address,
-        cep
-    } = req.body
-
-    if (!username || !name || !email || !password || !address || !cep) {
-        res.status(400).json({ "msg": "Informe todos os campos." })
-        return
-    }
-
-    const users = await prisma.user.create({
-        data: {
-            username,
-            name,
-            email,
-            password,
-            address,
-            cep
-        }
-    })
-    res.status(201).json(users)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
 router.get("/:id", async (req, res) => {
-    const { id } = req.params
+  const { id } = req.params
 
-    const user = await prisma.user.findFirst({
-        where: { id: Number(id) }
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) }
     })
-
-    if (!user) {
-        res.status(404).json({ "msg": "Usuário não encontrado." })
-        return
-    }
     res.status(200).json(user)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
-router.put("/:id", async (req, res) => {
-    const { id } = req.params
+router.post("/", async (req, res) => {
+  const { email, password, name, profile } = req.body
 
-    const {
-        username,
-        name,
-        email,
-        password,
-        address,
-        cep
-    } = req.body
+  if (!email || !password) {
+    res.status(400).json({ "erro": "Email and Password are required!" })
+    return
+  }
 
-    const user = await prisma.user.update({
-        where: { id: Number(id) },
-        data: {
-            username,
-            name,
-            email,
-            password,
-            address,
-            cep
-        }
+  try {
+    const user = await prisma.user.create({
+      data: { email, password, name, profile }
     })
-    res.status(200).json(user)
+    res.status(201).json(user)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
 router.delete("/:id", async (req, res) => {
-    const { id } = req.params
+  const { id } = req.params
 
+  try {
     const user = await prisma.user.delete({
-        where: { id: Number(id) }
+      where: { id: Number(id) }
     })
     res.status(200).json(user)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.put("/delete/:id", async (req, res) => {
+  const { id } = req.params
+  const deletedAt = new Date()
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: Number(id) },
+      data: { deletedAt }
+    })
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params
+  const { email, password, name } = req.body
+
+  if (!email || !password) {
+    res.status(400).json({ "erro": "Email and Password are required!" })
+    return
+  }
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: Number(id) },
+      data: { email, password, name }
+    })
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.put("/role-update/:id", async (req, res) => {
+  const { id } = req.params
+  const { role } = req.body
+
+  if (!role) {
+    res.status(400).json({ "erro": "role are required!" })
+    return
+  }
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: Number(id) },
+      data: { role }
+    })
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
 export default router
