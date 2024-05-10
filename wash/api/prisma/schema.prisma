@@ -28,25 +28,26 @@ model User {
 }
 
 model Profile {
-  id         Int        @id @default(autoincrement())
-  bio        String?
-  phone      String?    @db.VarChar(20)
-  startDay   String?    @db.VarChar(30)
-  finalDay   String?    @db.VarChar(30)
-  minPrice   Decimal?   @db.Decimal(9, 2)
-  maxPrice   Decimal?   @db.Decimal(9, 2)
-  verified   Boolean    @default(false)
-  user       User       @relation(fields: [userId], references: [id])
-  userId     Int        @unique
-  images     Image[]
-  schedules  Schedule[]
-  cities     City[]
-  ratings    Rating[]
-  categories Category[]
-  plans      Plan[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  deletedAt  DateTime?
+  id               Int        @id @default(autoincrement())
+  bio              String?
+  phone            String?    @db.VarChar(20)
+  startDay         String?    @db.VarChar(30)
+  finalDay         String?    @db.VarChar(30)
+  minPrice         Decimal?   @db.Decimal(9, 2)
+  maxPrice         Decimal?   @db.Decimal(9, 2)
+  verified         Boolean    @default(false)
+  user             User       @relation(fields: [userId], references: [id])
+  userId           Int        @unique
+  images           Image[]
+  schedules        Schedule[]
+  cities           City[]
+  ratings          Rating[]
+  categories       Category[]
+  plans            Plan[]
+  totalPointsPlans Int?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  deletedAt        DateTime?
 
   @@map("profiles")
 }
@@ -131,6 +132,7 @@ model Plan {
   name        String
   description String
   price       Decimal?  @db.Decimal(9, 2)
+  points      Int
   profiles    Profile[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
