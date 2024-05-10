@@ -13,4 +13,213 @@ router.get("/", async (req, res) => {
   }
 })
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const profile = await prisma.profile.findUnique({
+      where: { id: Number(id) }
+    })
+    res.status(200).json(profile)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.get("/list/total-points", async (req, res) => {
+  const profiles = await prisma.profile.findMany({
+    select: {
+      id: true,
+      bio: true,
+      phone: true,
+      userId: true,
+      maxPrice: true,
+      minPrice: true,
+      startDay: true,
+      finalDay: true,
+      plans: true,
+      ratings: true,
+      totalPointsPlans: true
+    },
+    orderBy: {
+      totalPointsPlans: 'desc'
+    }
+  })
+  res.status(200).json(profiles)
+})
+
+router.get("/list/max-price", async (req, res) => {
+  const profiles = await prisma.profile.findMany({
+    select: {
+      id: true,
+      bio: true,
+      phone: true,
+      userId: true,
+      maxPrice: true,
+      minPrice: true,
+      startDay: true,
+      finalDay: true,
+      plans: true,
+      ratings: true,
+      totalPointsPlans: true
+    },
+    orderBy: {
+      maxPrice: 'desc'
+    }
+  })
+  res.status(200).json(profiles)
+})
+
+router.get("/list/min-price", async (req, res) => {
+  const profiles = await prisma.profile.findMany({
+    select: {
+      id: true,
+      bio: true,
+      phone: true,
+      userId: true,
+      maxPrice: true,
+      minPrice: true,
+      startDay: true,
+      finalDay: true,
+      plans: true,
+      ratings: true,
+      totalPointsPlans: true
+    },
+    orderBy: {
+      maxPrice: 'asc'
+    }
+  })
+  res.status(200).json(profiles)
+})
+
+// router.get("/list/ratings", async (req, res) => {
+//   const profiles = await prisma.profile.findMany({
+//     select: {
+//       id: true,
+//       bio: true,
+//       phone: true,
+//       userId: true,
+//       maxPrice: true,
+//       minPrice: true,
+//       startDay: true,
+//       finalDay: true,
+//       plans: true,
+//       ratings: true,
+//       totalPointsPlans: true
+//     },
+//     orderBy: {
+//       ratings: 'asc'
+//     }
+//   })
+//   res.status(200).json(profiles)
+// })
+
+router.post("/", async (req, res) => {
+  const {
+    bio,
+    phone,
+    startDay,
+    finalDay,
+    minPrice,
+    maxPrice,
+    userId,
+    images,
+    schedules,
+    cities,
+    categories,
+    plans,
+    totalPointsPlans
+  } = req.body
+
+  try {
+    const profile = await prisma.profile.create({
+      data: {
+        bio,
+        phone,
+        startDay,
+        finalDay,
+        minPrice,
+        maxPrice,
+        userId,
+        images,
+        schedules,
+        cities,
+        categories,
+        plans,
+        totalPointsPlans
+      }
+    })
+    res.status(201).json(profile)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const profile = await prisma.profile.delete({
+      where: { id: Number(id) }
+    })
+    res.status(200).json(profile)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.put("/delete/:id", async (req, res) => {
+  const { id } = req.params
+  const deletedAt = new Date()
+
+  try {
+    const profile = await prisma.profile.update({
+      where: { id: Number(id) },
+      data: { deletedAt }
+    })
+    res.status(200).json(profile)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params
+  const {
+    bio,
+    phone,
+    startDay,
+    finalDay,
+    minPrice,
+    maxPrice,
+    userId,
+    images,
+    schedules,
+    cities,
+    categories
+  } = req.body
+
+  try {
+    const profile = await prisma.profile.update({
+      where: { id: Number(id) },
+      data: {
+        bio,
+        phone,
+        startDay,
+        finalDay,
+        minPrice,
+        maxPrice,
+        userId,
+        images,
+        schedules,
+        cities,
+        categories
+      }
+    })
+    res.status(200).json(profile)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
 export default router
