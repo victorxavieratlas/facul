@@ -6,7 +6,16 @@ const router = Router()
 
 router.get("/", async (req, res) => {
   try {
-    const profiles = await prisma.profile.findMany()
+    const profiles = await prisma.profile.findMany({
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      }
+    })
     res.status(200).json(profiles)
   } catch (error) {
     res.status(400).json(error)
@@ -18,7 +27,15 @@ router.get("/:id", async (req, res) => {
 
   try {
     const profile = await prisma.profile.findUnique({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      }
     })
     res.status(200).json(profile)
   } catch (error) {
@@ -27,92 +44,85 @@ router.get("/:id", async (req, res) => {
 })
 
 router.get("/list/total-points", async (req, res) => {
-  const profiles = await prisma.profile.findMany({
-    select: {
-      id: true,
-      bio: true,
-      phone: true,
-      userId: true,
-      maxPrice: true,
-      minPrice: true,
-      startDay: true,
-      finalDay: true,
-      plans: true,
-      ratings: true,
-      totalPointsPlans: true
-    },
-    orderBy: {
-      totalPointsPlans: 'desc'
-    }
-  })
-  res.status(200).json(profiles)
+  try {
+    const profiles = await prisma.profile.findMany({
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      },
+      orderBy: {
+        totalPointsPlans: 'desc'
+      }
+    })
+    res.status(200).json(profiles)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
 router.get("/list/max-price", async (req, res) => {
-  const profiles = await prisma.profile.findMany({
-    select: {
-      id: true,
-      bio: true,
-      phone: true,
-      userId: true,
-      maxPrice: true,
-      minPrice: true,
-      startDay: true,
-      finalDay: true,
-      plans: true,
-      ratings: true,
-      totalPointsPlans: true
-    },
-    orderBy: {
-      maxPrice: 'desc'
-    }
-  })
-  res.status(200).json(profiles)
+  try {
+    const profiles = await prisma.profile.findMany({
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      },
+      orderBy: {
+        maxPrice: 'desc'
+      }
+    })
+    res.status(200).json(profiles)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
 router.get("/list/min-price", async (req, res) => {
-  const profiles = await prisma.profile.findMany({
-    select: {
-      id: true,
-      bio: true,
-      phone: true,
-      userId: true,
-      maxPrice: true,
-      minPrice: true,
-      startDay: true,
-      finalDay: true,
-      plans: true,
-      ratings: true,
-      totalPointsPlans: true
-    },
-    orderBy: {
-      maxPrice: 'asc'
-    }
-  })
-  res.status(200).json(profiles)
+  try {
+    const profiles = await prisma.profile.findMany({
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      },
+      orderBy: {
+        maxPrice: 'asc'
+      }
+    })
+    res.status(200).json(profiles)
+  } catch (error) {
+    res.status(400).json(error)
+  }
 })
 
-// router.get("/list/ratings", async (req, res) => {
-//   const profiles = await prisma.profile.findMany({
-//     select: {
-//       id: true,
-//       bio: true,
-//       phone: true,
-//       userId: true,
-//       maxPrice: true,
-//       minPrice: true,
-//       startDay: true,
-//       finalDay: true,
-//       plans: true,
-//       ratings: true,
-//       totalPointsPlans: true
-//     },
-//     orderBy: {
-//       ratings: 'asc'
-//     }
-//   })
-//   res.status(200).json(profiles)
-// })
+router.get("/list/ratings", async (req, res) => {
+  try {
+    const profiles = await prisma.profile.findMany({
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      }
+    })
+    res.status(200).json(profiles)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
 
 router.post("/", async (req, res) => {
   const {
@@ -141,11 +151,6 @@ router.post("/", async (req, res) => {
         minPrice,
         maxPrice,
         userId,
-        images,
-        schedules,
-        cities,
-        categories,
-        plans,
         totalPointsPlans
       }
     })
@@ -160,7 +165,15 @@ router.delete("/:id", async (req, res) => {
 
   try {
     const profile = await prisma.profile.delete({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      }
     })
     res.status(200).json(profile)
   } catch (error) {
@@ -175,6 +188,14 @@ router.put("/delete/:id", async (req, res) => {
   try {
     const profile = await prisma.profile.update({
       where: { id: Number(id) },
+      include: {
+        images: true,
+        schedules: true,
+        cities: true,
+        ratings: true,
+        categories: true,
+        plans: true,
+      },
       data: { deletedAt }
     })
     res.status(200).json(profile)
