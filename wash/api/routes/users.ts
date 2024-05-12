@@ -6,7 +6,11 @@ const router = Router()
 
 router.get("/", async (req, res) => {
   try {
-    const users = await prisma.user.findMany()
+    const users = await prisma.user.findMany({
+      include: {
+        profile: true
+      }
+    })
     res.status(200).json(users)
   } catch (error) {
     res.status(400).json(error)
@@ -18,7 +22,10 @@ router.get("/:id", async (req, res) => {
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
+      include: {
+        profile: true
+      }
     })
     res.status(200).json(user)
   } catch (error) {
@@ -36,7 +43,7 @@ router.post("/", async (req, res) => {
 
   try {
     const user = await prisma.user.create({
-      data: { email, password, name, profile }
+      data: { email, password, name }
     })
     res.status(201).json(user)
   } catch (error) {
@@ -49,7 +56,10 @@ router.delete("/:id", async (req, res) => {
 
   try {
     const user = await prisma.user.delete({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
+      include: {
+        profile: true
+      }
     })
     res.status(200).json(user)
   } catch (error) {
@@ -64,7 +74,10 @@ router.put("/delete/:id", async (req, res) => {
   try {
     const user = await prisma.user.update({
       where: { id: Number(id) },
-      data: { deletedAt }
+      data: { deletedAt },
+      include: {
+        profile: true
+      }
     })
     res.status(200).json(user)
   } catch (error) {
@@ -84,7 +97,10 @@ router.put("/:id", async (req, res) => {
   try {
     const user = await prisma.user.update({
       where: { id: Number(id) },
-      data: { email, password, name }
+      data: { email, password, name },
+      include: {
+        profile: true
+      }
     })
     res.status(200).json(user)
   } catch (error) {
