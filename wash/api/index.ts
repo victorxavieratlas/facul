@@ -9,6 +9,7 @@ import profilesRoutes from './routes/profiles'
 import ratingsRoutes from './routes/ratings'
 import imagesRoutes from './routes/images'
 import schedulesRoutes from './routes/schedules'
+import workingHoursRoutes from './routes/hours'
 
 app.use(express.json())
 // app.use("/marcas", marcasRoutes)
@@ -18,6 +19,7 @@ app.use("/profiles", profilesRoutes)
 app.use("/ratings", ratingsRoutes)
 app.use("/images", imagesRoutes)
 app.use("/schedules", schedulesRoutes)
+app.use("/workingHours", workingHoursRoutes)
 
 app.get('/', (req, res) => {
   res.send('API is running')
