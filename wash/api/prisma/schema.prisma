@@ -65,6 +65,7 @@ model Image {
   @@map("images")
 }
 
+//adicionar @unique no day para não ter dias repetidos | Adicionar se é dia trabalhado ou não - boolean
 model Schedule {
   id           Int           @id @default(autoincrement())
   day          Day
@@ -78,6 +79,7 @@ model Schedule {
   @@map("schedules")
 }
 
+//Adicionar mais horários (almoço) não obrigatório - Adicionar relação 1-m com profile
 model WorkingHour {
   id         Int       @id @default(autoincrement())
   start      String
