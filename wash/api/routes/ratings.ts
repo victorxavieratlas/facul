@@ -45,6 +45,21 @@ router.get("/list/total-ratings", async (req, res) => {
   }
 })
 
+router.get("/profile/:profileId", async (req, res) => {
+  const { profileId } = req.params
+
+  try {
+      const ratings = await prisma.rating.findMany({
+          where: {
+              profileId: Number(profileId)
+          }
+      })
+      res.status(200).json(ratings)
+  } catch (error) {
+      res.status(400).json(error)
+  }
+})
+
 router.post("/", async (req, res) => {
   const {
     comment,
