@@ -51,6 +51,7 @@ CREATE TABLE `schedules` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `day` ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday') NOT NULL,
     `profileId` INTEGER NOT NULL,
+    `isWorkingDay` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -63,6 +64,7 @@ CREATE TABLE `workinghours` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `start` VARCHAR(191) NOT NULL,
     `end` VARCHAR(191) NOT NULL,
+    `profileId` INTEGER NOT NULL,
     `scheduleId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -100,6 +102,20 @@ CREATE TABLE `categories` (
 CREATE TABLE `cities` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
+    `zone` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `deletedAt` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `districts` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `zone` VARCHAR(191) NOT NULL,
+    `cityId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -140,6 +156,15 @@ CREATE TABLE `_CityToProfile` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `_DistrictToProfile` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_DistrictToProfile_AB_unique`(`A`, `B`),
+    INDEX `_DistrictToProfile_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_PlanToProfile` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -158,10 +183,16 @@ ALTER TABLE `images` ADD CONSTRAINT `images_profileId_fkey` FOREIGN KEY (`profil
 ALTER TABLE `schedules` ADD CONSTRAINT `schedules_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `workinghours` ADD CONSTRAINT `workinghours_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `workinghours` ADD CONSTRAINT `workinghours_scheduleId_fkey` FOREIGN KEY (`scheduleId`) REFERENCES `schedules`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ratings` ADD CONSTRAINT `ratings_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `districts` ADD CONSTRAINT `districts_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_CategoryToProfile` ADD CONSTRAINT `_CategoryToProfile_A_fkey` FOREIGN KEY (`A`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -174,6 +205,12 @@ ALTER TABLE `_CityToProfile` ADD CONSTRAINT `_CityToProfile_A_fkey` FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE `_CityToProfile` ADD CONSTRAINT `_CityToProfile_B_fkey` FOREIGN KEY (`B`) REFERENCES `profiles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_DistrictToProfile` ADD CONSTRAINT `_DistrictToProfile_A_fkey` FOREIGN KEY (`A`) REFERENCES `districts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_DistrictToProfile` ADD CONSTRAINT `_DistrictToProfile_B_fkey` FOREIGN KEY (`B`) REFERENCES `profiles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_PlanToProfile` ADD CONSTRAINT `_PlanToProfile_A_fkey` FOREIGN KEY (`A`) REFERENCES `plans`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
