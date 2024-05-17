@@ -9,7 +9,7 @@ type WorkingHourInput = {
     end: string;
     scheduleId: number;
     profileId: number;
-  };
+};
 
 router.get("/", async (req, res) => {
     try {
