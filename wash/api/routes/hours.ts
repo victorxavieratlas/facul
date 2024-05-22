@@ -81,8 +81,6 @@ router.get("/profile/:profileId", async (req, res) => {
 //Adicionar horário de almoço
 router.post("/", async (req, res) => {
     const {
-        start,
-        end,
         scheduleId,
         profileId
     } = req.body
@@ -90,8 +88,6 @@ router.post("/", async (req, res) => {
     try {
         const workingHour = await prisma.workingHour.create({
             data: {
-                start,
-                end,
                 scheduleId,
                 profileId
             }
@@ -109,8 +105,6 @@ router.post("/create", async (req, res) => {
         const creates = workingHours.map(({ start, end, scheduleId, profileId }) => 
             prisma.workingHour.create({
                 data: {
-                    start,
-                    end,
                     scheduleId,
                     profileId
                 }
@@ -158,19 +152,19 @@ router.put("/delete/:id", async (req, res) => {
     }
 })
 
-router.put("/:id", async (req, res) => {
-    const { id } = req.params
-    const { start, end } = req.body
+// router.put("/:id", async (req, res) => {
+//     const { id } = req.params
+//     const { start, end } = req.body
 
-    try {
-        const workingHour = await prisma.workingHour.update({
-            where: { id: Number(id) },
-            data: { start, end }
-        })
-        res.status(200).json(workingHour)
-    } catch (error) {
-        res.status(400).json(error)
-    }
-})
+//     try {
+//         const workingHour = await prisma.workingHour.update({
+//             where: { id: Number(id) },
+//             data: { start, end }
+//         })
+//         res.status(200).json(workingHour)
+//     } catch (error) {
+//         res.status(400).json(error)
+//     }
+// })
 
 export default router

@@ -6,7 +6,6 @@ const router = Router()
 
 type CitiesInput = {
     name: string;
-    zone: string;
 };
 
 router.get("/", async (req, res) => {
@@ -55,8 +54,7 @@ router.post("/", async (req, res) => {
   try {
     const city = await prisma.city.create({
       data: {
-        name,
-        zone
+        name
       }
     })
     res.status(201).json(city)
@@ -69,11 +67,10 @@ router.post("/create", async (req, res) => {
     const cities: CitiesInput[] = req.body.citiesInput;
 
     try {
-        const creates = cities.map(({ name, zone }) => 
+        const creates = cities.map(({ name }) => 
             prisma.city.create({
                 data: {
-                    name,
-                    zone
+                    name
                 }
             })
         );
@@ -116,16 +113,14 @@ router.put("/delete/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params
   const {
-    name,
-    zone
+    name
   } = req.body
 
   try {
     const cities = await prisma.city.update({
       where: { id: Number(id) },
       data: {
-        name,
-        zone
+        name
       }
     })
     res.status(200).json(cities)

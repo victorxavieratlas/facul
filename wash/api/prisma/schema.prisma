@@ -115,7 +115,7 @@ model HourPoints {
 
   @@map("hour-points")
 }
-
+//Adicionar o numberOfRatings e o totalOfRatings na tabela profile e talvez alterar o nome nessa
 model Rating {
   id              Int       @id @default(autoincrement())
   profile         Profile   @relation(fields: [profileId], references: [id])

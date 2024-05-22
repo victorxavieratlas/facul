@@ -32,11 +32,11 @@ router.get("/list/total-ratings", async (req, res) => {
       select: {
         id: true,
         comment: true,
-        value: true,
-        total: true,
+        numberOfRatings: true,
+        totalOfRatings: true,
       },
       orderBy: {
-        total: 'desc'
+        totalOfRatings: 'desc'
       }
     })
     res.status(200).json(ratings)
@@ -63,8 +63,8 @@ router.get("/profile/:profileId", async (req, res) => {
 router.post("/", async (req, res) => {
   const {
     comment,
-    value,
-    total,
+    numberOfRatings,
+    totalOfRatings,
     profileId
   } = req.body
 
@@ -72,8 +72,8 @@ router.post("/", async (req, res) => {
     const rating = await prisma.rating.create({
       data: {
         comment,
-        value,
-        total,
+        numberOfRatings,
+        totalOfRatings,
         profileId
       }
     })
@@ -115,8 +115,8 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params
   const {
     comment,
-    value,
-    total
+    numberOfRatings,
+    totalOfRatings
   } = req.body
 
   try {
@@ -124,8 +124,8 @@ router.put("/:id", async (req, res) => {
       where: { id: Number(id) },
       data: {
         comment,
-        value,
-        total
+        numberOfRatings,
+        totalOfRatings
       }
     })
     res.status(200).json(rating)
