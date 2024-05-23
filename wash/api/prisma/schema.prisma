@@ -42,6 +42,7 @@ model Profile {
   schedules        Schedule[]
   workingHours     WorkingHour[]
   hoursPoints      HourPoints[]
+  states           State[]
   cities           City[]
   citiesZones      CityZone[]
   districts        District[]
@@ -115,6 +116,7 @@ model HourPoints {
 
   @@map("hour-points")
 }
+
 //Adicionar o numberOfRatings e o totalOfRatings na tabela profile e talvez alterar o nome nessa
 model Rating {
   id              Int       @id @default(autoincrement())
@@ -141,9 +143,23 @@ model Category {
   @@map("categories")
 }
 
+model State {
+  id        Int       @id @default(autoincrement())
+  name      String
+  cities    City[]
+  profiles  Profile[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("states")
+}
+
 model City {
   id             Int            @id @default(autoincrement())
   name           String
+  state          State          @relation(fields: [stateId], references: [id])
+  stateId        Int
   cityZones      CityZone[]
   districts      District[]
   districtsZones DistrictZone[]

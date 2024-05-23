@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "dev": "npx ts-node-dev --respawn index.ts",
-    "migrate": "npx prisma migrate dev --name nome_migrate"
+    "migrate": "npx prisma migrate dev --name nome_migrate",
+    "seed": "ts-node prisma/seeds/seed.ts"
   },
   "keywords": [],
   "author": "",

@@ -4,7 +4,16 @@ const profileClient = new PrismaClient().profile
 
 export const getAllProfiles = async (req, res) => {
     try {
-        const allProfiles = await profileClient.findMany()
+        const allProfiles = await profileClient.findMany({
+            include: {
+                images: true,
+                schedules: true,
+                cities: true,
+                ratings: true,
+                categories: true,
+                plans: true,
+            }
+        })
         res.status(200).json({ data: allProfiles })
     } catch (error) {
         res.status(400).json(error)
@@ -96,7 +105,9 @@ export const createProfile = async (req, res) => {
         minPrice,
         maxPrice,
         userId,
-        totalPointsPlans
+        totalPointsPlans,
+        cityId,
+        schedules
     } = req.body
 
     try {
@@ -109,7 +120,16 @@ export const createProfile = async (req, res) => {
                 minPrice,
                 maxPrice,
                 userId,
-                totalPointsPlans
+                totalPointsPlans,
+                cities: {
+                    connect: { id: Number(cityId) }
+                },
+                schedules: {
+                    create: schedules.map(schedule => ({
+                        day: schedule.day,
+                        isWorkingDay: schedule.isWorkingDay,
+                    }))
+                }
             }
         })
         res.status(201).json({ data: profile })
@@ -154,7 +174,8 @@ export const updateProfile = async (req, res) => {
         startDay,
         finalDay,
         minPrice,
-        maxPrice
+        maxPrice,
+        cityId
     } = req.body
 
     try {
@@ -166,7 +187,10 @@ export const updateProfile = async (req, res) => {
                 startDay,
                 finalDay,
                 minPrice,
-                maxPrice
+                maxPrice,
+                cities: {
+                    connect: { id: Number(cityId) }
+                }
             }
         })
         res.status(200).json({ data: profile })
