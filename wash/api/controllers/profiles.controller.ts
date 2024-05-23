@@ -149,26 +149,26 @@ export const softDeleteProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
     const { id } = req.params
     const {
-      bio,
-      phone,
-      startDay,
-      finalDay,
-      minPrice,
-      maxPrice
+        bio,
+        phone,
+        startDay,
+        finalDay,
+        minPrice,
+        maxPrice
     } = req.body
-  
+
     try {
-      const profile = await profileClient.update({
-        where: { id: Number(id) },
-        data: {
-          bio,
-          phone,
-          startDay,
-          finalDay,
-          minPrice,
-          maxPrice
-        }
-      })
+        const profile = await profileClient.update({
+            where: { id: Number(id) },
+            data: {
+                bio,
+                phone,
+                startDay,
+                finalDay,
+                minPrice,
+                maxPrice
+            }
+        })
         res.status(200).json({ data: profile })
     } catch (error) {
         res.status(400).json(error)

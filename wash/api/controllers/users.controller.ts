@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import { hashSync } from "bcrypt"
 
 const userClient = new PrismaClient().user
 
@@ -31,17 +32,66 @@ export const getUserById = async (req, res) => {
     }
 }
 
+function validaSenha(senha) {
+
+    const passwordMissingCharacters = []
+  
+    // .length: retorna o tamanho da string (da senha)
+    if (senha.length < 8) {
+      passwordMissingCharacters.push("A senha deve possuir, no mínimo, 8 caracteres.")
+    }
+  
+    // contadores
+    let smallLetters = 0
+    let bigLetters = 0
+    let numbers = 0
+    let simbols = 0
+  
+    // senha = "abc123"
+    // letra = "a"
+  
+    // percorre as letras da variável senha
+    for (const letra of senha) {
+      // expressão regular
+      if ((/[a-z]/).test(letra)) {
+        smallLetters++
+      }
+      else if ((/[A-Z]/).test(letra)) {
+        bigLetters++
+      }
+      else if ((/[0-9]/).test(letra)) {
+        numbers++
+      } else {
+        simbols++
+      }
+    }
+  
+    if (smallLetters == 0 || bigLetters == 0 || numbers == 0 || simbols == 0) {
+      passwordMissingCharacters.push("A senha deve possuir letras minúsculas, letras maiúsculas, números e símbolos.")
+    }
+  
+    return passwordMissingCharacters
+  }
+
 export const createUser = async (req, res) => {
     const { email, password, name } = req.body
 
     if (!email || !password) {
-        res.status(400).json({ "erro": "Email and Password are required!" })
+        res.status(400).json({ erro: "E-mail e senha são obrigatórios." })
         return
     }
 
+    const message = validaSenha(password)
+    if (message.length > 0) {
+      res.status(400).json({ erro: message.join("-") })
+      return
+    }
+
+    const hashedPassword = hashSync(password, 10)
+
     try {
         const user = await userClient.create({
-            data: { email, password, name }
+            data: { email, password: hashedPassword, name }
         })
         res.status(201).json({ data: user })
     } catch (error) {
