@@ -4,19 +4,35 @@ const port = 3007
 
 // import marcasRoutes from './routes/marcas'
 // import vinhosRoutes from './routes/vinhos'
-import usersRoutes from './routes/users'
-import profilesRoutes from './routes/profiles'
+import usersRouter from './routes/users.router'
+import loginRouter from './routes/login.router'
+import profilesRoutes from './routes/profiles.router'
+import ratingsRoutes from './routes/ratings'
+import citiesRouter from './routes/cities'
+import imagesRoutes from './routes/images'
+import schedulesRoutes from './routes/schedules'
+import workingHoursRoutes from './routes/hours'
+import searchRouter from './routes/search.router'
 
-app.use(express.json())
 // app.use("/marcas", marcasRoutes)
 // app.use("/vinhos", vinhosRoutes)
-app.use("/users", usersRoutes)
-app.use("/profiles", profilesRoutes)
 
-app.get('/', (req, res) => {
-  res.send('API is running')
-})
+app
+  .use(express.json())
+  .use("/users", usersRouter)
+  .use("/login", loginRouter)
+  .use("/profiles", profilesRoutes)
+  .use("/ratings", ratingsRoutes)
+  .use("/cities", citiesRouter)
+  .use("/images", imagesRoutes)
+  .use("/schedules", schedulesRoutes)
+  .use("/workingHours", workingHoursRoutes)
+  .use("/search", searchRouter)
 
-app.listen(port, () => {
-  console.log(`Running in: ${port}`)
-})
+  .get('/', (req, res) => {
+    res.send('API is running')
+  })
+
+  .listen(port, () => {
+    console.log(`Running in: ${port}`)
+  })

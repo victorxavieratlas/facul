@@ -15,11 +15,11 @@ datasource db {
 
 model User {
   id        Int       @id @default(autoincrement())
+  profile   Profile?
+  role      Role      @default(USER)
   email     String    @unique
   password  String
   name      String?
-  role      Role      @default(USER)
-  profile   Profile?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -28,25 +28,31 @@ model User {
 }
 
 model Profile {
-  id               Int        @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
+  user             User           @relation(fields: [userId], references: [id])
+  userId           Int            @unique
+  phone            String?        @db.VarChar(20)
   bio              String?
-  phone            String?    @db.VarChar(20)
-  startDay         String?    @db.VarChar(30)
-  finalDay         String?    @db.VarChar(30)
-  minPrice         Decimal?   @db.Decimal(9, 2)
-  maxPrice         Decimal?   @db.Decimal(9, 2)
-  verified         Boolean    @default(false)
-  user             User       @relation(fields: [userId], references: [id])
-  userId           Int        @unique
+  startDay         String?        @db.VarChar(30)
+  finalDay         String?        @db.VarChar(30)
+  minPrice         Decimal?       @db.Decimal(9, 2)
+  maxPrice         Decimal?       @db.Decimal(9, 2)
+  verified         Boolean        @default(false)
   images           Image[]
   schedules        Schedule[]
+  workingHours     WorkingHour[]
+  hoursPoints      HourPoints[]
+  states           State[]
   cities           City[]
+  citiesZones      CityZone[]
+  districts        District[]
+  districtsZones   DistrictZone[]
   ratings          Rating[]
   categories       Category[]
   plans            Plan[]
   totalPointsPlans Int?
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
   deletedAt        DateTime?
 
   @@map("profiles")
@@ -54,10 +60,10 @@ model Profile {
 
 model Image {
   id        Int       @id @default(autoincrement())
-  url       String
-  published Boolean   @default(false)
   profile   Profile   @relation(fields: [profileId], references: [id])
   profileId Int
+  url       String
+  published Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -67,10 +73,12 @@ model Image {
 
 model Schedule {
   id           Int           @id @default(autoincrement())
-  day          Day
-  workingHours WorkingHour[]
   profile      Profile       @relation(fields: [profileId], references: [id])
   profileId    Int
+  day          Day
+  isWorkingDay Boolean       @default(false)
+  workingHours WorkingHour[]
+  hoursPoints  HourPoints[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
@@ -79,28 +87,47 @@ model Schedule {
 }
 
 model WorkingHour {
-  id         Int       @id @default(autoincrement())
-  start      String
-  end        String
-  schedule   Schedule  @relation(fields: [scheduleId], references: [id])
-  scheduleId Int
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  deletedAt  DateTime?
+  id          Int          @id @default(autoincrement())
+  profile     Profile      @relation(fields: [profileId], references: [id])
+  profileId   Int
+  schedule    Schedule     @relation(fields: [scheduleId], references: [id])
+  scheduleId  Int
+  hoursPoints HourPoints[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
 
   @@map("workinghours")
 }
 
+model HourPoints {
+  id            Int         @id @default(autoincrement())
+  profile       Profile     @relation(fields: [profileId], references: [id])
+  profileId     Int
+  schedule      Schedule    @relation(fields: [scheduleId], references: [id])
+  scheduleId    Int
+  workingHour   WorkingHour @relation(fields: [workingHourId], references: [id])
+  workingHourId Int
+  point         String
+  type          PointType
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  deletedAt     DateTime?
+
+  @@map("hour-points")
+}
+
+//Adicionar o numberOfRatings e o totalOfRatings na tabela profile e talvez alterar o nome nessa
 model Rating {
-  id        Int       @id @default(autoincrement())
-  comment   String
-  value     Int
-  total     Int
-  profile   Profile   @relation(fields: [profileId], references: [id])
-  profileId Int
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id              Int       @id @default(autoincrement())
+  profile         Profile   @relation(fields: [profileId], references: [id])
+  profileId       Int
+  comment         String
+  numberOfRatings Int
+  totalOfRatings  Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
 
   @@map("ratings")
 }
@@ -116,15 +143,80 @@ model Category {
   @@map("categories")
 }
 
-model City {
+model State {
   id        Int       @id @default(autoincrement())
   name      String
+  cities    City[]
   profiles  Profile[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  @@map("states")
+}
+
+model City {
+  id             Int            @id @default(autoincrement())
+  name           String
+  state          State          @relation(fields: [stateId], references: [id])
+  stateId        Int
+  cityZones      CityZone[]
+  districts      District[]
+  districtsZones DistrictZone[]
+  profiles       Profile[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+
   @@map("cities")
+}
+
+model CityZone {
+  id             Int            @id @default(autoincrement())
+  name           String
+  city           City?          @relation(fields: [cityId], references: [id])
+  cityId         Int?
+  districts      District[]
+  districtsZones DistrictZone[]
+  profiles       Profile[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+
+  @@map("cities-zones")
+}
+
+model District {
+  id             Int            @id @default(autoincrement())
+  name           String
+  city           City?          @relation(fields: [cityId], references: [id])
+  cityId         Int?
+  cityZone       CityZone?      @relation(fields: [cityZoneId], references: [id])
+  cityZoneId     Int?
+  districtsZones DistrictZone[]
+  profiles       Profile[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+
+  @@map("districts")
+}
+
+model DistrictZone {
+  id         Int       @id @default(autoincrement())
+  name       String
+  city       City?     @relation(fields: [cityId], references: [id])
+  cityId     Int?
+  cityZone   CityZone? @relation(fields: [cityZoneId], references: [id])
+  cityZoneId Int?
+  district   District? @relation(fields: [districtId], references: [id])
+  districtId Int?
+  profiles   Profile[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  @@map("districts-zones")
 }
 
 model Plan {
@@ -158,4 +250,11 @@ enum Day {
   Sunday
 
   @@map("days")
+}
+
+enum PointType {
+  In
+  Out
+
+  @@map("point-type")
 }
