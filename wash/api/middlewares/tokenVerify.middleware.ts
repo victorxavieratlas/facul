@@ -17,8 +17,8 @@ export async function tokenVerify(req, res, next) {
     try {
         const tokenDecode = jwt.verify(token, process.env.JWT_KEY)
         // console.log(tokenDecode)
-        // req.userId = tokenDecode.userId
-        // req.userName = tokenDecode.userName
+        req.userId = tokenDecode.userId
+        req.userName = tokenDecode.userName
 
         const user = await userClient.findUnique({
             where: { id: Number(tokenDecode.userId) }

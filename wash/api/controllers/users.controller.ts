@@ -32,59 +32,70 @@ export const getUserById = async (req, res) => {
     }
 }
 
-function validaSenha(senha) {
+function passwordVerify(password) {
 
     const passwordMissingCharacters = []
-  
+
     // .length: retorna o tamanho da string (da senha)
-    if (senha.length < 8) {
-      passwordMissingCharacters.push("A senha deve possuir, no mínimo, 8 caracteres.")
+    if (password.length < 8) {
+        passwordMissingCharacters.push("A senha deve conter, no mínimo, 8 caracteres.")
     }
-  
+
     // contadores
     let smallLetters = 0
     let bigLetters = 0
     let numbers = 0
     let simbols = 0
-  
+
     // senha = "abc123"
     // letra = "a"
-  
+
     // percorre as letras da variável senha
-    for (const letra of senha) {
-      // expressão regular
-      if ((/[a-z]/).test(letra)) {
-        smallLetters++
-      }
-      else if ((/[A-Z]/).test(letra)) {
-        bigLetters++
-      }
-      else if ((/[0-9]/).test(letra)) {
-        numbers++
-      } else {
-        simbols++
-      }
+    for (const character of password) {
+        // expressão regular
+        if ((/[a-z]/).test(character)) {
+            smallLetters++
+        }
+        else if ((/[A-Z]/).test(character)) {
+            bigLetters++
+        }
+        else if ((/[0-9]/).test(character)) {
+            numbers++
+        } else {
+            simbols++
+        }
     }
-  
+
     if (smallLetters == 0 || bigLetters == 0 || numbers == 0 || simbols == 0) {
-      passwordMissingCharacters.push("A senha deve possuir letras minúsculas, letras maiúsculas, números e símbolos.")
+        passwordMissingCharacters.push("A senha deve conter letras minúsculas, letras maiúsculas, números e símbolos.")
     }
-  
+
     return passwordMissingCharacters
-  }
+}
+
+function emailVerify(email) {
+    var regex = /\S+@\S+\.\S+/;
+    return regex.test(email);
+}
 
 export const createUser = async (req, res) => {
     const { email, password, name } = req.body
 
     if (!email || !password) {
-        res.status(400).json({ erro: "E-mail e senha são obrigatórios." })
+        res.status(400).json({ erro: "E-mail e senha são obrigatórios!" })
         return
     }
 
-    const message = validaSenha(password)
+    const isValidEmail = emailVerify(email)
+    if (!isValidEmail) {
+        res.status(400).json({ erro: "E-mail inválido!" })
+        return
+    }
+
+    const message = passwordVerify(password)
     if (message.length > 0) {
-      res.status(400).json({ erro: message.join("-") })
-      return
+        res.status(400).json({ erro: message.join("-") })
+        return
     }
 
     const hashedPassword = hashSync(password, 10)

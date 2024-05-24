@@ -12,7 +12,7 @@ export const userLogin = async (req, res) => {
 
     const incorrectLoginMessage = {
         id: 0,
-        msg: "Erro: Email ou senha são incorretos."
+        msg: "Erro: Email ou senha incorretos!"
     }
 
     if (!email || !password) {
