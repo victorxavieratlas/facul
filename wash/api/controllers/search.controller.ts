@@ -26,6 +26,19 @@ export const getCityById = async (req, res) => {
 	}
 }
 
+export const getCitiesByStateId = async (req, res) => {
+	const { stateId } = req.params
+
+	try {
+		const city = await cityClient.findMany({
+			where: { stateId: Number(stateId) }
+		})
+		res.status(200).json({data: city})
+	} catch (error) {
+		res.status(400).json(error)
+	}
+}
+
 export const getProfilesByCityById = async (req, res) => {
 	const { id } = req.params
 
