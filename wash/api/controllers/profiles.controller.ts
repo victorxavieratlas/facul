@@ -107,7 +107,8 @@ export const createProfile = async (req, res) => {
         userId,
         totalPointsPlans,
         cityId,
-        schedules
+        schedules,
+        images
     } = req.body
 
     try {
@@ -128,6 +129,12 @@ export const createProfile = async (req, res) => {
                     create: schedules.map(schedule => ({
                         day: schedule.day,
                         isWorkingDay: schedule.isWorkingDay,
+                    }))
+                },
+                images: {
+                    create: images.map(image => ({
+                        url: image.url,
+                        published: image.published
                     }))
                 }
             }

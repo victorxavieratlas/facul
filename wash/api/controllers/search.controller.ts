@@ -33,7 +33,7 @@ export const getCitiesByStateId = async (req, res) => {
 		const city = await cityClient.findMany({
 			where: { stateId: Number(stateId) }
 		})
-		res.status(200).json({data: city})
+		res.status(200).json({ data: city })
 	} catch (error) {
 		res.status(400).json(error)
 	}
@@ -45,13 +45,16 @@ export const getProfilesByCityById = async (req, res) => {
 	try {
 		const city = await cityClient.findUnique({
 			where: { id: Number(id) },
-            include: {
-                profiles: {
-                    orderBy: {
-                        totalPointsPlans: 'desc'
-                    }
-                }
-            }
+			include: {
+				profiles: {
+					orderBy: {
+						totalPointsPlans: 'desc'
+					},
+					include: {
+						images: true
+					}
+				}
+			}
 		})
 		res.status(200).json(city)
 	} catch (error) {
@@ -81,8 +84,8 @@ export const getCityByContainName = async (req, res) => {
 		const cities = await cityClient.findMany({
 			where: {
 				name: {
-                    contains: name
-                }
+					contains: name
+				}
 			}
 		})
 		res.status(200).json(cities)
@@ -135,8 +138,8 @@ export const getStateByContainName = async (req, res) => {
 		const states = await stateClient.findMany({
 			where: {
 				name: {
-                    contains: name
-                }
+					contains: name
+				}
 			}
 		})
 		res.status(200).json(states)
