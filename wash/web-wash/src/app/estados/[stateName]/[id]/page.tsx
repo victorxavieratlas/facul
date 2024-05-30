@@ -1,3 +1,4 @@
+import { escape } from "querystring"
 import Cities from "../../../components/Cities"
 
 async function getCitiesByState(stateId: string) {
@@ -34,6 +35,9 @@ export default async function stateDetails({
 
 
 	const state = await getState(params.id, params.stateName)
+
+	const decodStateName = decodeURIComponent(params.stateName)
+
 	const cities = await getCitiesByState(params.id)
 
 	const listCities = cities.data.map((city: cityProps) => (
@@ -57,16 +61,16 @@ export default async function stateDetails({
 					<li>
 						<div className="flex items-center">
 							<svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+								<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
 							</svg>
-							<a href="#" className="ms-1 text-sm font-medium text-blue-400 md:ms-2">{params.stateName}</a>
+							<a href="#" className="ms-1 text-sm font-medium text-blue-400 md:ms-2">{decodStateName}</a>
 						</div>
 					</li>
 				</ol>
 			</nav>
 
 			<h1 className="text-3xl font-extrabold text-gray-800 text-balance mb-10">
-				Lavagens e Estéticas Automotivas em <span className="text-4xl font-extrabold text-blue-500">{params.stateName}</span>
+				Lavagens e Estéticas Automotivas em <span className="text-4xl font-extrabold text-blue-500">{decodStateName}</span>
 			</h1>
 			<ul className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mr-20 mb-10 ml-4">{listCities}</ul>
 		</div>

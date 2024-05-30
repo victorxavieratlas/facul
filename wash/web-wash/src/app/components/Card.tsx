@@ -1,10 +1,14 @@
 'use client'
+import Processor from "postcss/lib/processor"
 import { profileProps } from "../estados/[stateName]/[id]/cidades/[cityName]/[cityId]/page"
 
 import Link from "next/link"
+import Profile from "./Profile"
 // import Image from "next/image"
 
 export default function ItemCard({ profile }: { profile: profileProps }) {
+
+    Profile({profile})
     return (
         <li className="mb-10">
             <div className="max-w-sm">
