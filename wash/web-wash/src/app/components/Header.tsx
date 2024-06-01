@@ -43,7 +43,7 @@ export default function Header() {
                             <a href="#" className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">CADASTRE-SE GRÁTIS</a>
                         </li>
                         <li className="block py-2 px-3 text-white hover:bg-gray-300 rounded-lg">
-                            <a href="#" className="block py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-700 md:p-0 md:dark:hover:text-gray-700">ENTRAR</a>
+                            <a href="/entrar" className="block py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-700 md:p-0 md:dark:hover:text-gray-700">ENTRAR</a>
                         </li>
                     </ul>
                 </div>

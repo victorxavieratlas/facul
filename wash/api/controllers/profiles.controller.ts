@@ -25,7 +25,13 @@ export const getProfileById = async (req, res) => {
 
     try {
         const profile = await profileClient.findUnique({
-            where: { id: Number(id) }
+            where: { id: Number(id) },
+            include: {
+                images: true,
+                states: true,
+                cities: true,
+                schedules: true,
+            }
         })
         res.status(200).json({ data: profile })
     } catch (error) {

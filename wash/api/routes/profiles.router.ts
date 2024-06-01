@@ -1,14 +1,14 @@
 import { Router } from "express"
 
 import { createProfile, deleteProfile, getAllProfiles, getListOfMaxPrice, getListOfMinPrice, getListOfTotalPoints, getProfileById, softDeleteProfile, updateProfile } from "../controllers/profiles.controller"
-// import { tokenVerify } from '../middlewares/tokenVerify.middleware'
+import { tokenVerify } from '../middlewares/tokenVerify.middleware'
 
 const profileRouter = Router()
 
 profileRouter
 	// .get("/", tokenVerify, getAllProfiles) - Com middleware
 	.get("/", getAllProfiles)
-	.get("/:id", getProfileById)
+	.get("/:id", tokenVerify, getProfileById)
 	.get("/list/total-points", getListOfTotalPoints)
 	.get("/list/max-price", getListOfMaxPrice)
 	.get("/list/min-price", getListOfMinPrice)

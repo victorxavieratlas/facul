@@ -1,5 +1,5 @@
 'use client'
-import { stateProps, cityProps } from "../estados/[stateName]/[id]/page"
+import { stateProps, cityProps } from "../estados/[stateName]/[stateId]/page"
 
 import Link from "next/link"
 

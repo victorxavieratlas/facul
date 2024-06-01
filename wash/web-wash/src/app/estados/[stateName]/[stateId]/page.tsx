@@ -1,4 +1,3 @@
-import { escape } from "querystring"
 import Cities from "../../../components/Cities"
 
 async function getCitiesByState(stateId: string) {
@@ -30,15 +29,15 @@ export interface stateProps {
 export default async function stateDetails({
 	params,
 }: {
-	params: { id: string, stateName: string }
+	params: { stateId: string, stateName: string }
 }) {
 
 
-	const state = await getState(params.id, params.stateName)
+	const state = await getState(params.stateId, params.stateName)
 
 	const decodStateName = decodeURIComponent(params.stateName)
 
-	const cities = await getCitiesByState(params.id)
+	const cities = await getCitiesByState(params.stateId)
 
 	const listCities = cities.data.map((city: cityProps) => (
 		<Cities key={city.id} city={city} state={state} />
@@ -46,8 +45,6 @@ export default async function stateDetails({
 
 	return (
 		<div className="ml-48 mt-4">
-
-
 			<nav className="flex" aria-label="Breadcrumb">
 				<ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
 					<li className="inline-flex items-center">

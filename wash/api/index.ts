@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from "cors"
 const app = express()
 const port = 3007
 
@@ -13,12 +14,14 @@ import imagesRoutes from './routes/images'
 import schedulesRoutes from './routes/schedules'
 import workingHoursRoutes from './routes/hours'
 import searchRouter from './routes/search.router'
+import { tokenVerify } from './middlewares/tokenVerify.middleware'
 
 // app.use("/marcas", marcasRoutes)
 // app.use("/vinhos", vinhosRoutes)
 
 app
   .use(express.json())
+  .use(cors())
   .use("/users", usersRouter)
   .use("/login", loginRouter)
   .use("/profiles", profilesRoutes)

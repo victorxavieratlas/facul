@@ -1,6 +1,6 @@
 'use client'
 import Processor from "postcss/lib/processor"
-import { profileProps } from "../estados/[stateName]/[id]/cidades/[cityName]/[cityId]/page"
+import { profileProps } from "../estados/[stateName]/[stateId]/cidades/[cityName]/[cityId]/page"
 
 import Link from "next/link"
 import Profile from "./Profile"
@@ -16,7 +16,7 @@ export default function ItemCard({ profile }: { profile: profileProps }) {
                     <div>
                         <div className="max-w-sm min-h-max max-h-max bg-gray-100 rounded-lg shadow">
                             <img
-                                className="rounded-t-lg w-full min-h-60 max-h-60"
+                                className="rounded-t-lg object-cover w-full min-h-60 max-h-60"
                                 src={profile.images[0].url}
                                 alt="Imagem de perfil da loja"
                             />
