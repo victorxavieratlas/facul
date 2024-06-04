@@ -6,9 +6,9 @@ import Link from "next/link"
 function ItemState({ state }: { state: stateProps }) {
 
     return (
-        <div className="max-w-sm bg-white border border-gray-200">
+        <div className="max-w-sm bg-white border-none">
             <Link href={`estados/${state.name}/${state.id}`}>
-                <p>{state.name}</p>
+                <p className="text-md text-gray-600 font-semibold underline underline-offset-1 h-12 sm:h-8">{state.name}</p>
             </Link>
         </div>
     )
