@@ -1,22 +1,20 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Toaster, toast } from 'sonner'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
+
+import { ClienteContext } from "../context/ClienteContext"
 
 interface loginInput {
     email: string
     password: string
 }
 
-export default async function Login({
-    params
-}: {
-    params: { userId: string },
-}) {
+export default function Login() {
     const { register, handleSubmit, setFocus } = useForm<loginInput>()
-
+    const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
 
     useEffect(() => {
@@ -31,13 +29,18 @@ export default async function Login({
             body: JSON.stringify({ email: data.email, password: data.password })
         })
 
-        console.log(response)
+        // console.log(response)
         if (response.status == 201) {
             const user = await response.json()
 
             Cookies.set("user_login_id", user.userId)
             Cookies.set("x-access-token", user.token)
+            Cookies.set("x-user-name", user.userName)
 
+            console.log(user.userId, user.userName)
+            //Erro aqui
+            mudaLogin({userId: Number(user.userId), userName: user.userName})
+            // console.log(typeof mudaLogin)
             router.push(`/painel/${user.userId}`)
 
         } else {
@@ -73,7 +76,7 @@ export default async function Login({
                     </div>
                     <button type="submit" className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Entrar</button>
                     <div className="text-sm font-medium text-gray-500">
-                        Não tem conta? <a href="#" className="text-blue-500 hover:underline">Criar nova conta</a>
+                        Não tem conta? <a href="/cadastrar" className="text-blue-500 hover:underline">Criar nova conta</a>
                     </div>
                 </form>
             </div>

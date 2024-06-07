@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
+import ClienteProvider from "./context/ClienteContext"
 
 export const metadata: Metadata = {
   title: "Encontre lavagens e estéticas automotivas",
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <ClienteProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ClienteProvider>
       </body>
     </html>
   )

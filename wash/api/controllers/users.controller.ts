@@ -104,7 +104,10 @@ export const createUser = async (req, res) => {
         const user = await userClient.create({
             data: { email, password: hashedPassword, name }
         })
-        res.status(201).json({ data: user })
+        res.status(201).json({ data: {
+            userId: user.id,
+            userName: user.name
+        } })
     } catch (error) {
         res.status(400).json(error)
     }

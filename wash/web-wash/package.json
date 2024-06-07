@@ -15,7 +15,9 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.51.5",
-    "sonner": "^1.4.41"
+    "react-icons": "^5.2.1",
+    "sonner": "^1.4.41",
+    "sweetalert2": "^11.11.0"
   },
   "devDependencies": {
     "@types/node": "^20",
