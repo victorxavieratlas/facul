@@ -120,29 +120,29 @@ export const createProfile = async (req, res) => {
     try {
         const profile = await profileClient.create({
             data: {
-                bio,
-                phone,
-                startDay,
-                finalDay,
-                minPrice,
-                maxPrice,
-                userId,
-                totalPointsPlans,
-                cities: {
-                    connect: { id: Number(cityId) }
-                },
-                schedules: {
-                    create: schedules.map(schedule => ({
-                        day: schedule.day,
-                        isWorkingDay: schedule.isWorkingDay,
-                    }))
-                },
-                images: {
-                    create: images.map(image => ({
-                        url: image.url,
-                        published: image.published
-                    }))
-                }
+                userId
+                // bio,
+                // phone,
+                // startDay,
+                // finalDay,
+                // minPrice,
+                // maxPrice,
+                // totalPointsPlans,
+                // cities: {
+                //     connect: { id: Number(cityId) }
+                // },
+                // schedules: {
+                //     create: schedules.map(schedule => ({
+                //         day: schedule.day,
+                //         isWorkingDay: schedule.isWorkingDay,
+                //     }))
+                // },
+                // images: {
+                //     create: images.map(image => ({
+                //         url: image.url,
+                //         published: image.published
+                //     }))
+                // }
             }
         })
         res.status(201).json({ data: profile })

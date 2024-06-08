@@ -88,9 +88,9 @@ export const createUser = async (req, res) => {
 
     const isValidEmail = emailVerify(email)
     if (!isValidEmail) {
-        res.status(400).json({ erro: "E-mail inválido!" })
+        res.status(405).json({ erro: "E-mail inválido!" })
         return
-    }
+    } 
 
     const message = passwordVerify(password)
     if (message.length > 0) {

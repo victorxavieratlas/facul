@@ -23,41 +23,82 @@ export default function Login() {
     }, [])
 
     async function registerVerify(data: RegisterInput) {
-        const userResponse = await fetch("http://localhost:3007/users", {
+        const createUserResponse = await fetch("http://localhost:3007/users", {
             cache: 'no-store',
             method: "POST",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ email: data.email, password: data.password, name: data.name })
         })
 
-        // if (userResponse.status == 201) {
-        //     const user = await userResponse.json()
+        if (createUserResponse.status == 201) {
+            const user = await createUserResponse.json()
 
-        //     Cookies.set("user_login_id", user.userId)
-        //     Cookies.set("x-access-token", user.token)
-        //     Cookies.set("x-user-name", user.userName)
+            const createSessionResponse = await fetch("http://localhost:3007/login", {
+                cache: 'no-store',
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify({ email: data.email, password: data.password })
+            })
 
-        //     console.log(user.userId, user.userName)
-        //     //Erro aqui
-        //     mudaLogin({userId: Number(user.userId), userName: user.userName})
-        //     // console.log(typeof mudaLogin)
-        //     router.push(`/painel/${user.userId}`)
+            if (createSessionResponse.status == 201) {
+                const userSession = await createSessionResponse.json()
 
-        // } else {
-        //     toast.error("Erro... Email ou senha incorretos.")
-        //     setFocus("email")
-        // }
+                Cookies.set("user_login_id", userSession.userId)
+                Cookies.set("x-access-token", userSession.token)
+                Cookies.set("x-user-name", userSession.userName)
 
-        //login antes de criar o profile
+                const createProfileResponse = await fetch("http://localhost:3007/profiles", {
+                    cache: 'no-store',
+                    method: "POST",
+                    headers: { "Content-type": "application/json" },
+                    body: JSON.stringify({ userId: userSession.userId })
+                })
 
-        const profileResponse = await fetch("http://localhost:3007/profiles", {
-            cache: 'no-store',
-            method: "POST",
-            headers: { "Content-type": "application/json" },
-            body: JSON.stringify({ userId: userResponse.id })
-        })
+                if (createProfileResponse.status == 201) {
+                    const profile = await createProfileResponse.json()
 
+                    Cookies.set("x-profile-id", profile.data.id)
 
+                    mudaLogin({ userId: Number(userSession.userId), userName: userSession.userName })
+
+                    router.push(`/painel/${userSession.userId}`)
+                } else {
+                    const deleteUserResponse = await fetch("http://localhost:3007/users", {
+                        cache: 'no-store',
+                        method: "POST",
+                        headers: { "Content-type": "application/json" },
+                        body: JSON.stringify({ id: user.id })
+                    })
+
+                    if (deleteUserResponse.status == 200) {
+                        toast.error("Ocorreu um erro! Cadastre novamente")
+                        setFocus("email")
+                    }
+
+                    Cookies.remove("user_login_id")
+                    Cookies.remove("x-access-token")
+                    Cookies.remove("x-user-name")
+                }
+
+            } else {
+
+                const deleteUserResponse = await fetch("http://localhost:3007/users", {
+                    cache: 'no-store',
+                    method: "POST",
+                    headers: { "Content-type": "application/json" },
+                    body: JSON.stringify({ id: user.id })
+                })
+
+                if (deleteUserResponse.status == 200) {
+                    toast.error("Ocorreu um erro! Cadastre novamente")
+                    setFocus("email")
+                }
+            }
+
+        } else {
+            toast.error("Email cadastrado já existe ou digite um email válido.")
+            setFocus("email")
+        }
     }
 
     return (
@@ -85,7 +126,7 @@ export default function Login() {
 
                     <button type="submit" className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cadastrar</button>
                     <div className="text-sm font-medium text-gray-500">
-                        Já tem conta? <a href="/entrar" className="text-blue-500 hover:underline">Entrar na conta</a> 
+                        Já tem conta? <a href="/entrar" className="text-blue-500 hover:underline">Entrar na conta</a>
                     </div>
                 </form>
             </div>
