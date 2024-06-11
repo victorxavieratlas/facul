@@ -19,7 +19,11 @@ export default function Login() {
     const router = useRouter()
 
     useEffect(() => {
-        setFocus("email")
+        if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
+            router.replace(`/painel/${Cookies.get("user_login_id")}`)
+        } else {
+            setFocus("email")
+        }
     }, [])
 
     async function registerVerify(data: RegisterInput) {
@@ -59,6 +63,7 @@ export default function Login() {
 
                     Cookies.set("x-profile-id", profile.data.id)
 
+                    console.log( Number(userSession.userId))
                     mudaLogin({ userId: Number(userSession.userId), userName: userSession.userName })
 
                     router.push(`/painel/${userSession.userId}`)
@@ -68,7 +73,7 @@ export default function Login() {
                         method: "POST",
                         headers: { "Content-type": "application/json" },
                         body: JSON.stringify({ id: user.id })
-                    })
+                    }) //melhorar o deleteUser
 
                     if (deleteUserResponse.status == 200) {
                         toast.error("Ocorreu um erro! Cadastre novamente")
@@ -87,7 +92,7 @@ export default function Login() {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
                     body: JSON.stringify({ id: user.id })
-                })
+                }) //melhorar o deleteUser
 
                 if (deleteUserResponse.status == 200) {
                     toast.error("Ocorreu um erro! Cadastre novamente")
