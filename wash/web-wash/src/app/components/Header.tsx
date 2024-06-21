@@ -4,6 +4,7 @@ import { RxExit } from "react-icons/rx"
 import Swal from "sweetalert2"
 
 import { ClienteContext } from "../context/ClienteContext"
+import Link from "next/link"
 
 export default function Header() {
 
@@ -29,10 +30,10 @@ export default function Header() {
     return (
         <nav className="bg-gray-200 border-gray-400">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between lg:mx-auto p-4">
-                <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12">
+                <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12">
                     <img src="./logo2.svg" className="h-8" alt="Logo e logotipo da CarWash e azul claro" />
                     <span className="self-center text-2xl font-semibold whitespace-nowrap text-blue-500">CarWash</span>
-                </a>
+                </Link>
                 <div className="flex md:order-1">
                     <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" className="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-200 rounded-lg text-sm p-2.5 me-1">
                         <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

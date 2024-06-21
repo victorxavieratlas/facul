@@ -2,6 +2,8 @@
 import { useEffect } from "react"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
+import ProfileForm from "../../components/ProfileForm"
+
 
 
 export default async function Panel({
@@ -32,7 +34,14 @@ export default async function Panel({
     return (
         <div className="sm:ml-48 sm:mr-48 mt-4">
 
-            {profileData.phone != null ?
+            {profileData.phone == null ?
+                
+                <div className=" sm:mr-20 my-40 items-center justify-between w-full text-center">
+                    <ProfileForm profileIncomplete={profileData.id}/>
+                </div>
+
+                :
+
                 <div className="max-w-full min-w-full">
                     <img className="object-cover h-96 w-full" src={profileData.images[0].url} alt="" />
                     <div className="p-5">
@@ -48,13 +57,6 @@ export default async function Panel({
                         <h3 className="mt-4 sm:mt-10 ">Descrição de {profileData.name}</h3>
                         <p className="mb-3 font-normal text-gray-700">{profileData.bio}</p>
                     </div>
-                </div>
-                :
-                <div className=" sm:mr-20 my-40 items-center justify-between w-full text-center">
-                    <h1 className="text-1xl sm:text-3xl font-extrabold text-gray-800 text-balance">
-						<span className="clear-left block mb-4">Clique no botão a baixo e</span> <span className="font-extrabold text-blue-500">Complete seu perfil!</span>
-					</h1>
-                    <button type="button" className="mt-10 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Completar perfil</button>
                 </div>
             }
         </div>
