@@ -23,64 +23,121 @@ router.post("/", async (req, res) => {
   res.status(201).json(aluno)
 })
 
+router.post("/deposito/:alunoIdParams", async (req, res) => {
+  const { alunoIdParams } = req.params
+  const { data, tipo, valor } = req.body
 
-// router.get("/", async (req, res) => {
-//   const gastos = await prisma.gasto.findMany()
-//   res.status(200).json(gastos)
-// })
+  if (!data || !tipo || !valor || !alunoIdParams) {
+    res.status(400).json({ "erro": "Informe todos os dados" })
+    return
+  }
 
-// router.post("/", async (req, res) => {
-//   const { data, lanche, alunoId } = req.body
+  const alunoId = Number(alunoIdParams)
 
-//   if (!data || !lanche || alunoId) {
-//     res.status(400).json({ "erro": "Informe todos os dados" })
-//     return
-//   }
+  try {
+    const [deposito, aluno] = await prisma.$transaction([
+      prisma.deposito.create({ data: { data, alunoId, tipo, valor } }),
+      prisma.aluno.update({ where: { id: alunoId }, data: { numDepositos: { increment: 1 }, totalDepositos: {increment: valor} } })
+    ])
+    res.status(201).json({ deposito, aluno })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
 
-//   const gasto = await prisma.gasto.create({
-//     data: { data, lanche, alunoId }
-//   })
-//   res.status(201).json(gasto)
-// })
+router.delete("/deposito/:idParams", async (req, res) => {
+    const { idParams } = req.params
+    const { depositoId, valor } = req.body
 
-// router.get("/", async (req, res) => {
-//   const depositos = await prisma.deposito.findMany()
-//   res.status(200).json(depositos)
-// })
+    if (!idParams || !depositoId || !valor) {
+      res.status(400).json({ "erro": "Informe todos os dados" })
+      return
+    }
 
-// router.post("/", async (req, res) => {
-//   const { data, tipo, valor, alunoId } = req.body
+    const id = Number(idParams)
 
-//   if (!data || !tipo || !valor || !alunoId) {
-//     res.status(400).json({ "erro": "Informe todos os dados" })
-//     return
-//   }
+    try {
+        const [deposito, aluno] = await prisma.$transaction([
+          prisma.deposito.delete({ where: { id: depositoId } }),
+          prisma.aluno.update({ where: { id }, data: { numDepositos: { decrement: 1 }, totalDepositos: {decrement: valor} } })
+        ])
+        res.status(200).json({ deposito, aluno })
+      } catch (error) {
+        res.status(400).json(error)
+      }
+  })
+  
+router.get("/deposito", async (req, res) => {
+  const deposito = await prisma.deposito.findMany()
+  res.status(200).json(deposito)
+})
 
-//   try {
-//     const [gasto, aluno] = await prisma.$transaction([
-//       prisma.deposito.create({ data: { data, alunoId, tipo, valor } }),
-//       prisma.aluno.update({ where: { id: alunoId }, data: { numDepositos: { increment: 1 }, totalDepositos: {increment: valor} } })
-//     ])
-//     res.status(201).json({ gasto, aluno })
-//   } catch (error) {
-//     res.status(400).json(error)
-//   }
-// })
+router.post("/gastos/:alunoIdParams", async (req, res) => {
+  const { alunoIdParams } = req.params
+  const { data, lanche, valor } = req.body
 
-// router.delete("/:id", async (req, res) => {
-//     const { id } = req.params
-//     const { valor } = req.body
+  if (!data || !lanche || !valor || !alunoIdParams) {
+    res.status(400).json({ "erro": "Informe todos os dados" })
+    return
+  }
 
+  const alunoId = Number(alunoIdParams)
 
-//     try {
-//         const [gasto, aluno] = await prisma.$transaction([
-//           prisma.deposito.delete({ where: { id: Number(id) } }),
-//           prisma.aluno.update({ where: { gastos: {id: Number(id)} }, data: { numDepositos: { decrement: 1 }, totalDepositos: {decrement: valor} } })
-//         ])
-//         res.status(200).json({ gasto, aluno })
-//       } catch (error) {
-//         res.status(400).json(error)
-//       }
-//   })
+  try {
+    const [gasto, aluno] = await prisma.$transaction([
+      prisma.gasto.create({ data: { data, alunoId, lanche, valor } }),
+      prisma.aluno.update({ where: { id: alunoId }, data: { numCompras: { increment: 1 }, totalCompras: {increment: valor} } })
+    ])
+    res.status(201).json({ gasto, aluno })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
+router.delete("/gastos/:idParams", async (req, res) => {
+  const { idParams } = req.params
+  const { gastoId, valor } = req.body
+
+  if (!idParams || !gastoId || !valor) {
+    res.status(400).json({ "erro": "Informe todos os dados" })
+    return
+  }
+
+  const id = Number(idParams)
+
+  try {
+      const [gasto, aluno] = await prisma.$transaction([
+        prisma.gasto.delete({ where: { id: gastoId } }),
+        prisma.aluno.update({ where: { id }, data: { numCompras: { decrement: 1 }, totalCompras: {decrement: valor} } })
+      ])
+      res.status(200).json({ gasto, aluno })
+    } catch (error) {
+      res.status(400).json(error)
+    }
+})
+
+router.get("/gastos", async (req, res) => {
+  const gastos = await prisma.gasto.findMany()
+  res.status(200).json(gastos)
+})
+
+router.get("/alunos/saldo", async (req, res) => {
+  const alunos = await prisma.aluno.findMany({
+    include: {
+      gastos: true,
+      depositos: true
+    }
+  })
+
+  const alunosSaldo = alunos.map(aluno => {
+    const saldo = aluno.totalDepositos - aluno.totalCompras;
+    return {
+      ...aluno,
+      saldo
+    };
+  });
+
+  res.status(200).json(alunosSaldo);
+})
 
 export default router

@@ -19,6 +19,7 @@ CREATE TABLE `Gasto` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `data` VARCHAR(12) NOT NULL,
     `lanche` VARCHAR(40) NOT NULL,
+    `valor` DECIMAL(9, 2) NULL,
     `alunoId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)

@@ -29,10 +29,11 @@ model Aluno {
 }
 
 model Gasto {
-  id      Int    @id @default(autoincrement())
-  data    String @db.VarChar(12)
-  lanche  String @db.VarChar(40)
-  aluno   Aluno  @relation(fields: [alunoId], references: [id])
+  id      Int      @id @default(autoincrement())
+  data    String   @db.VarChar(12)
+  lanche  String   @db.VarChar(40)
+  valor   Decimal? @db.Decimal(9, 2)
+  aluno   Aluno    @relation(fields: [alunoId], references: [id])
   alunoId Int
 }
 
