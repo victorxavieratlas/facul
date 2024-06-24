@@ -21,6 +21,7 @@ export default function Login() {
     useEffect(() => {
         if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
             router.replace(`/painel/${Cookies.get("user_login_id")}`)
+            mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" })
         } else {
             setFocus("email")
         }

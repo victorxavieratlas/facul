@@ -3,9 +3,7 @@ import { useEffect } from "react"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import ProfileForm from "../../components/ProfileForm"
-
-
-
+ 
 export default async function Panel({
     params
 }: {
@@ -36,14 +34,14 @@ export default async function Panel({
 
             {profileData.phone == null ?
                 
-                <div className=" sm:mr-20 my-40 items-center justify-between w-full text-center">
-                    <ProfileForm profileIncomplete={profileData.id}/>
+                <div className="my-10 items-center justify-between w-full text-left">
+                    <ProfileForm profileIncomplete={profileData}/>
                 </div>
 
                 :
 
                 <div className="max-w-full min-w-full">
-                    <img className="object-cover h-96 w-full" src={profileData.images[0].url} alt="" />
+                    {/* <img className="object-cover h-96 w-full" src={profileData.images[0].url} alt="" /> */}
                     <div className="p-5">
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{profileData.name}</h5>
                         <p className="mb-3 font-normal text-gray-700">De {profileData.startDay} à {profileData.finalDay}</p>

@@ -58,40 +58,46 @@ function ProfileForm({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
 
     return (
-        <div className="max-w-sm bg-white border-none">
-            <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
+        <div className="max-w bg-white border-none">
+            <div className="min-w-full w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form className="space-y-6"
                     onSubmit={handleSubmit(EditProfile)}>
-                    <h5 className="text-xl font-medium text-gray-900">Complete seu perfil na <span className="text-2xl text-blue-500">CarWash</span></h5>
+                    <h5 className="text-xl font-medium text-gray-900 text-center">Complete seu perfil na <span className="text-2xl text-blue-500">CarWash</span></h5>
                     <div>
-                        <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Seu telefone WhatsApp.</label>
-                        <input type="phone" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@email.com"
+                        <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Seu telefone WhatsApp</label>
+                        <input type="phone" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="53999999999"
                             required {...register("phone")} />
                     </div>
                     <div>
-                        <label htmlFor="minPrice" className="block mb-2 text-sm font-medium text-gray-900">Seu menor preço.</label>
-                        <input type="decimal" id="minPrice" placeholder="R$ 100" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        <label htmlFor="bio" className="block mb-2 text-sm font-medium text-gray-900">Adicione uma descrição</label>
+                        <input type="string" id="bio" placeholder="Conte sobre o seu negócio" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5"
+                            required {...register("bio")} />
+                    </div>
+
+                    <div>
+                        <label htmlFor="minPrice" className="block mb-2 text-sm font-medium text-gray-900">Seu menor preço</label>
+                        <input type="decimal" id="minPrice" placeholder="O menor valor dos seus serviços" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required {...register("minPrice")} />
                     </div>
                     <div>
-                        <label htmlFor="maxPrice" className="block mb-2 text-sm font-medium text-gray-900">Seu maior preço.</label>
-                        <input type="decimal" id="maxPrice" placeholder="R$ 200" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        <label htmlFor="maxPrice" className="block mb-2 text-sm font-medium text-gray-900">Seu maior preço</label>
+                        <input type="decimal" id="maxPrice" placeholder="O maior valor dos seus serviços" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required {...register("maxPrice")} />
                     </div>
 
                     <div>
-                        <label htmlFor="startDay" className="block mb-2 text-sm font-medium text-gray-900">Seu maior preço.</label>
-                        <input type="string" id="startDay" placeholder="R$ 200" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        <label htmlFor="startDay" className="block mb-2 text-sm font-medium text-gray-900">Dia de abetura</label>
+                        <input type="string" id="startDay" placeholder="Segunda" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required {...register("startDay")} />
                     </div>
                     <div>
-                        <label htmlFor="finalDay" className="block mb-2 text-sm font-medium text-gray-900">Seu maior preço.</label>
-                        <input type="string" id="finalDay" placeholder="R$ 200" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        <label htmlFor="finalDay" className="block mb-2 text-sm font-medium text-gray-900">Dia de fechamento</label>
+                        <input type="string" id="finalDay" placeholder="Sexta" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required {...register("finalDay")} />
                     </div>
 
                     <div>
-                        <label htmlFor="cityId" className="block mb-2 text-sm font-medium text-gray-900">Seu maior preço.</label>
+                        <label htmlFor="cityId" className="block mb-2 text-sm font-medium text-gray-900">Escolha a sua cidade</label>
                         <input type="string" id="cityId" placeholder="1100114" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required {...register("cityId")} />
                     </div>
