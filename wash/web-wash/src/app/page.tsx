@@ -1,4 +1,6 @@
+"use client"
 import States from "./components/States";
+import Search from "./components/Search";
 
 async function getState() {
 	const response = await fetch("http://localhost:3007/search/state", 
@@ -30,7 +32,9 @@ export default async function Home() {
 				</div>
 			</div>
 
-			<form className="max-w-sm sm:max-w-lg mx-auto">
+			<Search states={states} />
+
+			{/* <form className="max-w-sm sm:max-w-lg mx-auto">
 				<div className="flex">
 					<div className="relative w-full drop-shadow-lg mt-10 mb-10">
 						<input type="search" id="search-dropdown" className="block p-2.5 w-full h-14 rounded-lg z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:outline-none" placeholder=" Selenionar cidade" required />
@@ -42,9 +46,9 @@ export default async function Home() {
 						</button>
 					</div>
 				</div>
-			</form>
+			</form> */}
 
-			<div className="text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10">
+			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10">
         		{listStates}
       		</div>
 

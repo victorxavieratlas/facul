@@ -46,6 +46,24 @@ router.get("/list/:name", async (req, res) => {
 	}
 })
 
+router.get("/search/:name", async (req, res) => {
+	const { name } = req.params
+	console.log(name)
+	try {
+		const cities = await prisma.city.findMany({
+			where: {
+			 	name: {
+					contains: name
+				}
+			}
+		})
+		console.log(cities)
+		res.status(200).json(cities)
+	} catch (error) {
+		res.status(400).json(error)
+	}
+})
+
 router.post("/", async (req, res) => {
 	const {
 		name,
