@@ -3,13 +3,13 @@ import States from "./components/States";
 import Search from "./components/Search";
 
 async function getState() {
-	const response = await fetch("http://localhost:3007/search/state", 
-		  { cache: 'no-store' })
+	const response = await fetch("http://localhost:3007/search/state",
+		{ cache: 'no-store' })
 	const data = await response.json()
 	return data
-  }
-  
-  export interface stateProps {
+}
+
+export interface stateProps {
 	id: number
 	name: string
 }
@@ -19,16 +19,19 @@ export default async function Home() {
 	const states = await getState()
 
 	const listStates = states.map((state: stateProps) => (
-	  <States key={state.id} state={state} />
+		<States key={state.id} state={state} />
 	))
 
 	return (
 		<div>
-			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-10 mb-10">
+			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-8 mb-10 sm:mb-0">
 				<div className="ml-4 sm:ml-0 flex flex-col gap-4">
 					<h1 className="text-2xl sm:text-5xl font-extrabold text-gray-800 text-balance">
 						<span className="clear-left block mb-4">Encontre</span> <span className="clear-left block mb-4">lavagens e estéticas automotivas</span> na <span className="font-extrabold text-blue-500">CarWash</span>
 					</h1>
+					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-2">
+						<span className="clear-left block">A maior plataforma de lavagens e estéticas</span>automotivas do Brasil.
+					</h2>
 				</div>
 			</div>
 
@@ -49,9 +52,8 @@ export default async function Home() {
 			</form> */}
 
 			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10">
-        		{listStates}
-      		</div>
-
+				{listStates}
+			</div>
 		</div>
 	)
 }

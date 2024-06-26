@@ -2,14 +2,17 @@
 import { useContext } from "react"
 import { RxExit } from "react-icons/rx"
 import Swal from "sweetalert2"
+import Cookies from 'js-cookie'
 
 import { ClienteContext } from "../context/ClienteContext"
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
 
 
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext)
+    const router = useRouter()
 
     function logout() {
         Swal.fire({
@@ -22,7 +25,12 @@ export default function Header() {
             cancelButtonText: "Não",
         }).then((result) => {
             if (result.isConfirmed) {
+                // Cookies.remove("user_login_id")
+                // Cookies.remove("x-access-token")
+                // Cookies.remove("x-user-name")
+                // Cookies.remove("x-profile-id")
                 mudaLogin({ userId: null, userName: "" })
+                router.replace("/")
             }
         });
     }

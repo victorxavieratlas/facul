@@ -32,7 +32,7 @@ export default async function cityDetails({
 	params: { cityId: string, cityName: string, stateName: string, stateId: string }
 }) {
 
-	
+
 	const decodStateName = decodeURIComponent(params.stateName)
 	const decodCityName = decodeURIComponent(params.cityName)
 
@@ -40,7 +40,7 @@ export default async function cityDetails({
 	const listProfiles = profiles.profiles.map((profile: profileProps) => (
 		<Cards key={profile.id} profile={profile} />
 	))
-
+	console.log(listProfiles)
 	return (
 		<div className="ml-4 sm:ml-48 mt-6">
 			<nav className="flex" aria-label="Breadcrumb">
@@ -77,14 +77,24 @@ export default async function cityDetails({
 			<h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 text-balance mb-10 mt-4">
 				Lavagens e estéticas automotivas em <span className="text-3xl sm:text-4xl font-extrabold text-blue-500">{decodCityName}, {decodStateName}</span>
 			</h1>
-			
+
 			<div className="mb-10">
 				{/* Adicionar 'ordenar e filtrar' */}
 			</div>
 
-			<ul className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:mr-20 mb-10 ml-2 mr-4">
-				{listProfiles}
-			</ul>
+			<div>
+				{!listProfiles ?
+					<div className="w-full text-center">
+						<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 my-40">
+							Nenhuma lavagem ou estética automotiva encontrada.
+						</h2>
+					</div>
+					:
+					<ul className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:mr-20 mb-10 ml-2 mr-4">
+						{listProfiles}
+					</ul>
+				}
+			</div>
 		</div>
 	)
 }

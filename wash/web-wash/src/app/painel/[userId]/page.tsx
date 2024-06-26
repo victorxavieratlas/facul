@@ -11,6 +11,7 @@ export default async function Panel({
 }) {
     const router = useRouter()
 
+    //Ajustar o login para criar o cookie do profile e usar aqui
     const profileId = Cookies.get("x-profile-id")
 
     useEffect(() => {
@@ -28,7 +29,7 @@ export default async function Panel({
 
     const profile = await getProfile(profileId)
     const profileData = profile.data
-
+    // console.log(profileData)
     return (
         <div className="sm:ml-48 sm:mr-48 mt-4">
 

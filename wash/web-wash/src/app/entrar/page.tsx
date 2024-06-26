@@ -18,7 +18,12 @@ export default function Login() {
     const router = useRouter()
 
     useEffect(() => {
-        setFocus("email")
+        if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
+            router.replace(`/painel/${Cookies.get("user_login_id")}`)
+            mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" })
+        } else {
+            setFocus("email")
+        }
     }, [])
 
     async function loginVerify(data: loginInput) {
@@ -29,10 +34,10 @@ export default function Login() {
             body: JSON.stringify({ email: data.email, password: data.password })
         })
 
-        // console.log(response)
+        
         if (response.status == 201) {
             const user = await response.json()
-
+            console.log(user)
             Cookies.set("user_login_id", user.userId)
             Cookies.set("x-access-token", user.token)
             Cookies.set("x-user-name", user.userName)

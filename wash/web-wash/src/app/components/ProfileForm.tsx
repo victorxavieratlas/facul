@@ -43,13 +43,15 @@ function ProfileForm({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                 })
         })
 
+        console.log(profileUpdated)
         // console.log(response)
         if (profileUpdated.status == 200) {
             const profile = await profileUpdated.json()
 
-            console.log(profile)
+            console.log(profile.data.userId)
 
-            router.push(`/painel/${profile.userId}`)
+            router.refresh()
+            // router.replace(`/painel/${profile.data.userId}`)
         } else {
             toast.error("Não foi possível editar ou salvar as informações.")
             setFocus("phone")

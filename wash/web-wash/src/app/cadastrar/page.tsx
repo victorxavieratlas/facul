@@ -63,10 +63,7 @@ export default function Login() {
                     const profile = await createProfileResponse.json()
 
                     Cookies.set("x-profile-id", profile.data.id)
-
-                    console.log( Number(userSession.userId))
                     mudaLogin({ userId: Number(userSession.userId), userName: userSession.userName })
-
                     router.push(`/painel/${userSession.userId}`)
                 } else {
                     const deleteUserResponse = await fetch("http://localhost:3007/users", {
