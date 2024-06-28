@@ -11,7 +11,6 @@ export default async function Panel({
 }) {
     const router = useRouter()
 
-    //Ajustar o login para criar o cookie do profile e usar aqui
     const profileId = Cookies.get("x-profile-id")
 
     useEffect(() => {
@@ -29,20 +28,22 @@ export default async function Panel({
 
     const profile = await getProfile(profileId)
     const profileData = profile.data
-    // console.log(profileData)
     return (
         <div className="sm:ml-48 sm:mr-48 mt-4">
 
-            {profileData.phone == null ?
+            {!profileData.phone ?
                 
                 <div className="my-10 items-center justify-between w-full text-left">
                     <ProfileForm profileIncomplete={profileData}/>
                 </div>
-
                 :
-
                 <div className="max-w-full min-w-full">
-                    {/* <img className="object-cover h-96 w-full" src={profileData.images[0].url} alt="" /> */}
+                    {profileData.images[0] ? 
+                    <img className="object-cover h-96 w-full" src={profileData.images[0].url} alt="" />
+                    :
+                    // Imgem default
+                    <></>
+                    }
                     <div className="p-5">
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{profileData.name}</h5>
                         <p className="mb-3 font-normal text-gray-700">De {profileData.startDay} à {profileData.finalDay}</p>

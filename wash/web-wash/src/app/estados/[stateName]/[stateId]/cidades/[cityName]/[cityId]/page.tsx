@@ -83,7 +83,7 @@ export default async function cityDetails({
 			</div>
 
 			<div>
-				{!listProfiles ?
+				{!listProfiles.length ?
 					<div className="w-full text-center">
 						<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 my-40">
 							Nenhuma lavagem ou estética automotiva encontrada.

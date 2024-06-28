@@ -1,13 +1,11 @@
 "use client"
+import { useEffect, useContext } from 'react'
+import { useRouter } from 'next/navigation'
+import Cookies from 'js-cookie'
+
+import { ClienteContext } from "./context/ClienteContext"
 import States from "./components/States";
 import Search from "./components/Search";
-
-async function getState() {
-	const response = await fetch("http://localhost:3007/search/state",
-		{ cache: 'no-store' })
-	const data = await response.json()
-	return data
-}
 
 export interface stateProps {
 	id: number
@@ -15,12 +13,25 @@ export interface stateProps {
 }
 
 export default async function Home() {
+	const { mudaLogin } = useContext(ClienteContext)
+	const router = useRouter()
 
-	const states = await getState()
+	if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
+		router.replace(`/`)
+		mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" })
+	}
 
-	const listStates = states.map((state: stateProps) => (
-		<States key={state.id} state={state} />
-	))
+	async function getState() {
+		const statesResponse = await fetch("http://localhost:3007/search/state",
+			{ cache: 'no-store' })
+		const states = await statesResponse.json()
+
+		const listStates = states.map((state: stateProps) => (
+			<States key={state.id} state={state} />
+		))
+		return { listStates, states }
+	}
+	const allStates = getState()
 
 	return (
 		<div>
@@ -35,7 +46,7 @@ export default async function Home() {
 				</div>
 			</div>
 
-			<Search states={states} />
+			<Search states={(await allStates).states} />
 
 			{/* <form className="max-w-sm sm:max-w-lg mx-auto">
 				<div className="flex">
@@ -52,7 +63,7 @@ export default async function Home() {
 			</form> */}
 
 			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10">
-				{listStates}
+				{(await allStates).listStates}
 			</div>
 		</div>
 	)

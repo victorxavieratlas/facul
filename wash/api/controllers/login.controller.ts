@@ -49,8 +49,8 @@ export const userLogin = async (req, res) => {
                 process.env.JWT_KEY,
                 { expiresIn: "1h" }
             )
-            console.log(user.id, user.name)
-            res.status(201).json({ token: token, userId: user.id, userName: user.name })
+            console.log(user.profile.id)
+            res.status(201).json({ token: token, userId: user.id, userName: user.name, profileId: user.profile.id })
         }
         else {
             res.status(400).json(incorrectLoginMessage)

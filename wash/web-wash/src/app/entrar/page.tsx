@@ -41,9 +41,8 @@ export default function Login() {
             Cookies.set("user_login_id", user.userId)
             Cookies.set("x-access-token", user.token)
             Cookies.set("x-user-name", user.userName)
+            Cookies.set("x-profile-id", user.profileId)
 
-            console.log(user.userId, user.userName)
-            //Erro aqui
             mudaLogin({userId: Number(user.userId), userName: user.userName})
             // console.log(typeof mudaLogin)
             router.push(`/painel/${user.userId}`)
