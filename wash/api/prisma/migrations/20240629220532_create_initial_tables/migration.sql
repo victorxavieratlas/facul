@@ -17,14 +17,19 @@ CREATE TABLE `users` (
 CREATE TABLE `profiles` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
+    `name` VARCHAR(30) NULL,
     `phone` VARCHAR(20) NULL,
     `bio` VARCHAR(191) NULL,
+    `openHour` VARCHAR(5) NULL,
+    `closeHour` VARCHAR(5) NULL,
     `startDay` VARCHAR(30) NULL,
     `finalDay` VARCHAR(30) NULL,
     `minPrice` DECIMAL(9, 2) NULL,
     `maxPrice` DECIMAL(9, 2) NULL,
     `verified` BOOLEAN NOT NULL DEFAULT false,
     `totalPointsPlans` INTEGER NULL,
+    `numberOfRatings` INTEGER NULL,
+    `totalOfRatings` INTEGER NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -112,9 +117,22 @@ CREATE TABLE `categories` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `cities` (
+CREATE TABLE `states` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `deletedAt` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `cities` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `uf` VARCHAR(2) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `stateId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -173,6 +191,15 @@ CREATE TABLE `plans` (
     `deletedAt` DATETIME(3) NULL,
 
     PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_ProfileToState` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_ProfileToState_AB_unique`(`A`, `B`),
+    INDEX `_ProfileToState_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -257,6 +284,9 @@ ALTER TABLE `hour-points` ADD CONSTRAINT `hour-points_workingHourId_fkey` FOREIG
 ALTER TABLE `ratings` ADD CONSTRAINT `ratings_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `cities` ADD CONSTRAINT `cities_stateId_fkey` FOREIGN KEY (`stateId`) REFERENCES `states`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `cities-zones` ADD CONSTRAINT `cities-zones_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -273,6 +303,12 @@ ALTER TABLE `districts-zones` ADD CONSTRAINT `districts-zones_cityZoneId_fkey` F
 
 -- AddForeignKey
 ALTER TABLE `districts-zones` ADD CONSTRAINT `districts-zones_districtId_fkey` FOREIGN KEY (`districtId`) REFERENCES `districts`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ProfileToState` ADD CONSTRAINT `_ProfileToState_A_fkey` FOREIGN KEY (`A`) REFERENCES `profiles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ProfileToState` ADD CONSTRAINT `_ProfileToState_B_fkey` FOREIGN KEY (`B`) REFERENCES `states`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_CategoryToProfile` ADD CONSTRAINT `_CategoryToProfile_A_fkey` FOREIGN KEY (`A`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

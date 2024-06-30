@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 interface City {
     id: number;
+    uf: string;
     name: string;
     stateId: number;
 }
@@ -75,7 +76,7 @@ const Search = ({ states }: SearchProps) => {
                         return (
                             <Link href={`/estados/${stateName}/${city.stateId}/cidades/${city.name}/${city.id}`} className="hover:bg-gray-400 transition duration-200 ease-in-out">
                                 <li key={city.id} className="border-b-2 border-gray-200 p-3 cursor-pointer transition duration-200 ease-in-out">
-                                    <p className="block text-gray-800 hover:text-blue-500">{city.name}</p>
+                                    <p className="block text-gray-800 hover:text-blue-500">{city.name} - {city.uf}</p>
                                 </li>
                             </Link>
                         );

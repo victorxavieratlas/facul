@@ -30,7 +30,7 @@ export default function ItemCard({ profile }: { profile: profileProps }) {
                                 <div className="p-5">
                                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{profile.name}</h5>
                                     <p className="mb-3 min-h-20 font-normal text-gray-700">{profile.bio}</p>
-                                    <p className="mb-3 h-10 font-normal text-gray-700">Aberto de {profile.startDay} à {profile.finalDay}</p>
+                                    <p className="mb-3 h-10 font-normal text-gray-700">De {profile.startDay} à {profile.finalDay} das {profile.openHour} às {profile.closeHour}</p>
                                     <div className="w-full flex justify-end">
                                         <div className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-500 rounded-lg">
                                             Serviços  de  R${profile.minPrice}  à  R${profile.maxPrice}

@@ -104,13 +104,35 @@ export const getListOfMinPrice = async (req, res) => {
 
 export const createProfile = async (req, res) => {
     const {
+        userId,
+        name
+    } = req.body
+
+    try {
+        const profile = await profileClient.create({
+            data: {
+                userId,
+                name
+            }
+        })
+        res.status(201).json({ data: profile })
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+export const createProfileComplete = async (req, res) => {
+    const {
+        userId,
+        name,
         bio,
         phone,
         startDay,
         finalDay,
+        openHour,
+        closeHour,
         minPrice,
         maxPrice,
-        userId,
         totalPointsPlans,
         cityId,
         schedules,
@@ -120,29 +142,32 @@ export const createProfile = async (req, res) => {
     try {
         const profile = await profileClient.create({
             data: {
-                userId
-                // bio,
-                // phone,
-                // startDay,
-                // finalDay,
-                // minPrice,
-                // maxPrice,
-                // totalPointsPlans,
-                // cities: {
-                //     connect: { id: Number(cityId) }
-                // },
-                // schedules: {
-                //     create: schedules.map(schedule => ({
-                //         day: schedule.day,
-                //         isWorkingDay: schedule.isWorkingDay,
-                //     }))
-                // },
-                // images: {
-                //     create: images.map(image => ({
-                //         url: image.url,
-                //         published: image.published
-                //     }))
-                // }
+                userId,
+                name,
+                bio,
+                phone,
+                startDay,
+                finalDay,
+                openHour,
+                closeHour,
+                minPrice,
+                maxPrice,
+                totalPointsPlans,
+                cities: {
+                    connect: { id: Number(cityId) }
+                },
+                schedules: {
+                    create: schedules.map(schedule => ({
+                        day: schedule.day,
+                        isWorkingDay: schedule.isWorkingDay,
+                    }))
+                },
+                images: {
+                    create: images.map(image => ({
+                        url: image.url,
+                        published: image.published
+                    }))
+                }
             }
         })
         res.status(201).json({ data: profile })

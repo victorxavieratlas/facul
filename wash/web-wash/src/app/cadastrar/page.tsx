@@ -37,38 +37,42 @@ export default function Login() {
 
         if (createUserResponse.status == 201) {
             const user = await createUserResponse.json()
-
-            const createSessionResponse = await fetch("http://localhost:3007/login", {
+            console.log(user.data)
+            const createProfileResponse = await fetch("http://localhost:3007/profiles", {
                 cache: 'no-store',
                 method: "POST",
                 headers: { "Content-type": "application/json" },
-                body: JSON.stringify({ email: data.email, password: data.password })
+                body: JSON.stringify({
+                    userId: user.data.userId,
+                    name: user.data.userName
+                })
             })
+            console.log(`Profile ------- ${user.data}`)
+            if (createProfileResponse.status == 201) {
+                const profile = await createProfileResponse.json()
+                Cookies.set("x-profile-id", profile.data.id)
 
-            if (createSessionResponse.status == 201) {
-                const userSession = await createSessionResponse.json()
-
-                Cookies.set("user_login_id", userSession.userId)
-                Cookies.set("x-access-token", userSession.token)
-                Cookies.set("x-user-name", userSession.userName)
-
-                const createProfileResponse = await fetch("http://localhost:3007/profiles", {
+                const createSessionResponse = await fetch("http://localhost:3007/login", {
                     cache: 'no-store',
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                    body: JSON.stringify({ userId: userSession.userId })
+                    body: JSON.stringify({ email: data.email, password: data.password })
                 })
+                // console.log(`Create Session Response`)
+                // console.log(createSessionResponse)
 
-                if (createProfileResponse.status == 201) {
-                    const profile = await createProfileResponse.json()
+                if (createSessionResponse.status == 201) {
+                    const userSession = await createSessionResponse.json()
+                    // console.log(`User Session ------- ${userSession}`)
+                    Cookies.set("user_login_id", userSession.userId)
+                    Cookies.set("x-access-token", userSession.token)
+                    Cookies.set("x-user-name", userSession.userName)
 
-                    Cookies.set("x-profile-id", profile.data.id)
-                    mudaLogin({ userId: Number(userSession.userId), userName: userSession.userName })
-                    router.push(`/painel/${userSession.userId}`)
+
                 } else {
                     const deleteUserResponse = await fetch("http://localhost:3007/users", {
                         cache: 'no-store',
-                        method: "POST",
+                        method: "DELETE",
                         headers: { "Content-type": "application/json" },
                         body: JSON.stringify({ id: user.id })
                     }) //melhorar o deleteUser
@@ -77,17 +81,14 @@ export default function Login() {
                         toast.error("Ocorreu um erro! Cadastre novamente")
                         setFocus("email")
                     }
-
-                    Cookies.remove("user_login_id")
-                    Cookies.remove("x-access-token")
-                    Cookies.remove("x-user-name")
                 }
 
+                mudaLogin({ userId: Number(user.data.userId), userName: user.data.userName })
+                router.push(`/painel/${user.data.userId}`)
             } else {
-
                 const deleteUserResponse = await fetch("http://localhost:3007/users", {
                     cache: 'no-store',
-                    method: "POST",
+                    method: "DELETE",
                     headers: { "Content-type": "application/json" },
                     body: JSON.stringify({ id: user.id })
                 }) //melhorar o deleteUser
@@ -96,8 +97,13 @@ export default function Login() {
                     toast.error("Ocorreu um erro! Cadastre novamente")
                     setFocus("email")
                 }
-            }
 
+                Cookies.remove("user_login_id")
+                Cookies.remove("x-access-token")
+                Cookies.remove("x-user-name")
+                Cookies.remove("x-profile-id")
+            }
+            // console.log(user)
         } else {
             toast.error("Email cadastrado já existe ou digite um email válido.")
             setFocus("email")

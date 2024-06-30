@@ -19,6 +19,8 @@ export interface profileProps {
 	maxPrice: string
 	startDay: string
 	finalDay: string
+	openHour: string
+	closeHour: string
 	images: [{
 		url: string
 		published: boolean

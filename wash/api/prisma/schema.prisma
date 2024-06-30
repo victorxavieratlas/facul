@@ -31,9 +31,11 @@ model Profile {
   id               Int            @id @default(autoincrement())
   user             User           @relation(fields: [userId], references: [id])
   userId           Int            @unique
-  name             String?         @db.VarChar(30)
+  name             String?        @db.VarChar(30)
   phone            String?        @db.VarChar(20)
   bio              String?
+  openHour         String?        @db.VarChar(5)
+  closeHour        String?        @db.VarChar(5)
   startDay         String?        @db.VarChar(30)
   finalDay         String?        @db.VarChar(30)
   minPrice         Decimal?       @db.Decimal(9, 2)
@@ -52,6 +54,8 @@ model Profile {
   categories       Category[]
   plans            Plan[]
   totalPointsPlans Int?
+  numberOfRatings  Int?
+  totalOfRatings   Int?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   deletedAt        DateTime?
@@ -118,7 +122,6 @@ model HourPoints {
   @@map("hour-points")
 }
 
-//Adicionar o numberOfRatings e o totalOfRatings na tabela profile e talvez alterar o nome nessa
 model Rating {
   id              Int       @id @default(autoincrement())
   profile         Profile   @relation(fields: [profileId], references: [id])
@@ -158,6 +161,7 @@ model State {
 
 model City {
   id             Int            @id @default(autoincrement())
+  uf             String         @db.VarChar(2)
   name           String
   state          State          @relation(fields: [stateId], references: [id])
   stateId        Int

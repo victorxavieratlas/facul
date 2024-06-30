@@ -6,6 +6,7 @@ const router = Router()
 
 type CitiesInput = {
 	name: string;
+	uf: string;
 	stateId: number;
 };
 
@@ -67,6 +68,7 @@ router.get("/search/:name", async (req, res) => {
 router.post("/", async (req, res) => {
 	const {
 		name,
+		uf,
 		stateId
 	} = req.body
 
@@ -74,6 +76,7 @@ router.post("/", async (req, res) => {
 		const city = await prisma.city.create({
 			data: {
 				name,
+				uf,
 				stateId
 			}
 		})
@@ -87,10 +90,11 @@ router.post("/create", async (req, res) => {
 	const cities: CitiesInput[] = req.body.citiesInput;
 
 	try {
-		const creates = cities.map(({ name, stateId }) =>
+		const creates = cities.map(({ name, uf, stateId }) =>
 			prisma.city.create({
 				data: {
 					name,
+					uf,
 					stateId
 				}
 			})

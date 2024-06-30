@@ -21,6 +21,7 @@ async function main() {
             await prisma.city.create({
                 data: {
                     id: city.id,
+                    uf: city.uf,
                     name: city.name,
                     stateId: state.id,
                 },
