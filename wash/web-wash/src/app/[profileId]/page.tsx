@@ -53,7 +53,7 @@ export default async function profileDetails({
 		<div className="sm:ml-48 sm:mr-48 mt-4">
 
 			<div className="max-w-full min-w-full">
-				{profileData.images[0].url ?
+				{profileData.images[0] ?
 					<img className="object-cover h-96 w-full" src={profileData.images[0].url} alt="" />
 					:
 					// Imagem default
