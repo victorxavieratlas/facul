@@ -15,28 +15,8 @@ profileRouter
 	// .post("/", tokenVerify, createProfile) - Com middleware
 	.post("/", createProfile)
 	.post("/complete", createProfileComplete)
-	.delete("/:id", deleteProfile)
-	.put("/delete/:id", softDeleteProfile)
-	.put("/:id", updateProfile)
+	.delete("/:id", tokenVerify, deleteProfile)
+	.put("/delete/:id", tokenVerify, softDeleteProfile)
+	.put("/:id", tokenVerify, updateProfile)
 
 export default profileRouter
-
-
-// router.get("/list/ratings", async (req, res) => {
-//   try {
-//     const profiles = await prisma.profile.findMany({
-//       include: {
-//         images: true,
-//         schedules: true,
-//         cities: true,
-//         ratings: true,
-//         categories: true,
-//         plans: true,
-//       }
-//     })
-//     res.status(200).json(profiles)
-//   } catch (error) {
-//     res.status(400).json(error)
-//   }
-// })
-

@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 import { hashSync } from "bcrypt"
 
+const prisma = new PrismaClient()
 const userClient = new PrismaClient().user
 
 export const getAllUsers = async (req, res) => {
@@ -90,7 +91,7 @@ export const createUser = async (req, res) => {
     if (!isValidEmail) {
         res.status(405).json({ erro: "E-mail inválido!" })
         return
-    } 
+    }
 
     const message = passwordVerify(password)
     if (message.length > 0) {
@@ -104,10 +105,12 @@ export const createUser = async (req, res) => {
         const user = await userClient.create({
             data: { email, password: hashedPassword, name }
         })
-        res.status(201).json({ data: {
-            userId: user.id,
-            userName: user.name
-        } })
+        res.status(201).json({
+            data: {
+                userId: user.id,
+                userName: user.name
+            }
+        })
     } catch (error) {
         res.status(400).json(error)
     }
@@ -116,9 +119,18 @@ export const createUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     const { id } = req.params
 
+
+
     try {
         const user = await userClient.delete({
             where: { id: Number(id) }
+        })
+
+        await prisma.log.create({
+            data: {
+                description: "Usuário deletado!",
+                userId: id
+            }
         })
         res.status(200).json({ data: user })
     } catch (error) {
@@ -161,6 +173,146 @@ export const updateUser = async (req, res) => {
     }
 }
 
+export const generateCode = async (req, res) => {
+    const { email } = req.body
+
+    if (!email) {
+        res.status(400).json({ "erro": "E-mail é obrigatório!" })
+        return
+    }
+
+    const isValidEmail = emailVerify(email)
+    if (!isValidEmail) {
+        res.status(405).json({ erro: "E-mail inválido!" })
+        return
+    }
+    //talvez adicionar verificação se existe código válido
+    const randomCode = Math.floor(Math.random() * 900000) + 100000;
+
+    try {
+        const [user, code] = await prisma.$transaction([
+            prisma.user.findUnique({ where: { email } }),
+            prisma.code.create({
+                data: {
+                    email: email,
+                    code: randomCode.toString(),
+                    createdAt: new Date()
+                }
+            })
+        ])
+
+        if (user) {
+            if (code) {
+                res.status(200).json({
+                    data: {
+                        code: code.code,
+                        userId: user.id,
+                        email: email,
+                    }
+                })
+            } else {
+                res.status(400).json({ erro: "Erro ao gerar código!" })
+            }
+        } else {
+            res.status(405).json({ erro: "E-mail inválido!" })
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+export const validateCode = async (req, res) => {
+    const { id } = req.params
+    const { email, code } = req.body
+
+    if (!email || !code) {
+        res.status(400).json({ "erro": "E-mail e código são obrigatórios!" })
+        return
+    }
+
+    try {
+        const responseCode = await prisma.code.findFirst({
+            where: {
+                code: code,
+                email: email,
+                deletedAt: null
+            }
+        })
+
+        if (responseCode) {
+            const currentTime = new Date();
+            const codeCreationTime = new Date(responseCode.createdAt);
+            const timeDifference = (currentTime.getTime() - codeCreationTime.getTime()) / (1000 * 60);
+
+            if (timeDifference > 15) {
+                res.status(400).json({ erro: "Código expirado!" })
+                return;
+            }
+
+            const deletedCode = await prisma.code.delete({
+                where: { id: Number(responseCode.id) }
+            })
+            if (deletedCode) {
+                res.status(200).json({
+                    data: {
+                        msg: "Código validado!",
+                        userId: id,
+                        email: email
+                    }
+                })
+            } else {
+                res.status(400).json({ erro: "Erro ao deletar código!" })
+            }
+        } else {
+            res.status(404).json({ erro: "Código inválido!" })
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+export const changeUserPassword = async (req, res) => {
+    const { id } = req.params
+    const { email, password } = req.body
+
+    if (!email || !password) {
+        res.status(400).json({ erro: "Senha é obrigatória!" })
+        return
+    }
+
+    const message = passwordVerify(password)
+    if (message.length > 0) {
+        res.status(400).json({ erro: message.join("-") })
+        return
+    }
+
+    const hashedPassword = hashSync(password, 10)
+
+    try {
+        const user = await userClient.update({
+            where: {
+                id: Number(id),
+                email: email
+            },
+            data: { password: hashedPassword }
+        })
+        if (user) {
+            await prisma.log.create({
+                data: {
+                    description: "Senha alterada!",
+                    userId: id
+                }
+            })
+            res.status(200).json({ msg: "Senha alterada com sucesso!" })
+        } else {
+            res.status(400).json({ error: "Erro ao alterar a senha!" })
+        }
+
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
 export const userRoleUpdate = async (req, res) => {
     const { id } = req.params
     const { role } = req.body
@@ -174,6 +326,12 @@ export const userRoleUpdate = async (req, res) => {
         const user = await userClient.update({
             where: { id: Number(id) },
             data: { role }
+        })
+        await prisma.log.create({
+            data: {
+                description: "Permissão alterada!",
+                userId: id
+            }
         })
         res.status(200).json({ data: user })
     } catch (error) {
