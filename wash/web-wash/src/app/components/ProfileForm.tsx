@@ -1,9 +1,9 @@
 'use client'
-
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner'
+import Cookies from 'js-cookie'
 
 interface City {
     id: number;
@@ -13,6 +13,7 @@ interface City {
 }
 
 interface ProfilePanelInput {
+    image: string;
     bio: string;
     phone: string;
     startDay: string;
@@ -77,13 +78,28 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     async function EditProfile(data: ProfilePanelInput) {
         const response = await fetch(`http://localhost:3007/profiles/${profileIncomplete.id}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `${Cookies.get("x-access-token")}`
+             },
+            body: JSON.stringify({
+                imageURL: data.image,
+                bio: data.bio,
+                phone: data.phone,
+                startDay: data.startDay,
+                finalDay: data.finalDay,
+                openHour: data.openHour,
+                closeHour: data.closeHour,
+                minPrice: data.minPrice,
+                maxPrice: data.maxPrice,
+                cityId: data.cityId,
+            })
         });
 
-        if (response.ok) {
-            toast.success("Perfil atualizado com sucesso!");
-            router.refresh();
+        if (response.status === 200) {
+            console.log(response.status)
+            // toast.success("Perfil atualizado com sucesso!");
+            window.location.reload();
         } else {
             toast.error("Não foi possível editar ou salvar as informações.");
         }
@@ -118,6 +134,13 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             </ul>
                         )}
                     </div>
+
+                    <div>
+                        <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-900">URL da imagem</label>
+                        <input type="string" id="image" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="https://www..."
+                            required {...register("image")} />
+                    </div>
+
                     <div>
                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Seu telefone WhatsApp</label>
                         <input type="phone" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="53999999999"
@@ -169,3 +192,4 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 };
 
 export default ProfileForm;
+

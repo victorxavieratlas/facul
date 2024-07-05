@@ -111,11 +111,11 @@ export default function Login() {
     }
 
     return (
-        <div className="ml-48 mr-48 mt-20 mb-20 flex justify-center">
+        <div className="sm:mx-48 mt-20 mb-20 flex justify-center min-w-96">
             <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form className="space-y-6"
                     onSubmit={handleSubmit(registerVerify)}>
-                    <h5 className="text-xl font-medium text-gray-900">Cadastre-se grátis na <span className="text-2xl text-blue-500">CarWash</span></h5>
+                    <h5 className="text-xl font-medium text-gray-900 text-center">Cadastre-se grátis na <span className="text-2xl text-blue-500">CarWash</span></h5>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Seu email</label>
                         <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@email.com"

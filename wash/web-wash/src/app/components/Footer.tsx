@@ -1,14 +1,22 @@
+
+import Link from "next/link"
+import Image from 'next/image'
+
 export default function Header() {
     return (
         <footer className="bg-white dark:bg-gray-900">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
-                    <div className="mb-6 md:mb-0">
-                        <a href="/" className="flex items-center">
-                            <img src="logo2.svg" className="h-8 me-3" alt="Logo da CarWash em azul" />
-                            <span className="self-center text-2xl font-semibold whitespace-nowrap text-blue-500">CarWash</span>
-                        </a>
-                    </div>
+                    <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12 mb-4">
+                        <Image
+                            src="../logo2.svg"
+                            width={30}
+                            height={30}
+                            alt="logotipo da CarWash em azul claro"
+                        />
+                        {/* <img src="./logo2.svg" className="h-8" alt="Logo e logotipo da CarWash e azul claro" /> */}
+                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-blue-500">CarWash</span>
+                    </Link>
                     <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>

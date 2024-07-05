@@ -136,7 +136,8 @@ export const createProfileComplete = async (req, res) => {
         totalPointsPlans,
         cityId,
         schedules,
-        images
+        // images
+        imageURL
     } = req.body
 
     try {
@@ -162,11 +163,17 @@ export const createProfileComplete = async (req, res) => {
                         isWorkingDay: schedule.isWorkingDay,
                     }))
                 },
+                // images: {
+                //     create: images.map(image => ({
+                //         url: image.url,
+                //         published: image.published
+                //     }))
+                // }
                 images: {
-                    create: images.map(image => ({
-                        url: image.url,
-                        published: image.published
-                    }))
+                    create: {
+                        url: imageURL,
+                        published: true
+                    }
                 }
             }
         })
@@ -211,9 +218,12 @@ export const updateProfile = async (req, res) => {
         phone,
         startDay,
         finalDay,
+        openHour,
+        closeHour,
         minPrice,
         maxPrice,
-        cityId
+        cityId,
+        imageURL
     } = req.body
 
     if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId) {
@@ -228,10 +238,18 @@ export const updateProfile = async (req, res) => {
                 phone,
                 startDay,
                 finalDay,
+                openHour,
+                closeHour,
                 minPrice,
                 maxPrice,
                 cities: {
                     connect: { id: Number(cityId) }
+                },
+                images: {
+                    create: {
+                        url: imageURL,
+                        published: true
+                    }
                 }
             }
         })
