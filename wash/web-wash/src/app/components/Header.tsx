@@ -9,6 +9,7 @@ import { ClienteContext } from "../context/ClienteContext"
 import Link from "next/link"
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { profile } from "console";
 
 export default function Header() {
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
@@ -68,7 +69,7 @@ export default function Header() {
                             {idClienteLogado ? (
                                 <>
                                     <p className="block px-4 py-4 text-md font-bold text-gray-700 border-solid border-b-2 border-gray-300">{nomeClienteLogado}</p>
-                                    <Link href="/perfil">
+                                    <Link href={`/painel/${Cookies.get("user_login_id")}`}>
                                         <p className="block px-4 py-3 font-medium text-md text-gray-700 hover:bg-gray-100 border-solid border-b-2 border-gray-300">
                                             <svg className="inline mr-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -77,7 +78,7 @@ export default function Header() {
                                             Ver painel
                                         </p>
                                     </Link>
-                                    <Link href="/perfil">
+                                    <Link href={`/${Cookies.get("x-profile-id")}`}>
                                         <p className="block px-4 py-3 font-medium text-md text-gray-700 hover:bg-gray-100 border-solid border-b-2 border-gray-300">
                                             <svg className="inline mr-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A9 9 0 0117.804 5.12M9 15a3 3 0 100-6 3 3 0 000 6zm3 6v-2a6 6 0 00-6-6H3" />

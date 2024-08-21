@@ -74,6 +74,7 @@ export default function Panel() {
                         <h3 className="mt-4 sm:mt-10 ">Descrição de {profileData.name}</h3>
                         <p className="mb-3 font-normal text-gray-700">{profileData.bio}</p>
                     </div>
+                    {/* Accordion aqui */}
                 </div>
             }
         </div>
