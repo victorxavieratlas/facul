@@ -14,6 +14,7 @@ import imagesRoutes from './routes/images'
 import schedulesRoutes from './routes/schedules'
 import workingHoursRoutes from './routes/hours'
 import searchRouter from './routes/search.router'
+import servicesRouter from './routes/services.router'
 import { tokenVerify } from './middlewares/tokenVerify.middleware'
 
 // app.use("/marcas", marcasRoutes)
@@ -31,6 +32,7 @@ app
   .use("/schedules", schedulesRoutes)
   .use("/workingHours", workingHoursRoutes)
   .use("/search", searchRouter)
+  .use("/services", servicesRouter)
 
   .get('/', (req, res) => {
     res.send('API is running')
