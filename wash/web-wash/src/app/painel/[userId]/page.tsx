@@ -79,10 +79,17 @@ export default function Panel() {
                         <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
                             Ver telefone
                         </button>
-                        <h3 className="mt-4 sm:mt-10 ">Descrição de {profileData.name}</h3>
+                        <h3 className="mt-4 sm:mt-10">Descrição de {profileData.name}</h3>
                         <p className="mb-3 font-normal text-gray-700">{profileData.bio}</p>
                     </div>
                     <ServicesAccordion services={services} profileId={profileData.id} updateServices={fetchServices} />
+                    <div className="w-full p-5">
+                        <h3 className="font-semibold text-gray-500 mt-4 sm:mt-10">Apresentação de </h3>
+                        <p className="font-bold text-blue-500">{profileData.name}</p>
+                    </div>
+                    <div className="flex items-start w-full p-5">
+                        <p className="mb-3 font-normal text-gray-700">{profileData.bio}</p>
+                    </div>
                 </div>
             }
         </div>
