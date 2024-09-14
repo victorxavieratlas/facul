@@ -7,7 +7,7 @@ const router = Router()
 router
     .get('/:id', getServiceByProfileId)
     .post('/', createService)
-    .put('/services/:id', updateService)
-    .delete('/services/:id', deleteService)
+    .put('/:id', updateService)
+    .delete('/:id', deleteService)
 
 export default router
