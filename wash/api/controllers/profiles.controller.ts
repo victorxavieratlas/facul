@@ -226,6 +226,8 @@ export const updateProfile = async (req, res) => {
         imageURL
     } = req.body
 
+    console.log(req.body)
+
     if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId) {
         res.status(400).json({error: "Todos os campos são obrigatórios!"})
     }

@@ -2,14 +2,20 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlineUpload } from 'react-icons/ai';
 
-export default function ImageUpload() {
+// Defina as props e suas tipagens
+interface ImageUploadProps {
+    setImageFile: (file: File | null) => void; // Tipagem para a função setImageFile
+  }
+
+export default function ImageUpload({ setImageFile }: ImageUploadProps) {
   const { register, setValue } = useForm();
-  const [image, setImage] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setPreviewImage(URL.createObjectURL(file)); // Para mostrar a pré-visualização
+      setImageFile(file); // Armazena o arquivo da imagem para upload
       setValue('image', file); // Set the file in the form data
     }
   };
@@ -32,13 +38,13 @@ export default function ImageUpload() {
           className="hidden"
           {...register('image', {
             required: true,
-            onChange: handleImageUpload // Mova o onChange para o register
+            onChange: handleImageUpload
           })}
         />
       </label>
-      {image && (
+      {previewImage && (
         <div className="mt-4 w-full h-64 flex items-center justify-center">
-          <img src={image} alt="Preview" className="max-h-full max-w-full rounded-lg shadow-lg" />
+          <img src={previewImage} alt="Preview" className="max-h-full max-w-full rounded-lg shadow-lg" />
         </div>
       )}
     </div>
