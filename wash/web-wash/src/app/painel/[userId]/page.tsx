@@ -73,18 +73,18 @@ export default function Panel() {
                 <ProfileForm profileIncomplete={profileData} /> :
                 <div className="max-w-full min-w-full">
                     {profileData.images && profileData.images[0] ?
-                        <img className="object-cover h-96 w-full" src={profileData.images[0].url} alt="" /> : <></>
+                        <img className="object-cover h-96 w-full rounded-t-lg" src={profileData.images[0].url} alt="" /> : <></>
                     }
-                    <div className="p-5">
+                    <div className="p-5 mb-6 shadow rounded-b-lg">
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{profileData.name}</h5>
                         <Link href="/edit">
-                        <button className="float-right px-2 py-2 mt-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
-                            <svg className="inline mr-1 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
-                                <path d="M16.2141 4.98239L17.6158 3.58063C18.39 2.80646 19.6452 2.80646 20.4194 3.58063C21.1935 4.3548 21.1935 5.60998 20.4194 6.38415L19.0176 7.78591M16.2141 4.98239L10.9802 10.2163C9.93493 11.2616 9.41226 11.7842 9.05637 12.4211C8.70047 13.058 8.3424 14.5619 8 16C9.43809 15.6576 10.942 15.2995 11.5789 14.9436C12.2158 14.5877 12.7384 14.0651 13.7837 13.0198L19.0176 7.78591M16.2141 4.98239L19.0176 7.78591" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M21 12C21 16.2426 21 18.364 19.682 19.682C18.364 21 16.2426 21 12 21C7.75736 21 5.63604 21 4.31802 19.682C3 18.364 3 16.2426 3 12C3 7.75736 3 5.63604 4.31802 4.31802C5.63604 3 7.75736 3 12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                            </svg>
-                            Editar perfil
-                        </button>
+                            <button className="float-right px-2 py-2 mt-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
+                                <svg className="inline mr-1 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                                    <path d="M16.2141 4.98239L17.6158 3.58063C18.39 2.80646 19.6452 2.80646 20.4194 3.58063C21.1935 4.3548 21.1935 5.60998 20.4194 6.38415L19.0176 7.78591M16.2141 4.98239L10.9802 10.2163C9.93493 11.2616 9.41226 11.7842 9.05637 12.4211C8.70047 13.058 8.3424 14.5619 8 16C9.43809 15.6576 10.942 15.2995 11.5789 14.9436C12.2158 14.5877 12.7384 14.0651 13.7837 13.0198L19.0176 7.78591M16.2141 4.98239L19.0176 7.78591" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M21 12C21 16.2426 21 18.364 19.682 19.682C18.364 21 16.2426 21 12 21C7.75736 21 5.63604 21 4.31802 19.682C3 18.364 3 16.2426 3 12C3 7.75736 3 5.63604 4.31802 4.31802C5.63604 3 7.75736 3 12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                Editar perfil
+                            </button>
                         </Link>
                         <p className="mt-6 mb-3 font-normal text-gray-700">
                             <svg className="inline mr-2 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#6b7280" fill="none">
@@ -128,8 +128,8 @@ export default function Panel() {
                         </p>
                     </div>
                     <ServicesAccordion services={services} profileId={profileData.id} updateServices={fetchServices} />
-                    <div className=" w-full p-5">
-                        <h3 className="font-semibold text-gray-500 mt-4 sm:mt-6">
+                    <div className=" w-full p-5 my-6 shadow rounded-lg">
+                        <h3 className="font-semibold text-gray-500">
                             <svg className="inline pb-1 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#6b7280" fill="none">
                                 <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                 <path d="M3 10H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -139,11 +139,12 @@ export default function Panel() {
                                 <path d="M17 14H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                 <path d="M3 18H5.11765M8.29412 18H10.4118M13.5882 18H15.7059M18.8824 18H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
-                            Apresentação de <p className="inline font-bold text-blue-500">{profileData.name}</p></h3>
-
-                    </div>
-                    <div className="flex items-start w-full px-6">
-                        <p className="mb-10 font-normal text-gray-700">{profileData.bio}</p>
+                            Apresentação de <p className="inline font-bold text-blue-500">{profileData.name}
+                            </p>
+                        </h3>
+                        <div className="flex items-start w-full px-12">
+                            <p className="my-6 font-normal text-gray-700">{profileData.bio}</p>
+                        </div>
                     </div>
                 </div>
             }

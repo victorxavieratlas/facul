@@ -63,9 +63,9 @@ export default function ServicesAccordion({ services, profileId, updateServices 
     };
 
     return (
-        <div className="p-4 bg-white shadow rounded-lg">
+        <div className="p-5 bg-white shadow rounded-lg">
             <div className="w-full">
-                <div className="flex justify-start float-left p-4 pt-2 md:pt-6 pl-2">
+                <div className="flex justify-start float-left">
                     <p className="font-semibold text-gray-500">
                         <svg className="inline mr-2 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#6b7280" fill="none">
                             <path d="M22 6H2C2 5.06812 2 4.60218 2.15224 4.23463C2.35523 3.74458 2.74458 3.35523 3.23463 3.15224C3.60218 3 4.06812 3 5 3H19C19.9319 3 20.3978 3 20.7654 3.15224C21.2554 3.35523 21.6448 3.74458 21.8478 4.23463C22 4.60218 22 5.06812 22 6Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -78,7 +78,7 @@ export default function ServicesAccordion({ services, profileId, updateServices 
                         </svg>
                         Serviços oferecidos:</p>
                 </div>
-                <div className="flex justify-end float-right md:p-4 sm:pr-2">
+                <div className="flex justify-end float-right">
                     <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded-lg" onClick={() => setShowAddForm(true)}>
                         <svg className="inline mr-1 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
                             <path d="M12 8V16M16 12L8 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
