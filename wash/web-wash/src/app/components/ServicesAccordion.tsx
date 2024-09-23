@@ -78,7 +78,7 @@ export default function ServicesAccordion({ services, profileId, updateServices 
                         </svg>
                         Serviços oferecidos:</p>
                 </div>
-                <div className="flex justify-end float-right">
+                <div className="mb-4 flex justify-end float-right">
                     <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded-lg" onClick={() => setShowAddForm(true)}>
                         <svg className="inline mr-1 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
                             <path d="M12 8V16M16 12L8 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
