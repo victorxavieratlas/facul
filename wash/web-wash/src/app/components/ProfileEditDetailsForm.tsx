@@ -26,6 +26,22 @@ interface ProfilePanelInput {
     cityId: number;
 }
 
+interface ProfileData {
+    id: number;
+    phone?: string;
+    images?: [{ url: string }];
+    cities: [{ id: number, name: string, stateId: number, uf: string }];
+    states: [{ id: number, name: string }];
+    name: string;
+    startDay: string;
+    finalDay: string;
+    minPrice: number;
+    maxPrice: number;
+    bio: string;
+    openHour: string;
+    closeHour: string;
+}
+
 interface ProfileId {
     profileId: number;
 }
@@ -34,8 +50,18 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const { register, handleSubmit, setFocus } = useForm<ProfilePanelInput>();
     const router = useRouter();
 
-    const [input, setInput] = useState('');
+    const [inputCity, setInputCity] = useState('');
+    const [inputPhone, setInputPhone] = useState('');
+    const [inputMinPrice, setInputMinPrice] = useState('');
+    const [inputMaxPrice, setInputMaxPrice] = useState('');
+    const [inputOpenDay, setInputOpenDay] = useState('');
+    const [inputCloseDay, setInputCloseDay] = useState('');
+    const [inputOpenHour, setInputOpenHour] = useState('');
+    const [inputCloseHour, setInputCloseHour] = useState('');
+    const [inputPresentation, setInputPresentation] = useState('');
+    const [inputImage, setInputImage] = useState('');
     const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+    const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [results, setResults] = useState<City[]>([]);
     const [showTooltipCity, setShowTooltipCity] = useState(false);
     const [showTooltipPhoneNumber, setShowTooltipPhoneNumber] = useState(false);
@@ -49,6 +75,16 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [showTooltipImage, setShowTooltipImage] = useState(false);
     // Adicione isso ao estado do componente ProfileForm
     const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+    const [isFocusedCityInput, setIsFocusedCityInput] = useState(false);
+    const [isFocusedPhoneInput, setIsFocusedPhoneInput] = useState(false);
+    const [isFocusedMinPriceInput, setIsFocusedMinPriceInput] = useState(false);
+    const [isFocusedMaxPriceInput, setIsFocusedMaxPriceInput] = useState(false);
+    const [isFocusedOpenDayInput, setIsFocusedOpenDayInput] = useState(false);
+    const [isFocusedCloseDayInput, setIsFocusedCloseDayInput] = useState(false);
+    const [isFocusedOpenHourInput, setIsFocusedOpenHourInput] = useState(false);
+    const [isFocusedCloseHourInput, setIsFocusedCloseHourInput] = useState(false);
+    const [isFocusedPresentationInput, setIsFocusedPresentationInput] = useState(false);
+    const [isFocusedImageInput, setIsFocusedImageInput] = useState(false);
 
     // Adicione essa função no componente ProfileForm para enviar a imagem
     const uploadImage = async () => {
@@ -76,12 +112,52 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         }
     };
 
-
+    useEffect(() => {
+        getProfile(profileId);
+        if (profileData?.cities[0].name && !isFocusedCityInput) {
+            setInputCity(`${profileData.cities[0].name} - ${profileData.cities[0].uf}`);
+        }
+        if (profileData?.phone && !isFocusedPhoneInput) {
+            setInputPhone(`${profileData.phone}`);
+        }
+        if (profileData?.minPrice && !isFocusedMinPriceInput) {
+            setInputMinPrice(`${profileData.minPrice}`);
+        }
+        if (profileData?.maxPrice && !isFocusedMaxPriceInput) {
+            setInputMaxPrice(`${profileData.maxPrice}`);
+        }
+        if (profileData?.startDay && !isFocusedOpenDayInput) {
+            setInputOpenDay(`${profileData.startDay}`);
+        }
+        if (profileData?.openHour && !isFocusedOpenHourInput) {
+            setInputOpenHour(`${profileData.openHour}`);
+        }
+        if (profileData?.closeHour && !isFocusedCloseHourInput) {
+            setInputCloseHour(`${profileData.closeHour}`);
+        }
+        if (profileData?.bio && !isFocusedPresentationInput) {
+            setInputPresentation(`${profileData.bio}`);
+        }
+        // if (profileData?.images[0].url && !isFocusedImageInput) {
+        //     setInputImage(`${profileData.images[0].url}`);
+        // }
+    }, [
+        profileData, 
+        isFocusedCityInput, 
+        isFocusedPhoneInput, 
+        isFocusedMinPriceInput, 
+        isFocusedMaxPriceInput,
+        isFocusedOpenDayInput,
+        isFocusedCloseDayInput,
+        isFocusedOpenHourInput,
+        isFocusedCloseHourInput,
+        isFocusedPresentationInput,
+    ]);
 
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
-            if (input.length >= 3) {
-                fetch(`http://localhost:3007/cities/search/${encodeURIComponent(input)}`)
+            if (inputCity.length >= 3) {
+                fetch(`http://localhost:3007/cities/search/${encodeURIComponent(inputCity)}`)
                     .then(response => response.json())
                     .then(data => {
                         if (Array.isArray(data)) {
@@ -99,10 +175,11 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             }
         }, 300);
         return () => clearTimeout(debounceTimeout);
-    }, [input]);
+
+    }, [inputCity]);
 
     const handleSelectCity = (city: City) => {
-        setInput(`${city.name} - ${city.uf}`); // Set the visible input field to city name and UF
+        setInputCity(`${city.name} - ${city.uf}`); // Set the visible input field to city name and UF
         setSelectedCityId(city.id); // Keep the city ID in state
         setResults([]); // Clear results after selection
     };
@@ -127,8 +204,14 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         EditProfile(updatedProfile);
     };
 
+    async function getProfile(profileId: ProfileId) {
+        const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
+        const data = await response.json();
+        setProfileData(data.data);
+    }
+
     async function EditProfile(data: ProfilePanelInput) {
-    
+
         const response = await fetch(`http://localhost:3007/profiles/${profileId}`, {
             method: "PUT",
             headers: {
@@ -158,8 +241,73 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         }
     }
 
+    const handleFocusCityInput = () => {
+        if (!isFocusedCityInput) {
+            setInputCity(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedCityInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusPhoneInput = () => {
+        if (!isFocusedPhoneInput) {
+            setInputPhone(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedPhoneInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusMinPriceInput = () => {
+        if (!isFocusedMinPriceInput) {
+            setInputMinPrice(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedMinPriceInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusMaxPriceInput = () => {
+        if (!isFocusedMaxPriceInput) {
+            setInputMaxPrice(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedMaxPriceInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusOpenDayInput = () => {
+        if (!isFocusedOpenDayInput) {
+            setInputOpenDay(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedOpenDayInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusCloseDayInput = () => {
+        if (!isFocusedCloseDayInput) {
+            setInputCloseDay(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedCloseDayInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusOpenHourInput = () => {
+        if (!isFocusedOpenHourInput) {
+            setInputOpenHour(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedOpenHourInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusCloseHourInput = () => {
+        if (!isFocusedCloseHourInput) {
+            setInputCloseHour(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedCloseHourInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    const handleFocusPresentationInput = () => {
+        if (!isFocusedPresentationInput) {
+            setInputPresentation(''); // Limpa o input ao focar pela primeira vez
+            setIsFocusedPresentationInput(true); // Marca como focado para não limpar novamente
+        }
+    };
+
+    // console.log(profileData)
+
     return (
-        <div className="max-w bg-white border-none mb-10">
+        <div className="lg:min-w-max max-w-full bg-white border-none mb-10">
             <div className="min-w-full w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 text-wrap mb-4">
                     <h5 className="text-xl font-medium text-gray-500 text-center mb-10">Editar perfil na <span className="text-2xl text-blue-500">CarWash</span></h5>
@@ -192,7 +340,6 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                             </svg>
                             Digite sua cidade
                         </label>
-
                     </div>
                     <div className="relative w-full">
                         <input
@@ -200,13 +347,14 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                             id="cityId"
                             className="block p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             placeholder="São Paulo - SP"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            value={inputCity}
+                            onChange={(e) => setInputCity(e.target.value)}
+                            onFocus={handleFocusCityInput}
                             autoComplete="off"
                             required
                         />
                         {results.length > 0 && (
-                            <ul className="absolute w-full max-w-lg bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
+                            <ul className="absolute w-full bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
                                 {results.map((city) => (
                                     <li key={city.id} className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
                                         onClick={() => handleSelectCity(city)}>
@@ -249,7 +397,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="phone" id="phone" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
+                        <input type="phone" id="phone" value={inputPhone} onFocus={handleFocusPhoneInput} className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
                             required {...register("phone")} />
                     </div>
 
@@ -291,7 +439,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="decimal" id="minPrice" placeholder="80" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="decimal" id="minPrice" value={inputMinPrice} onFocus={handleFocusMinPriceInput} placeholder="80" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("minPrice")} />
                     </div>
                     <div>
@@ -326,7 +474,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="decimal" id="maxPrice" placeholder="200" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="decimal" id="maxPrice" value={inputMaxPrice} onFocus={handleFocusMaxPriceInput} placeholder="200" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("maxPrice")} />
                     </div>
 
@@ -364,7 +512,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="startDay" placeholder="Segunda" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="string" id="startDay" value={inputOpenDay} onFocus={handleFocusOpenDayInput} placeholder="Segunda" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("startDay")} />
                     </div>
                     <div>
@@ -398,7 +546,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="finalDay" placeholder="Sexta" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="string" id="finalDay" value={inputCloseDay} onFocus={handleFocusCloseDayInput} placeholder="Sexta" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("finalDay")} />
                     </div>
 
@@ -434,7 +582,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="openHour" placeholder="09:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="string" id="openHour" value={inputOpenHour} onFocus={handleFocusOpenHourInput} placeholder="09:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("openHour")} />
                     </div>
                     <div>
@@ -469,7 +617,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="closeHour" placeholder="18:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="string" id="closeHour" value={inputCloseHour} onFocus={handleFocusCloseHourInput} placeholder="18:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("closeHour")} />
                     </div>
                     <div className='break-words text-wrap'>
@@ -509,7 +657,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="bio" placeholder="Fundada em 2024 a CarWah veio para revolucionar o mercado de Lavagens e Estéticas Automotivas..." className="mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="string" id="bio" value={inputPresentation} onFocus={handleFocusPresentationInput} placeholder="Fundada em 2024 a CarWah veio para revolucionar o mercado de Lavagens e Estéticas Automotivas..." className="mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("bio")} />
                     </div>
 

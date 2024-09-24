@@ -1,21 +1,46 @@
+'use client'
+import { useEffect, useState, useContext } from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import ProfileEditDetailsForm from "@/app/components/ProfileEditDetailsForm"
-import { profile } from "console"
+import { ClienteContext } from "../../context/ClienteContext";
+import { ProfileData } from "../page";
 
 interface ProfileId {
     profileId: number;
 }
 
-export default async function editDetails({
-	params,
+export default function editDetails({
+    params,
 }: {
-	params: { profileId: ProfileId }
+    params: { profileId: ProfileId }
 }) {
+    const router = useRouter();
 
-	return (
-		<div className="sm:ml-48 sm:mr-48 mt-4">
-			<ProfileEditDetailsForm profileId={params.profileId} /> :
-		</div>
-	)
+    const { mudaLogin } = useContext(ClienteContext);
+
+    useEffect(() => {
+        if (!Cookies.get("x-access-token") || !Cookies.get("user_login_id") || !Cookies.get("x-profile-id")) {
+            router.replace("/entrar");
+            return;
+        } else {
+
+            if (Number(params.profileId) != Number(Cookies.get("x-profile-id"))) {
+                router.replace(`/painel/${Cookies.get("user_login_id")}`);
+            } else {
+                router.replace(`/${Cookies.get("x-profile-id")}/editar`);
+                mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" });
+            }
+        }
+    }, [router]);
+
+    return (
+        <div className="mt-4 w-full lg:flex lg:justify-center">
+            <div className="mt-4 w-full max-w-2xl">
+                <ProfileEditDetailsForm profileId={params.profileId} />
+            </div>
+        </div>
+    )
 }
 
 // fazer depois página de estados

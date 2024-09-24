@@ -3,11 +3,10 @@ import { useEffect, useState, useContext } from "react";
 import Link from "next/link"
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import ProfileForm from "../components/ProfileForm";
 import { ClienteContext } from "../context/ClienteContext";
 import ServicesProfileAccordion from "../components/ServicesProfileAccordion";
 
-interface ProfileData {
+export interface ProfileData {
 	id: number;
 	phone?: string;
 	images?: [{ url: string }];
@@ -92,15 +91,10 @@ export default function Panel({
 		return <div className="m-96 p-96">Carregando...</div>;
 	}
 
-
-
 	const cityId = profileData.cities[0].id
 	const cityName = profileData.cities[0].name
 	const stateUf = profileData.cities[0].uf
 	// const stateName = profileData.states[0].name
-
-
-	//USAR OS DADOS DO ESTADO NO HTML A BAIXO
 
 	return (
 		<div className="sm:ml-48 sm:mr-48 mt-4">
