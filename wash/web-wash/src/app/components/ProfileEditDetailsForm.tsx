@@ -26,11 +26,11 @@ interface ProfilePanelInput {
     cityId: number;
 }
 
-interface ProfileIncomplete {
-    id: number;
+interface ProfileId {
+    profileId: number;
 }
 
-const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomplete }) => {
+const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const { register, handleSubmit, setFocus } = useForm<ProfilePanelInput>();
     const router = useRouter();
 
@@ -129,7 +129,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
     async function EditProfile(data: ProfilePanelInput) {
     
-        const response = await fetch(`http://localhost:3007/profiles/${profileIncomplete.id}`, {
+        const response = await fetch(`http://localhost:3007/profiles/${profileId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -162,7 +162,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         <div className="max-w bg-white border-none mb-10">
             <div className="min-w-full w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 text-wrap mb-4">
-                    <h5 className="text-xl font-medium text-gray-500 text-center mb-10">Completar perfil na <span className="text-2xl text-blue-500">CarWash</span></h5>
+                    <h5 className="text-xl font-medium text-gray-500 text-center mb-10">Editar perfil na <span className="text-2xl text-blue-500">CarWash</span></h5>
                     <p className="font-medium text-gray-500 underline underline-offset-8 mb-6">Informações de localidade</p>
                     <div className='w-full'>
                         <div className="inline-flex justify-end float-right ml-30">
@@ -550,12 +550,12 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             required {...register("image")} /> */}
                     </div>
 
-                    <button type="submit" className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Completar</button>
+                    <button type="submit" className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Salvar</button>
                 </form>
             </div>
         </div>
     );
 };
 
-export default ProfileForm;
+export default ProfileEditDetailsForm;
 

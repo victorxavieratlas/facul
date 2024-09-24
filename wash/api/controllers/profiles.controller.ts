@@ -33,6 +33,7 @@ export const getProfileById = async (req, res) => {
                 schedules: true,
             }
         })
+        console.log(profile.cities)
         res.status(200).json({ data: profile })
     } catch (error) {
         res.status(400).json(error)

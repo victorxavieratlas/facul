@@ -42,9 +42,9 @@ export default async function cityDetails({
 	const listProfiles = profiles.profiles.map((profile: profileProps) => (
 		<Cards key={profile.id} profile={profile} />
 	))
-	console.log(listProfiles)
+	// console.log(listProfiles)
 	return (
-		<div className="ml-4 sm:ml-48 mt-6">
+		<div className="ml-4 sm:ml-48 mt-4">
 			<nav className="flex" aria-label="Breadcrumb">
 				<ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
 					<li className="inline-flex items-center">
