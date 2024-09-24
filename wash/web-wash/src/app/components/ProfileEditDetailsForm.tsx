@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner'
 import Cookies from 'js-cookie'
-import UploadImageInput from './UploadImageInput';
+import UploadImageDetailsFormInput from './UploadImageDetailsFormInput';
 
 interface City {
     id: number;
@@ -75,6 +75,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [showTooltipImage, setShowTooltipImage] = useState(false);
     // Adicione isso ao estado do componente ProfileForm
     const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+    const [initialImageURL, setInitialImageURL] = useState<string | null>(null);
     const [isFocusedCityInput, setIsFocusedCityInput] = useState(false);
     const [isFocusedPhoneInput, setIsFocusedPhoneInput] = useState(false);
     const [isFocusedMinPriceInput, setIsFocusedMinPriceInput] = useState(false);
@@ -116,6 +117,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         getProfile(profileId);
         if (profileData?.cities[0].name && !isFocusedCityInput) {
             setInputCity(`${profileData.cities[0].name} - ${profileData.cities[0].uf}`);
+            setInitialImageURL(profileData.images?.[0]?.url || null); // Define a imagem inicial
         }
         if (profileData?.phone && !isFocusedPhoneInput) {
             setInputPhone(`${profileData.phone}`);
@@ -397,7 +399,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="phone" id="phone" value={inputPhone} onFocus={handleFocusPhoneInput} className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
+                        <input type="phone" id="phone" value={inputPhone} onFocus={handleFocusPhoneInput}  className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
                             required {...register("phone")} />
                     </div>
 
@@ -693,7 +695,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <UploadImageInput setImageFile={setSelectedImageFile} />
+                        <UploadImageDetailsFormInput setImageFile={setSelectedImageFile} initialImageURL={initialImageURL} />
                         {/* <input type="file" accept="image/*"  id="image" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="https://www..."
                             required {...register("image")} /> */}
                     </div>
