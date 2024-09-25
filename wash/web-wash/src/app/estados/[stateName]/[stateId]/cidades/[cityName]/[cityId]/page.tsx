@@ -39,10 +39,11 @@ export default async function cityDetails({
 	const decodCityName = decodeURIComponent(params.cityName)
 
 	const profiles = await getProfilesByCity(params.cityId)
-	const listProfiles = profiles.profiles.map((profile: profileProps) => (
+
+	const listProfiles = profiles.map((profile: profileProps) => (
 		<Cards key={profile.id} profile={profile} />
 	))
-	// console.log(listProfiles)
+	console.log(listProfiles)
 	return (
 		<div className="ml-4 sm:ml-48 mt-4">
 			<nav className="flex" aria-label="Breadcrumb">

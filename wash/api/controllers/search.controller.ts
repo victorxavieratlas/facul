@@ -3,6 +3,7 @@ import { profile } from "console"
 
 const cityClient = new PrismaClient().city
 const stateClient = new PrismaClient().state
+const profileCityClient = new PrismaClient().profileCity
 
 export const getAllCities = async (req, res) => {
 	try {
@@ -43,20 +44,25 @@ export const getProfilesByCityById = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const city = await cityClient.findUnique({
-			where: { id: Number(id) },
+		const profilesInCity = await profileCityClient.findMany({
+			where: {
+				cityId: Number(id)
+			},
 			include: {
-				profiles: {
-					orderBy: {
-						totalPointsPlans: 'desc'
-					},
+				profile: {
 					include: {
 						images: true
 					}
 				}
 			}
 		})
-		res.status(200).json(city)
+
+		const sortedProfiles = profilesInCity
+			.map(item => item.profile)
+			.sort((a, b) => b.totalPointsPlans - a.totalPointsPlans);
+
+		console.log(sortedProfiles)
+		res.status(200).json(sortedProfiles);
 	} catch (error) {
 		res.status(400).json(error)
 	}

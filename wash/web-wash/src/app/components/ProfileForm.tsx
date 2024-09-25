@@ -152,7 +152,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         if (response.status === 200) {
             // console.log(response.status)
             // toast.success("Perfil atualizado com sucesso!");
-            window.location.reload();
+            window.location.reload()
         } else {
             toast.error("Não foi possível editar ou salvar as informações.");
         }

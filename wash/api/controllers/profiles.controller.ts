@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 
 const profileClient = new PrismaClient().profile
+const profileCityClient = new PrismaClient().profileCity
 
 export const getAllProfiles = async (req, res) => {
     try {
@@ -8,7 +9,7 @@ export const getAllProfiles = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                cities: true,
+                profileCities: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -29,11 +30,11 @@ export const getProfileById = async (req, res) => {
             include: {
                 images: true,
                 states: true,
-                cities: true,
+                profileCities: true,
                 schedules: true,
             }
         })
-        console.log(profile.cities)
+        console.log(profile.profileCities)
         res.status(200).json({ data: profile })
     } catch (error) {
         res.status(400).json(error)
@@ -46,7 +47,7 @@ export const getListOfTotalPoints = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                cities: true,
+                profileCities: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -67,7 +68,7 @@ export const getListOfMaxPrice = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                cities: true,
+                profileCities: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -88,7 +89,7 @@ export const getListOfMinPrice = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                cities: true,
+                profileCities: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -137,11 +138,11 @@ export const createProfileComplete = async (req, res) => {
         totalPointsPlans,
         cityId,
         schedules,
-        // images
         imageURL
-    } = req.body
+    } = req.body;
 
     try {
+        // Passo 1: Criar o profile sem a relação com city
         const profile = await profileClient.create({
             data: {
                 userId,
@@ -155,21 +156,12 @@ export const createProfileComplete = async (req, res) => {
                 minPrice,
                 maxPrice,
                 totalPointsPlans,
-                cities: {
-                    connect: { id: Number(cityId) }
-                },
                 schedules: {
                     create: schedules.map(schedule => ({
                         day: schedule.day,
                         isWorkingDay: schedule.isWorkingDay,
                     }))
                 },
-                // images: {
-                //     create: images.map(image => ({
-                //         url: image.url,
-                //         published: image.published
-                //     }))
-                // }
                 images: {
                     create: {
                         url: imageURL,
@@ -177,25 +169,21 @@ export const createProfileComplete = async (req, res) => {
                     }
                 }
             }
-        })
-        res.status(201).json({ data: profile })
-    } catch (error) {
-        res.status(400).json(error)
-    }
-}
+        });
 
-export const deleteProfile = async (req, res) => {
-    const { id } = req.params
+        await profileCityClient.create({
+            data: {
+                profileId: profile.id,
+                cityId: Number(cityId)
+            }
+        });
 
-    try {
-        const profile = await profileClient.delete({
-            where: { id: Number(id) }
-        })
-        res.status(200).json({ data: profile })
+        res.status(201).json({ data: profile });
     } catch (error) {
-        res.status(400).json(error)
+        res.status(400).json({ error: "Erro ao criar o perfil", details: error });
     }
-}
+};
+
 
 export const softDeleteProfile = async (req, res) => {
     const { id } = req.params
@@ -227,12 +215,12 @@ export const updateProfile = async (req, res) => {
         imageURL
     } = req.body
 
-    console.log(req.body)
 
     if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId || !imageURL) {
-        return res.status(400).json({error: "Todos os campos são obrigatórios!"})
+        return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
     }
 
+    console.log(req.body)
     try {
         const profile = await profileClient.update({
             where: { id: Number(id) },
@@ -245,8 +233,10 @@ export const updateProfile = async (req, res) => {
                 closeHour,
                 minPrice,
                 maxPrice,
-                cities: {
-                    connect: { id: Number(cityId) }
+                profileCities: {
+                    create: {
+                        cityId: Number(cityId)
+                    }
                 },
                 images: {
                     create: {
@@ -256,11 +246,85 @@ export const updateProfile = async (req, res) => {
                 }
             }
         })
-        res.status(200).json()
+        res.status(200).json(profile)
     } catch (error) {
         res.status(400).json(error)
     }
 }
+
+// export const updateProfileDetailsForm = async (req, res) => {
+//     const { id } = req.params
+//     const {
+//         bio,
+//         phone,
+//         startDay,
+//         finalDay,
+//         openHour,
+//         closeHour,
+//         minPrice,
+//         maxPrice,
+//         cityId,
+//         imageURL
+//     } = req.body
+
+//     console.log(req.body)
+
+//     if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId || !imageURL) {
+//         return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
+//     }
+
+//     // const existingImage = await imageClient.findFirst({
+//     //     where: { profileId: Number(id) }
+//     // })
+
+//     // if (!existingImage) {
+//     //     return res.status(404).json({ error: 'Imagem não encontrada' });
+//     // }
+
+//     // const existingCity = await cityClient.findFirst({
+//     //     where: { B: Number(id) }
+//     // })
+
+//     // if (!existingCity) {
+//     //     return res.status(404).json({ error: 'Cidade não encontrada' });
+//     // }
+
+//     try {
+//         const profile = await profileClient.update({
+//             where: { id: Number(id) },
+//             data: {
+//                 bio,
+//                 phone,
+//                 startDay,
+//                 finalDay,
+//                 openHour,
+//                 closeHour,
+//                 minPrice,
+//                 maxPrice,
+//                 cities: {
+//                     update: {
+//                         where: { id: Number(cityId) },
+//                         data: {
+
+//                         }
+//                     }
+//                 },
+//                 images: {
+//                     update: {
+//                         where: { id: existingImage.id },
+//                         data: {
+//                             url: imageURL,
+//                             published: true
+//                         }
+//                     }
+//                 }
+//             }
+//         })
+//         res.status(200).json()
+//     } catch (error) {
+//         res.status(400).json(error)
+//     }
+// }
 
 // export const getListOfMinPrice = async (req, res) => {
 //     try {

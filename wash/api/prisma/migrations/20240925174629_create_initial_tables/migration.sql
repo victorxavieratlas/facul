@@ -141,6 +141,14 @@ CREATE TABLE `cities` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `ProfileCity` (
+    `profileId` INTEGER NOT NULL,
+    `cityId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`profileId`, `cityId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `cities-zones` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
@@ -194,6 +202,43 @@ CREATE TABLE `plans` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `codes` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(191) NOT NULL,
+    `code` VARCHAR(6) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `deletedAt` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `logs` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `description` VARCHAR(80) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `userId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `service` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `profileId` INTEGER NOT NULL,
+    `title` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
+    `value` VARCHAR(5) NOT NULL,
+    `time` VARCHAR(5) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `deletedAt` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_ProfileToState` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -209,15 +254,6 @@ CREATE TABLE `_CategoryToProfile` (
 
     UNIQUE INDEX `_CategoryToProfile_AB_unique`(`A`, `B`),
     INDEX `_CategoryToProfile_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `_CityToProfile` (
-    `A` INTEGER NOT NULL,
-    `B` INTEGER NOT NULL,
-
-    UNIQUE INDEX `_CityToProfile_AB_unique`(`A`, `B`),
-    INDEX `_CityToProfile_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -287,6 +323,12 @@ ALTER TABLE `ratings` ADD CONSTRAINT `ratings_profileId_fkey` FOREIGN KEY (`prof
 ALTER TABLE `cities` ADD CONSTRAINT `cities_stateId_fkey` FOREIGN KEY (`stateId`) REFERENCES `states`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `ProfileCity` ADD CONSTRAINT `ProfileCity_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProfileCity` ADD CONSTRAINT `ProfileCity_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `cities-zones` ADD CONSTRAINT `cities-zones_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -305,6 +347,12 @@ ALTER TABLE `districts-zones` ADD CONSTRAINT `districts-zones_cityZoneId_fkey` F
 ALTER TABLE `districts-zones` ADD CONSTRAINT `districts-zones_districtId_fkey` FOREIGN KEY (`districtId`) REFERENCES `districts`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `logs` ADD CONSTRAINT `logs_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `service` ADD CONSTRAINT `service_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `_ProfileToState` ADD CONSTRAINT `_ProfileToState_A_fkey` FOREIGN KEY (`A`) REFERENCES `profiles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -315,12 +363,6 @@ ALTER TABLE `_CategoryToProfile` ADD CONSTRAINT `_CategoryToProfile_A_fkey` FORE
 
 -- AddForeignKey
 ALTER TABLE `_CategoryToProfile` ADD CONSTRAINT `_CategoryToProfile_B_fkey` FOREIGN KEY (`B`) REFERENCES `profiles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_CityToProfile` ADD CONSTRAINT `_CityToProfile_A_fkey` FOREIGN KEY (`A`) REFERENCES `cities`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_CityToProfile` ADD CONSTRAINT `_CityToProfile_B_fkey` FOREIGN KEY (`B`) REFERENCES `profiles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_CityZoneToProfile` ADD CONSTRAINT `_CityZoneToProfile_A_fkey` FOREIGN KEY (`A`) REFERENCES `cities-zones`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

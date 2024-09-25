@@ -47,7 +47,7 @@ model Profile {
   workingHours     WorkingHour[]
   hoursPoints      HourPoints[]
   states           State[]
-  cities           City[]
+  profileCities    ProfileCity[]
   citiesZones      CityZone[]
   districts        District[]
   districtsZones   DistrictZone[]
@@ -167,15 +167,24 @@ model City {
   name           String
   state          State          @relation(fields: [stateId], references: [id])
   stateId        Int
+  profileCities  ProfileCity[]
   cityZones      CityZone[]
   districts      District[]
   districtsZones DistrictZone[]
-  profiles       Profile[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   deletedAt      DateTime?
 
   @@map("cities")
+}
+
+model ProfileCity {
+  profile    Profile @relation(fields: [profileId], references: [id])
+  profileId  Int
+  city       City    @relation(fields: [cityId], references: [id])
+  cityId     Int
+
+  @@id([profileId, cityId]) // Chave composta para garantir unicidade
 }
 
 model CityZone {

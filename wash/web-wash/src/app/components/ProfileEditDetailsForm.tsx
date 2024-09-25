@@ -197,9 +197,10 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         setInputPhone(e.target.value); // Atualiza o estado local
         setValue('phone', e.target.value); // Atualiza o valor do react-hook-form
     };
-
+ 
     // Atualize handleFormSubmit para enviar a imagem antes do perfil
     const handleFormSubmit = async (data: ProfilePanelInput) => {
+        console.log(`PRIMEIRO DATA ========`)
         console.log(data)
         if (data.cityId == undefined || data.phone == undefined || data.bio == "" || data.minPrice == undefined || data.maxPrice == undefined || data.openHour == undefined || data.closeHour == undefined || data.startDay == "" || data.finalDay == "" || data.imageURL == "") {
 
@@ -234,14 +235,19 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                 data.imageURL = profileData?.images && profileData.images[0] ? profileData.images[0].url : "";
             }
 
-            
+            console.log(`selected ========`)
+            console.log(selectedCityId)
             if(!selectedCityId){
                 console.log(selectedCityId)
                 const updatedProfile = { ...data, cityId: data.cityId, imageURL: data.imageURL };
+                console.log(`PRIMEIRO !selected ========`)
+                console.log(updatedProfile)
                 EditProfile(updatedProfile);
             } else {
                 data.cityId = selectedCityId
                 const updatedProfile = { ...data, cityId: selectedCityId, imageURL: data.imageURL };
+                console.log(`Segundo selected ========`)
+                console.log(updatedProfile)
                 EditProfile(updatedProfile);
             }
         } else {

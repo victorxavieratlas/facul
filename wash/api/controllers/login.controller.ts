@@ -30,7 +30,7 @@ export const userLogin = async (req, res) => {
                     include: {
                         images: true,
                         states: true,
-                        cities: true,
+                        // cities: true,
                         schedules: true,
                         workingHours: true
                     }
