@@ -47,7 +47,7 @@ interface ProfileId {
 }
 
 const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
-    const { register, handleSubmit, setFocus } = useForm<ProfilePanelInput>();
+    const { register, handleSubmit, setFocus, setValue } = useForm<ProfilePanelInput>();
     const router = useRouter();
 
     const [inputCity, setInputCity] = useState('');
@@ -115,6 +115,10 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
     useEffect(() => {
         getProfile(profileId);
+    }, [profileId]);
+
+    useEffect(() => {
+        // getProfile(profileId);
         if (profileData?.cities[0].name && !isFocusedCityInput) {
             setInputCity(`${profileData.cities[0].name} - ${profileData.cities[0].uf}`);
             setInitialImageURL(profileData.images?.[0]?.url || null); // Define a imagem inicial
@@ -131,6 +135,9 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         if (profileData?.startDay && !isFocusedOpenDayInput) {
             setInputOpenDay(`${profileData.startDay}`);
         }
+        if (profileData?.finalDay && !isFocusedCloseDayInput) {
+            setInputCloseDay(`${profileData.finalDay}`);
+        }
         if (profileData?.openHour && !isFocusedOpenHourInput) {
             setInputOpenHour(`${profileData.openHour}`);
         }
@@ -144,10 +151,10 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         //     setInputImage(`${profileData.images[0].url}`);
         // }
     }, [
-        profileData, 
-        isFocusedCityInput, 
-        isFocusedPhoneInput, 
-        isFocusedMinPriceInput, 
+        profileData,
+        isFocusedCityInput,
+        isFocusedPhoneInput,
+        isFocusedMinPriceInput,
         isFocusedMaxPriceInput,
         isFocusedOpenDayInput,
         isFocusedCloseDayInput,
@@ -186,24 +193,76 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         setResults([]); // Clear results after selection
     };
 
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputPhone(e.target.value); // Atualiza o estado local
+        setValue('phone', e.target.value); // Atualiza o valor do react-hook-form
+    };
+
     // Atualize handleFormSubmit para enviar a imagem antes do perfil
     const handleFormSubmit = async (data: ProfilePanelInput) => {
-        if (!selectedCityId) {
-            toast.error("Por favor, selecione uma cidade válida.");
-            return;
+        console.log(data)
+        if (data.cityId == undefined || data.phone == undefined || data.bio == "" || data.minPrice == undefined || data.maxPrice == undefined || data.openHour == undefined || data.closeHour == undefined || data.startDay == "" || data.finalDay == "" || data.imageURL == "") {
+
+            if (data.cityId == undefined) {
+                data.cityId = profileData?.cities[0].id || 0
+            }
+            if (data.phone == undefined) {
+                data.phone = profileData?.phone || ""
+            }
+            if (!data.minPrice) {
+                data.minPrice = profileData?.minPrice || 0
+            }
+            if (!data.maxPrice) {
+                data.maxPrice = profileData?.maxPrice || 0
+            }
+            if (data.startDay == "") {
+                data.startDay = profileData?.startDay || ""
+            }
+            if (data.finalDay == "") {
+                data.finalDay = profileData?.finalDay || ""
+            }
+            if (data.openHour == "") {
+                data.openHour = profileData?.openHour || ""
+            }
+            if (data.closeHour == "") {
+                data.closeHour = profileData?.closeHour || ""
+            }
+            if (data.bio == "") {
+                data.bio = profileData?.bio || ""
+            }
+            if (data.imageURL == undefined) {
+                data.imageURL = profileData?.images && profileData.images[0] ? profileData.images[0].url : "";
+            }
+
+            
+            if(!selectedCityId){
+                console.log(selectedCityId)
+                const updatedProfile = { ...data, cityId: data.cityId, imageURL: data.imageURL };
+                EditProfile(updatedProfile);
+            } else {
+                data.cityId = selectedCityId
+                const updatedProfile = { ...data, cityId: selectedCityId, imageURL: data.imageURL };
+                EditProfile(updatedProfile);
+            }
+        } else {
+            console.log("---------------AQUI")
+            if (!selectedCityId) {
+                toast.error("Por favor, selecione uma cidade válida.");
+
+                return;
+            }
+            // Primeiro, envie a imagem e obtenha a URL
+            const imageUrl = await uploadImage();
+
+            if (!imageUrl) {
+                toast.error("Erro ao enviar a imagem.");
+                return;
+            }
+
+            // Se a imagem foi enviada com sucesso, inclua a URL da imagem nos dados do perfil
+            const updatedProfile = { ...data, cityId: selectedCityId, imageURL: imageUrl };
+            EditProfile(updatedProfile);
         }
-
-        // Primeiro, envie a imagem e obtenha a URL
-        const imageUrl = await uploadImage();
-
-        if (!imageUrl) {
-            toast.error("Erro ao enviar a imagem.");
-            return;
-        }
-
-        // Se a imagem foi enviada com sucesso, inclua a URL da imagem nos dados do perfil
-        const updatedProfile = { ...data, cityId: selectedCityId, imageURL: imageUrl };
-        EditProfile(updatedProfile);
     };
 
     async function getProfile(profileId: ProfileId) {
@@ -235,9 +294,9 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         });
 
         if (response.status === 200) {
-            // console.log(response.status)
+
             // toast.success("Perfil atualizado com sucesso!");
-            window.location.reload();
+            // router.replace(`/painel/${Cookies.get("user_login_id")}`);
         } else {
             toast.error("Não foi possível editar ou salvar as informações.");
         }
@@ -399,8 +458,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="phone" id="phone" value={inputPhone} onFocus={handleFocusPhoneInput}  className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
-                            required {...register("phone")} />
+                        <input type="phone" id="phone" value={inputPhone} onFocus={handleFocusPhoneInput} onChange={handlePhoneChange} className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
+                            required />
                     </div>
 
 

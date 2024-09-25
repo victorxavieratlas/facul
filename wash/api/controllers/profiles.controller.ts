@@ -229,8 +229,8 @@ export const updateProfile = async (req, res) => {
 
     console.log(req.body)
 
-    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId) {
-        res.status(400).json({error: "Todos os campos são obrigatórios!"})
+    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId || !imageURL) {
+        return res.status(400).json({error: "Todos os campos são obrigatórios!"})
     }
 
     try {
@@ -256,7 +256,7 @@ export const updateProfile = async (req, res) => {
                 }
             }
         })
-        res.status(200).json({ data: profile })
+        res.status(200).json()
     } catch (error) {
         res.status(400).json(error)
     }
