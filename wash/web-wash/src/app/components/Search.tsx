@@ -20,11 +20,11 @@ interface SearchProps {
 const Search = ({ states }: SearchProps) => {
     const [input, setInput] = useState<string>('');
     const [results, setResults] = useState<City[]>([]);
-
+    
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
             if (input.length >= 3) {
-                console.log(input)
+                // console.log(input)
                 fetch(`http://localhost:3007/cities/search/${encodeURIComponent(input)}`)
                     .then(response => response.json())
                     .then(data => {

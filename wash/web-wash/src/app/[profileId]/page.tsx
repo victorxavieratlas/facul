@@ -10,8 +10,7 @@ export interface ProfileData {
 	id: number;
 	phone?: string;
 	images?: [{ url: string }];
-	cities: [{ id: number, name: string, stateId: number, uf: string }];
-	states: [{ id: number, name: string }];
+	profileLocation: [{ profileId: number, cityId: number, stateId: number }];
 	name: string;
 	startDay: string;
 	finalDay: string;
@@ -35,6 +34,13 @@ interface State {
 	name: string;
 }
 
+interface City {
+	id: number;
+	name: string;
+	stateId: number;
+	uf: string;
+}
+
 export async function getStateAndCityData(stateId: string, stateName: string, cityId: string, cityName: string) {
 	const stateAndCityData = {
 		stateId,
@@ -53,9 +59,11 @@ export default function Panel({
 	const router = useRouter();
 	const [profileData, setProfileData] = useState<ProfileData | null>(null);
 	const [stateData, setStateData] = useState<State | null>(null);
+	const [cityData, setCityData] = useState<City | null>(null);
 	const [services, setServices] = useState<Service[]>([]);
 	const { mudaLogin } = useContext(ClienteContext);
 
+	
 	useEffect(() => {
 		if (Cookies.get("x-access-token") || Cookies.get("user_login_id") || Cookies.get("x-profile-id")) {
 			mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" });
@@ -69,10 +77,11 @@ export default function Panel({
 		const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
 		const data = await response.json();
 		setProfileData(data.data);
-
+		console.log(data.data)
 		// Quando o profileData é obtido, buscamos as informações do estado
-		if (data.data.cities && data.data.cities.length > 0) {
-			getState(data.data.cities[0].stateId);
+		if (data.data.profileLocation && data.data.profileLocation.length > 0) {
+			getState(data.data.profileLocation[0].stateId);
+			getCity(data.data.profileLocation[0].cityId);
 		}
 	}
 
@@ -82,18 +91,27 @@ export default function Panel({
 		setServices(data);
 	}
 
+	async function getCity(cityId: number) {
+		// console.log(stateId)
+		const response = await fetch(`http://localhost:3007/search/city/${cityId}`);
+		const city = await response.json();
+		setCityData(city);
+	}
 	async function getState(stateId: number) {
+		// console.log(stateId)
 		const response = await fetch(`http://localhost:3007/search/state/${stateId}`);
 		const state = await response.json();
 		setStateData(state);
 	}
+	// console.log(profileData)
+	// console.log(stateData)
 	if (!profileData || !stateData) {
 		return <div className="m-96 p-96">Carregando...</div>;
 	}
 
-	const cityId = profileData.cities[0].id
-	const cityName = profileData.cities[0].name
-	const stateUf = profileData.cities[0].uf
+	const cityId = cityData?.id
+	const cityName = cityData?.name
+	const stateUf = cityData?.uf
 	// const stateName = profileData.states[0].name
 
 	return (

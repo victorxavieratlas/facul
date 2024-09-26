@@ -24,11 +24,13 @@ interface ProfilePanelInput {
     minPrice: number;
     maxPrice: number;
     cityId: number;
+    stateId: number;
 }
 
 interface ProfileIncomplete {
     id: number;
 }
+
 
 const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomplete }) => {
     const { register, handleSubmit, setFocus } = useForm<ProfilePanelInput>();
@@ -36,6 +38,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
     const [input, setInput] = useState('');
     const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+    const [selectedStateId, setSelectedStateId] = useState<number | null>(null);
     const [results, setResults] = useState<City[]>([]);
     const [showTooltipCity, setShowTooltipCity] = useState(false);
     const [showTooltipPhoneNumber, setShowTooltipPhoneNumber] = useState(false);
@@ -104,12 +107,15 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     const handleSelectCity = (city: City) => {
         setInput(`${city.name} - ${city.uf}`); // Set the visible input field to city name and UF
         setSelectedCityId(city.id); // Keep the city ID in state
+        setSelectedStateId(city.stateId); // Keep the state ID
         setResults([]); // Clear results after selection
     };
 
     // Atualize handleFormSubmit para enviar a imagem antes do perfil
     const handleFormSubmit = async (data: ProfilePanelInput) => {
-        if (!selectedCityId) {
+        console.log(selectedCityId)
+
+        if (!selectedCityId || !selectedStateId) {
             toast.error("Por favor, selecione uma cidade válida.");
             return;
         }
@@ -123,12 +129,12 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         }
 
         // Se a imagem foi enviada com sucesso, inclua a URL da imagem nos dados do perfil
-        const updatedProfile = { ...data, cityId: selectedCityId, imageURL: imageUrl };
+        const updatedProfile = { ...data, cityId: selectedCityId, imageURL: imageUrl, stateId: selectedStateId ? selectedStateId : 0 };
         EditProfile(updatedProfile);
     };
 
     async function EditProfile(data: ProfilePanelInput) {
-    
+        
         const response = await fetch(`http://localhost:3007/profiles/${profileIncomplete.id}`, {
             method: "PUT",
             headers: {
@@ -146,6 +152,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                 minPrice: data.minPrice,
                 maxPrice: data.maxPrice,
                 cityId: data.cityId,
+                stateId: data.stateId
             })
         });
 

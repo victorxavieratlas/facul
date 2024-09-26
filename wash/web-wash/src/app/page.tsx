@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
@@ -12,58 +12,63 @@ export interface stateProps {
 	name: string
 }
 
-export default async function Home() {
+export default function Home() {
 	const { mudaLogin } = useContext(ClienteContext)
 	const router = useRouter()
 
-	if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
-		router.replace(`/`)
-		mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" })
-	}
+	// Estado para armazenar os estados
+	const [states, setStates] = useState<stateProps[]>([])
 
+	// Verificar cookies e redirecionar se necessário
+	useEffect(() => {
+		if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
+			router.replace(`/`)
+			mudaLogin({
+				userId: Number(Cookies.get("user_login_id")) || 0,
+				userName: Cookies.get("x-user-name") || ""
+			})
+		}
+	}, [router, mudaLogin])
+
+	// Função para buscar os estados
 	async function getState() {
-		const statesResponse = await fetch("http://localhost:3007/search/state",
-			{ cache: 'no-store' })
-		const states = await statesResponse.json()
-
-		const listStates = states.map((state: stateProps) => (
-			<States key={state.id} state={state} />
-		))
-		return { listStates, states }
+		const statesResponse = await fetch("http://localhost:3007/search/state", { cache: 'no-store' })
+		const statesData = await statesResponse.json()
+		setStates(statesData)
 	}
-	const allStates = getState()
+
+	// Chamada da função `getState` apenas uma vez
+	useEffect(() => {
+		getState()
+	}, []) // Executa apenas uma vez no carregamento do componente
+
+	// Mapear estados após a chamada da API
+	const listStates = states.map((state: stateProps) => (
+		<States key={state.id} state={state} />
+	))
 
 	return (
 		<div>
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-8 mb-10 sm:mb-0">
 				<div className="ml-4 sm:ml-0 flex flex-col gap-4">
 					<h1 className="text-2xl sm:text-5xl font-extrabold text-gray-800 text-balance">
-						<span className="clear-left block mb-4">Encontre</span> <span className="clear-left block mb-4">lavagens e estéticas automotivas</span> na <span className="font-extrabold text-blue-500">CarWash</span>
+						<span className="clear-left block mb-4">Encontre</span> 
+						<span className="clear-left block mb-4">lavagens e estéticas automotivas</span> 
+						na <span className="font-extrabold text-blue-500">CarWash</span>
 					</h1>
 					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-2">
-						<span className="clear-left block">A maior plataforma de lavagens e estéticas</span>automotivas do Brasil.
+						<span className="clear-left block">A maior plataforma de lavagens e estéticas</span>
+						automotivas do Brasil.
 					</h2>
 				</div>
 			</div>
 
-			<Search states={(await allStates).states} />
+			{/* Passando os estados para o componente Search */}
+			<Search states={states} />
 
-			{/* <form className="max-w-sm sm:max-w-lg mx-auto">
-				<div className="flex">
-					<div className="relative w-full drop-shadow-lg mt-10 mb-10">
-						<input type="search" id="search-dropdown" className="block p-2.5 w-full h-14 rounded-lg z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:outline-none" placeholder=" Selenionar cidade" required />
-						<button type="submit" className="absolute top-0 end-0 p-2.5 w-14 text-sm font-medium h-full text-white bg-blue-500 rounded-e-lg border border-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300">
-							<svg className="w-5 h-5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-								<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-							</svg>
-							<span className="sr-only">Search</span>
-						</button>
-					</div>
-				</div>
-			</form> */}
-
+			{/* Renderizando a lista de estados */}
 			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10">
-				{(await allStates).listStates}
+				{listStates}
 			</div>
 		</div>
 	)

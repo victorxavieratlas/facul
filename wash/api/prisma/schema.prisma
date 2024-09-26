@@ -29,25 +29,25 @@ model User {
 }
 
 model Profile {
-  id               Int            @id @default(autoincrement())
-  user             User           @relation(fields: [userId], references: [id])
-  userId           Int            @unique
-  name             String?        @db.VarChar(30)
-  phone            String?        @db.VarChar(20)
+  id               Int               @id @default(autoincrement())
+  user             User              @relation(fields: [userId], references: [id])
+  userId           Int               @unique
+  name             String?           @db.VarChar(30)
+  phone            String?           @db.VarChar(20)
   bio              String?
-  openHour         String?        @db.VarChar(5)
-  closeHour        String?        @db.VarChar(5)
-  startDay         String?        @db.VarChar(30)
-  finalDay         String?        @db.VarChar(30)
-  minPrice         Decimal?       @db.Decimal(9, 2)
-  maxPrice         Decimal?       @db.Decimal(9, 2)
-  verified         Boolean        @default(false)
+  openHour         String?           @db.VarChar(5)
+  closeHour        String?           @db.VarChar(5)
+  startDay         String?           @db.VarChar(30)
+  finalDay         String?           @db.VarChar(30)
+  minPrice         Decimal?          @db.Decimal(9, 2)
+  maxPrice         Decimal?          @db.Decimal(9, 2)
+  verified         Boolean           @default(false)
   images           Image[]
   schedules        Schedule[]
   workingHours     WorkingHour[]
   hoursPoints      HourPoints[]
   states           State[]
-  profileCities    ProfileCity[]
+  profileLocation  ProfileLocation[]
   citiesZones      CityZone[]
   districts        District[]
   districtsZones   DistrictZone[]
@@ -58,8 +58,8 @@ model Profile {
   totalPointsPlans Int?
   numberOfRatings  Int?
   totalOfRatings   Int?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   deletedAt        DateTime?
 
   @@map("profiles")
@@ -150,41 +150,44 @@ model Category {
 }
 
 model State {
-  id        Int       @id @default(autoincrement())
-  name      String
-  cities    City[]
-  profiles  Profile[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id              Int               @id @default(autoincrement())
+  name            String
+  cities          City[]
+  profiles        Profile[]
+  profileLocation ProfileLocation[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
 
   @@map("states")
 }
 
 model City {
-  id             Int            @id @default(autoincrement())
-  uf             String         @db.VarChar(2)
-  name           String
-  state          State          @relation(fields: [stateId], references: [id])
-  stateId        Int
-  profileCities  ProfileCity[]
-  cityZones      CityZone[]
-  districts      District[]
-  districtsZones DistrictZone[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  deletedAt      DateTime?
+  id              Int               @id @default(autoincrement())
+  uf              String            @db.VarChar(2)
+  name            String
+  state           State             @relation(fields: [stateId], references: [id])
+  stateId         Int
+  profileLocation ProfileLocation[]
+  cityZones       CityZone[]
+  districts       District[]
+  districtsZones  DistrictZone[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
 
   @@map("cities")
 }
 
-model ProfileCity {
-  profile    Profile @relation(fields: [profileId], references: [id])
-  profileId  Int
-  city       City    @relation(fields: [cityId], references: [id])
-  cityId     Int
+model ProfileLocation {
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+  city      City    @relation(fields: [cityId], references: [id])
+  cityId    Int
+  state     State   @relation(fields: [stateId], references: [id])
+  stateId   Int
 
-  @@id([profileId, cityId]) // Chave composta para garantir unicidade
+  @@id([profileId, cityId, stateId]) // Chave composta para garantir unicidade
 }
 
 model CityZone {

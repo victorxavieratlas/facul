@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 
 const profileClient = new PrismaClient().profile
-const profileCityClient = new PrismaClient().profileCity
+const profileLocationClient = new PrismaClient().profileLocation
 
 export const getAllProfiles = async (req, res) => {
     try {
@@ -9,7 +9,7 @@ export const getAllProfiles = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                profileCities: true,
+                profileLocation: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -30,11 +30,11 @@ export const getProfileById = async (req, res) => {
             include: {
                 images: true,
                 states: true,
-                profileCities: true,
+                profileLocation: true,
                 schedules: true,
             }
         })
-        console.log(profile.profileCities)
+        console.log(profile)
         res.status(200).json({ data: profile })
     } catch (error) {
         res.status(400).json(error)
@@ -47,7 +47,7 @@ export const getListOfTotalPoints = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                profileCities: true,
+                profileLocation: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -68,7 +68,7 @@ export const getListOfMaxPrice = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                profileCities: true,
+                profileLocation: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -89,7 +89,7 @@ export const getListOfMinPrice = async (req, res) => {
             include: {
                 images: true,
                 schedules: true,
-                profileCities: true,
+                profileLocation: true,
                 ratings: true,
                 categories: true,
                 plans: true,
@@ -137,6 +137,7 @@ export const createProfileComplete = async (req, res) => {
         maxPrice,
         totalPointsPlans,
         cityId,
+        stateId,
         schedules,
         imageURL
     } = req.body;
@@ -171,10 +172,11 @@ export const createProfileComplete = async (req, res) => {
             }
         });
 
-        await profileCityClient.create({
+        await profileLocationClient.create({
             data: {
                 profileId: profile.id,
-                cityId: Number(cityId)
+                cityId: Number(cityId),
+                stateId: Number(stateId)
             }
         });
 
@@ -212,11 +214,12 @@ export const updateProfile = async (req, res) => {
         minPrice,
         maxPrice,
         cityId,
+        stateId,
         imageURL
     } = req.body
 
 
-    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId || !imageURL) {
+    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId || !stateId || !imageURL) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
     }
 
@@ -233,9 +236,10 @@ export const updateProfile = async (req, res) => {
                 closeHour,
                 minPrice,
                 maxPrice,
-                profileCities: {
+                profileLocation: {
                     create: {
-                        cityId: Number(cityId)
+                        cityId: Number(cityId),
+                        stateId: Number(stateId)
                     }
                 },
                 images: {
@@ -243,7 +247,12 @@ export const updateProfile = async (req, res) => {
                         url: imageURL,
                         published: true
                     }
-                }
+                },
+                // states: {
+                //     create: {
+                //         id: stateId
+                //     }
+                // }
             }
         })
         res.status(200).json(profile)

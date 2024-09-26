@@ -27,23 +27,34 @@ interface ProfilePanelInput {
 }
 
 interface ProfileData {
-    id: number;
-    phone?: string;
-    images?: [{ url: string }];
-    cities: [{ id: number, name: string, stateId: number, uf: string }];
-    states: [{ id: number, name: string }];
-    name: string;
-    startDay: string;
-    finalDay: string;
-    minPrice: number;
-    maxPrice: number;
-    bio: string;
-    openHour: string;
-    closeHour: string;
+	id: number;
+	phone?: string;
+	images?: [{ url: string }];
+	profileLocation: [{ profileId: number, cityId: number, stateId: number }];
+	name: string;
+	startDay: string;
+	finalDay: string;
+	minPrice: number;
+	maxPrice: number;
+	bio: string;
+	openHour: string;
+	closeHour: string;
 }
 
 interface ProfileId {
     profileId: number;
+}
+
+interface State {
+	id: number;
+	name: string;
+}
+
+interface City {
+	id: number;
+	name: string;
+	stateId: number;
+	uf: string;
 }
 
 const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
@@ -86,6 +97,21 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [isFocusedCloseHourInput, setIsFocusedCloseHourInput] = useState(false);
     const [isFocusedPresentationInput, setIsFocusedPresentationInput] = useState(false);
     const [isFocusedImageInput, setIsFocusedImageInput] = useState(false);
+    const [stateData, setStateData] = useState<State | null>(null);
+	const [cityData, setCityData] = useState<City | null>(null);
+
+    async function getCity(cityId: number) {
+		// console.log(stateId)
+		const response = await fetch(`http://localhost:3007/search/city/${cityId}`);
+		const city = await response.json();
+		setCityData(city);
+	}
+	async function getState(stateId: number) {
+		// console.log(stateId)
+		const response = await fetch(`http://localhost:3007/search/state/${stateId}`);
+		const state = await response.json();
+		setStateData(state);
+	}
 
     // Adicione essa função no componente ProfileForm para enviar a imagem
     const uploadImage = async () => {
@@ -119,8 +145,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
     useEffect(() => {
         // getProfile(profileId);
-        if (profileData?.cities[0].name && !isFocusedCityInput) {
-            setInputCity(`${profileData.cities[0].name} - ${profileData.cities[0].uf}`);
+        if (profileData?.profileLocation && !isFocusedCityInput) {
+            setInputCity(`${cityData?.name} - ${cityData?.uf}`);
             setInitialImageURL(profileData.images?.[0]?.url || null); // Define a imagem inicial
         }
         if (profileData?.phone && !isFocusedPhoneInput) {
@@ -205,7 +231,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         if (data.cityId == undefined || data.phone == undefined || data.bio == "" || data.minPrice == undefined || data.maxPrice == undefined || data.openHour == undefined || data.closeHour == undefined || data.startDay == "" || data.finalDay == "" || data.imageURL == "") {
 
             if (data.cityId == undefined) {
-                data.cityId = profileData?.cities[0].id || 0
+                data.cityId = profileData?.profileLocation[0].cityId || 0
             }
             if (data.phone == undefined) {
                 data.phone = profileData?.phone || ""
@@ -274,6 +300,10 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     async function getProfile(profileId: ProfileId) {
         const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
         const data = await response.json();
+        if (data.data.profileLocation && data.data.profileLocation.length > 0) {
+			await getState(data.data.profileLocation[0].stateId);
+			await getCity(data.data.profileLocation[0].cityId);
+		}
         setProfileData(data.data);
     }
 

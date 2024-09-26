@@ -3,7 +3,7 @@ import { profile } from "console"
 
 const cityClient = new PrismaClient().city
 const stateClient = new PrismaClient().state
-const profileCityClient = new PrismaClient().profileCity
+const profileLocationClient = new PrismaClient().profileLocation
 
 export const getAllCities = async (req, res) => {
 	try {
@@ -44,7 +44,7 @@ export const getProfilesByCityById = async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const profilesInCity = await profileCityClient.findMany({
+		const profilesInCity = await profileLocationClient.findMany({
 			where: {
 				cityId: Number(id)
 			},
@@ -121,6 +121,20 @@ export const getStateById = async (req, res) => {
 		res.status(400).json(error)
 	}
 }
+
+// //Precisa passar o state no arquivo profile
+// export const getStateByCityId = async (req, res) => {
+// 	const { id } = req.params
+
+// 	try {
+// 		const state = await stateClient.findUnique({
+// 			where: { id: Number(id) }
+// 		})
+// 		res.status(200).json(state)
+// 	} catch (error) {
+// 		res.status(400).json(error)
+// 	}
+// }
 
 export const getStateByName = async (req, res) => {
 	const { name } = req.params
