@@ -15,6 +15,7 @@ interface City {
 
 interface ProfilePanelInput {
     imageURL: string;
+    imageId: number;
     bio: string;
     phone: string;
     startDay: string;
@@ -24,12 +25,15 @@ interface ProfilePanelInput {
     minPrice: number;
     maxPrice: number;
     cityId: number;
+    oldCityId: number;
+    stateId: number;
+    oldStateId: number;
 }
 
 interface ProfileData {
 	id: number;
 	phone?: string;
-	images?: [{ url: string }];
+	images?: [{ id: number, url: string }];
 	profileLocation: [{ profileId: number, cityId: number, stateId: number }];
 	name: string;
 	startDay: string;
@@ -72,6 +76,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [inputPresentation, setInputPresentation] = useState('');
     const [inputImage, setInputImage] = useState('');
     const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+    const [selectedStateId, setSelectedStateId] = useState<number | null>(null);
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [results, setResults] = useState<City[]>([]);
     const [showTooltipCity, setShowTooltipCity] = useState(false);
@@ -216,6 +221,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const handleSelectCity = (city: City) => {
         setInputCity(`${city.name} - ${city.uf}`); // Set the visible input field to city name and UF
         setSelectedCityId(city.id); // Keep the city ID in state
+        setSelectedStateId(city.stateId)
         setResults([]); // Clear results after selection
     };
 
@@ -223,57 +229,97 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         setInputPhone(e.target.value); // Atualiza o estado local
         setValue('phone', e.target.value); // Atualiza o valor do react-hook-form
     };
+
+    const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputMinPrice(e.target.value); // Atualiza o estado local
+        setValue('minPrice', Number(e.target.value)); // Atualiza o valor do react-hook-form
+    };
+
+    const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputMaxPrice(e.target.value); // Atualiza o estado local
+        setValue('maxPrice', Number(e.target.value)); // Atualiza o valor do react-hook-form
+    };
+
+    const handleOpenDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputOpenDay(e.target.value); // Atualiza o estado local
+        setValue('startDay', e.target.value); // Atualiza o valor do react-hook-form
+    };
+
+    const handleCloseDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputCloseDay(e.target.value); // Atualiza o estado local
+        setValue('finalDay', e.target.value); // Atualiza o valor do react-hook-form
+    };
+
+    const handleOpenHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputOpenHour(e.target.value); // Atualiza o estado local
+        setValue('openHour', e.target.value); // Atualiza o valor do react-hook-form
+    };
+
+    const handleCloseHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputCloseHour(e.target.value); // Atualiza o estado local
+        setValue('closeHour', e.target.value); // Atualiza o valor do react-hook-form
+    };
+
+    const handlePresentationChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setInputPresentation(e.target.value); // Atualiza o estado local
+        setValue('bio', e.target.value); // Atualiza o valor do react-hook-form
+    };
  
     // Atualize handleFormSubmit para enviar a imagem antes do perfil
     const handleFormSubmit = async (data: ProfilePanelInput) => {
-        console.log(`PRIMEIRO DATA ========`)
-        console.log(data)
-        if (data.cityId == undefined || data.phone == undefined || data.bio == "" || data.minPrice == undefined || data.maxPrice == undefined || data.openHour == undefined || data.closeHour == undefined || data.startDay == "" || data.finalDay == "" || data.imageURL == "") {
-
+        console.log(`SUBMIT ========`)
+        // console.log(data.stateId)
+        data.oldCityId = Number(cityData?.id)
+        data.oldStateId = Number(cityData?.stateId)
+        
+        if (data.cityId === undefined || data.phone === undefined || data.bio === undefined || data.minPrice === undefined || data.maxPrice === undefined || data.openHour === undefined || data.closeHour === undefined || data.startDay === undefined || data.finalDay === undefined || data.imageURL === undefined) {
+            console.log(`PRIMEIRO IF ========`)
             if (data.cityId == undefined) {
                 data.cityId = profileData?.profileLocation[0].cityId || 0
             }
             if (data.phone == undefined) {
-                data.phone = profileData?.phone || ""
+                data.phone = String(profileData?.phone)
             }
-            if (!data.minPrice) {
-                data.minPrice = profileData?.minPrice || 0
+            if (data.minPrice === undefined) {
+                data.minPrice = Number(profileData?.minPrice)
             }
-            if (!data.maxPrice) {
-                data.maxPrice = profileData?.maxPrice || 0
+
+            if (data.maxPrice === undefined) {
+                data.maxPrice = Number(profileData?.maxPrice)
+
             }
-            if (data.startDay == "") {
-                data.startDay = profileData?.startDay || ""
+            if (data.startDay === undefined) {
+                data.startDay = String(profileData?.startDay)
             }
-            if (data.finalDay == "") {
-                data.finalDay = profileData?.finalDay || ""
+            if (data.finalDay === undefined) {
+                data.finalDay = String(profileData?.finalDay)
             }
-            if (data.openHour == "") {
-                data.openHour = profileData?.openHour || ""
+            if (data.openHour === undefined) {
+                data.openHour = String(profileData?.openHour)
             }
-            if (data.closeHour == "") {
-                data.closeHour = profileData?.closeHour || ""
+            if (data.closeHour === undefined) {
+                data.closeHour = String(profileData?.closeHour)
             }
-            if (data.bio == "") {
-                data.bio = profileData?.bio || ""
+            if (data.bio === undefined) {
+                data.bio = String(profileData?.bio)
             }
             if (data.imageURL == undefined) {
                 data.imageURL = profileData?.images && profileData.images[0] ? profileData.images[0].url : "";
             }
 
-            console.log(`selected ========`)
-            console.log(selectedCityId)
-            if(!selectedCityId){
-                console.log(selectedCityId)
-                const updatedProfile = { ...data, cityId: data.cityId, imageURL: data.imageURL };
+            // console.log(`selected ========`)
+            // console.log(selectedCityId)
+            if(!selectedCityId || !selectedStateId){
+                // console.log(selectedCityId)
+                const updatedProfile = { ...data, cityId: Number(cityData?.id), stateId: Number(cityData?.stateId), imageURL: data.imageURL };
                 console.log(`PRIMEIRO !selected ========`)
-                console.log(updatedProfile)
+                // console.log(data)
                 EditProfile(updatedProfile);
             } else {
-                data.cityId = selectedCityId
-                const updatedProfile = { ...data, cityId: selectedCityId, imageURL: data.imageURL };
+                // data.cityId = selectedCityId
+                const updatedProfile = { ...data, cityId: selectedCityId, stateId: selectedStateId, imageURL: data.imageURL };
                 console.log(`Segundo selected ========`)
-                console.log(updatedProfile)
+                // console.log(updatedProfile)
                 EditProfile(updatedProfile);
             }
         } else {
@@ -308,7 +354,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     }
 
     async function EditProfile(data: ProfilePanelInput) {
-
+        console.log(data)
+        console.log(data.oldCityId)
         const response = await fetch(`http://localhost:3007/profiles/${profileId}`, {
             method: "PUT",
             headers: {
@@ -326,6 +373,9 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                 minPrice: data.minPrice,
                 maxPrice: data.maxPrice,
                 cityId: data.cityId,
+                oldCityId: profileData?.profileLocation[0].cityId,
+                stateId: data.stateId,
+                oldStateId: profileData?.profileLocation[0].stateId
             })
         });
 
@@ -340,7 +390,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
     const handleFocusCityInput = () => {
         if (!isFocusedCityInput) {
-            setInputCity(''); // Limpa o input ao focar pela primeira vez
+            setInputCity(inputCity); // Limpa o input ao focar pela primeira vez
             setIsFocusedCityInput(true); // Marca como focado para não limpar novamente
         }
     };
@@ -354,49 +404,49 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
     const handleFocusMinPriceInput = () => {
         if (!isFocusedMinPriceInput) {
-            setInputMinPrice(''); // Limpa o input ao focar pela primeira vez
+            setInputMinPrice(inputMinPrice); // Limpa o input ao focar pela primeira vez
             setIsFocusedMinPriceInput(true); // Marca como focado para não limpar novamente
         }
     };
 
     const handleFocusMaxPriceInput = () => {
         if (!isFocusedMaxPriceInput) {
-            setInputMaxPrice(''); // Limpa o input ao focar pela primeira vez
+            setInputMaxPrice(inputMaxPrice); // Limpa o input ao focar pela primeira vez
             setIsFocusedMaxPriceInput(true); // Marca como focado para não limpar novamente
         }
     };
 
     const handleFocusOpenDayInput = () => {
         if (!isFocusedOpenDayInput) {
-            setInputOpenDay(''); // Limpa o input ao focar pela primeira vez
+            setInputOpenDay(inputOpenDay); // Limpa o input ao focar pela primeira vez
             setIsFocusedOpenDayInput(true); // Marca como focado para não limpar novamente
         }
     };
 
     const handleFocusCloseDayInput = () => {
         if (!isFocusedCloseDayInput) {
-            setInputCloseDay(''); // Limpa o input ao focar pela primeira vez
+            setInputCloseDay(inputCloseDay); // Limpa o input ao focar pela primeira vez
             setIsFocusedCloseDayInput(true); // Marca como focado para não limpar novamente
         }
     };
 
     const handleFocusOpenHourInput = () => {
         if (!isFocusedOpenHourInput) {
-            setInputOpenHour(''); // Limpa o input ao focar pela primeira vez
+            setInputOpenHour(inputOpenHour); // Limpa o input ao focar pela primeira vez
             setIsFocusedOpenHourInput(true); // Marca como focado para não limpar novamente
         }
     };
 
     const handleFocusCloseHourInput = () => {
         if (!isFocusedCloseHourInput) {
-            setInputCloseHour(''); // Limpa o input ao focar pela primeira vez
+            setInputCloseHour(inputCloseHour); // Limpa o input ao focar pela primeira vez
             setIsFocusedCloseHourInput(true); // Marca como focado para não limpar novamente
         }
     };
 
     const handleFocusPresentationInput = () => {
         if (!isFocusedPresentationInput) {
-            setInputPresentation(''); // Limpa o input ao focar pela primeira vez
+            setInputPresentation(inputPresentation); // Limpa o input ao focar pela primeira vez
             setIsFocusedPresentationInput(true); // Marca como focado para não limpar novamente
         }
     };
@@ -536,8 +586,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="decimal" id="minPrice" value={inputMinPrice} onFocus={handleFocusMinPriceInput} placeholder="80" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("minPrice")} />
+                        <input type="decimal" id="minPrice" value={inputMinPrice} onChange={handleMinPriceChange} onFocus={handleFocusMinPriceInput} placeholder="80" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required />
                     </div>
                     <div>
                         <div className="w-full">
@@ -571,8 +621,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="decimal" id="maxPrice" value={inputMaxPrice} onFocus={handleFocusMaxPriceInput} placeholder="200" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("maxPrice")} />
+                        <input type="decimal" id="maxPrice" value={inputMaxPrice} onChange={handleMaxPriceChange} onFocus={handleFocusMaxPriceInput} placeholder="200" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required />
                     </div>
 
                     <div>
@@ -609,8 +659,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="startDay" value={inputOpenDay} onFocus={handleFocusOpenDayInput} placeholder="Segunda" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("startDay")} />
+                        <input type="string" id="startDay" value={inputOpenDay} onChange={handleOpenDayChange} onFocus={handleFocusOpenDayInput} placeholder="Segunda" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required />
                     </div>
                     <div>
                         <div className="w-full">
@@ -643,8 +693,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="finalDay" value={inputCloseDay} onFocus={handleFocusCloseDayInput} placeholder="Sexta" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("finalDay")} />
+                        <input type="string" id="finalDay" value={inputCloseDay} onChange={handleCloseDayChange} onFocus={handleFocusCloseDayInput} placeholder="Sexta" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required />
                     </div>
 
                     <div>
@@ -679,8 +729,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="openHour" value={inputOpenHour} onFocus={handleFocusOpenHourInput} placeholder="09:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("openHour")} />
+                        <input type="string" id="openHour" value={inputOpenHour} onChange={handleOpenHourChange} onFocus={handleFocusOpenHourInput} placeholder="09:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required />
                     </div>
                     <div>
                         <div className="w-full">
@@ -714,8 +764,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="string" id="closeHour" value={inputCloseHour} onFocus={handleFocusCloseHourInput} placeholder="18:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("closeHour")} />
+                        <input type="string" id="closeHour" value={inputCloseHour} onChange={handleCloseHourChange} onFocus={handleFocusCloseHourInput} placeholder="18:00" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required />
                     </div>
                     <div className='break-words text-wrap'>
                         <p className="font-medium text-gray-500 underline underline-offset-8 mb-6">Informações gerais</p>
@@ -754,8 +804,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <textarea id="bio" value={inputPresentation} onFocus={handleFocusPresentationInput} placeholder="Fundada em 2024 a CarWah veio para revolucionar o mercado de Lavagens e Estéticas Automotivas..." className="placeholder:break-words mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("bio")} />
+                        <textarea id="bio" value={inputPresentation} onChange={handlePresentationChange} onFocus={handleFocusPresentationInput} placeholder="Fundada em 2024 a CarWah veio para revolucionar o mercado de Lavagens e Estéticas Automotivas..." className="placeholder:break-words mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required />
                     </div>
 
                     <div>
@@ -780,7 +830,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                                     </div>
                                 )}
                             </div>
-                            <label htmlFor="closeHour" className="block mb-2 text-sm font-medium text-gray-500">
+                            <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-500">
                                 <svg className="inline pb-1 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
                                     <path d="M11.5085 2.9903C7.02567 2.9903 4.78428 2.9903 3.39164 4.38238C1.99902 5.77447 1.99902 8.015 1.99902 12.4961C1.99902 16.9771 1.99902 19.2176 3.39164 20.6098C4.78428 22.0018 7.02567 22.0018 11.5085 22.0018C15.9912 22.0018 18.2326 22.0018 19.6253 20.6098C21.0179 19.2176 21.0179 16.9771 21.0179 12.4961V11.9958" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                     <path d="M4.99902 20.9898C9.209 16.2385 13.9402 9.93727 20.999 14.6632" stroke="currentColor" stroke-width="1.5" />

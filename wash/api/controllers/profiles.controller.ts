@@ -248,11 +248,76 @@ export const updateProfile = async (req, res) => {
                         published: true
                     }
                 },
-                // states: {
-                //     create: {
-                //         id: stateId
-                //     }
-                // }
+            }
+        })
+        res.status(200).json(profile)
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+export const updateProfileEditDetails = async (req, res) => {
+    const { id } = req.params
+    const {
+        bio,
+        phone,
+        startDay,
+        finalDay,
+        openHour,
+        closeHour,
+        minPrice,
+        maxPrice,
+        cityId,
+        oldCityId,
+        stateId,
+        oldStateId,
+        imageURL,
+        imageId,
+    } = req.body
+
+
+    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId || !stateId || !imageURL) {
+        return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
+    }
+
+    console.log(req.body)
+    try {
+        const profile = await profileClient.update({
+            where: { id: Number(id) },
+            data: {
+                bio,
+                phone,
+                startDay,
+                finalDay,
+                openHour,
+                closeHour,
+                minPrice,
+                maxPrice,
+                profileLocation: {
+                    update: {
+                        where: {
+                            profileId_cityId_stateId: {
+                                profileId: Number(id),
+                                cityId: Number(oldCityId),
+                                stateId: Number(oldStateId)
+                            }
+                        },
+                        data: {
+                            cityId: Number(cityId),
+                            stateId: Number(stateId)
+                        }
+
+                    }
+                },
+                images: {
+                    update: {
+                        where: { id: Number(imageId) },
+                        data: {
+                            url: imageURL,
+                            published: true
+                        }
+                    }
+                },
             }
         })
         res.status(200).json(profile)
