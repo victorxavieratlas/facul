@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { createProfile, createProfileComplete, getAllProfiles, getListOfMaxPrice, getListOfMinPrice, getListOfTotalPoints, getProfileById, softDeleteProfile, updateProfile } from "../controllers/profiles.controller"
+import { createProfile, createProfileComplete, getAllProfiles, getListOfMaxPrice, getListOfMinPrice, getListOfTotalPoints, getProfileById, softDeleteProfile, updateProfile, updateProfileEditDetails } from "../controllers/profiles.controller"
 import { tokenVerify } from '../middlewares/tokenVerify.middleware'
 
 const profileRouter = Router()
@@ -18,5 +18,6 @@ profileRouter
 	// .delete("/:id", tokenVerify, deleteProfile)
 	.put("/delete/:id", tokenVerify, softDeleteProfile)
 	.put("/:id", tokenVerify, updateProfile)
+	.put("/details/:id", tokenVerify, updateProfileEditDetails)
 
 export default profileRouter

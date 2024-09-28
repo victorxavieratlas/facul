@@ -272,15 +272,16 @@ export const updateProfileEditDetails = async (req, res) => {
         stateId,
         oldStateId,
         imageURL,
-        imageId,
+        oldImageId,
     } = req.body
 
 
-    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !cityId || !stateId || !imageURL) {
+    if (!bio || !phone || !startDay || !finalDay || !openHour || !closeHour ||!minPrice || !maxPrice || !cityId || !oldCityId || !stateId || !oldStateId || !imageURL || !oldImageId) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
     }
 
     console.log(req.body)
+    
     try {
         const profile = await profileClient.update({
             where: { id: Number(id) },
@@ -299,19 +300,18 @@ export const updateProfileEditDetails = async (req, res) => {
                             profileId_cityId_stateId: {
                                 profileId: Number(id),
                                 cityId: Number(oldCityId),
-                                stateId: Number(oldStateId)
-                            }
+                                stateId: Number(oldStateId),
+                            },
                         },
                         data: {
                             cityId: Number(cityId),
-                            stateId: Number(stateId)
-                        }
-
-                    }
+                            stateId: Number(stateId),
+                        },
+                    },
                 },
                 images: {
                     update: {
-                        where: { id: Number(imageId) },
+                        where: { id: Number(oldImageId) },
                         data: {
                             url: imageURL,
                             published: true

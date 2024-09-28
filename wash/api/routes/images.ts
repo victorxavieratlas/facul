@@ -75,19 +75,17 @@ router.put("/delete/:id", async (req, res) => {
   }
 })
 
-router.put("/:id", async (req, res) => {
-  const { id } = req.params
+router.put("/", async (req, res) => {
   const {
     url,
-    published
+    oldImageId,
   } = req.body
 
   try {
     const image = await prisma.image.update({
-      where: { id: Number(id) },
+      where: { id: Number(oldImageId) },
       data: {
-        url,
-        published
+        url
       }
     })
     res.status(200).json(image)

@@ -15,7 +15,7 @@ interface City {
 
 interface ProfilePanelInput {
     imageURL: string;
-    imageId: number;
+    oldImageId: number;
     bio: string;
     phone: string;
     startDay: string;
@@ -31,18 +31,18 @@ interface ProfilePanelInput {
 }
 
 interface ProfileData {
-	id: number;
-	phone?: string;
-	images?: [{ id: number, url: string }];
-	profileLocation: [{ profileId: number, cityId: number, stateId: number }];
-	name: string;
-	startDay: string;
-	finalDay: string;
-	minPrice: number;
-	maxPrice: number;
-	bio: string;
-	openHour: string;
-	closeHour: string;
+    id: number;
+    phone?: string;
+    images?: [{ id: number, url: string }];
+    profileLocation: [{ profileId: number, cityId: number, stateId: number }];
+    name: string;
+    startDay: string;
+    finalDay: string;
+    minPrice: number;
+    maxPrice: number;
+    bio: string;
+    openHour: string;
+    closeHour: string;
 }
 
 interface ProfileId {
@@ -50,15 +50,15 @@ interface ProfileId {
 }
 
 interface State {
-	id: number;
-	name: string;
+    id: number;
+    name: string;
 }
 
 interface City {
-	id: number;
-	name: string;
-	stateId: number;
-	uf: string;
+    id: number;
+    name: string;
+    stateId: number;
+    uf: string;
 }
 
 const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
@@ -103,20 +103,20 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [isFocusedPresentationInput, setIsFocusedPresentationInput] = useState(false);
     const [isFocusedImageInput, setIsFocusedImageInput] = useState(false);
     const [stateData, setStateData] = useState<State | null>(null);
-	const [cityData, setCityData] = useState<City | null>(null);
+    const [cityData, setCityData] = useState<City | null>(null);
 
     async function getCity(cityId: number) {
-		// console.log(stateId)
-		const response = await fetch(`http://localhost:3007/search/city/${cityId}`);
-		const city = await response.json();
-		setCityData(city);
-	}
-	async function getState(stateId: number) {
-		// console.log(stateId)
-		const response = await fetch(`http://localhost:3007/search/state/${stateId}`);
-		const state = await response.json();
-		setStateData(state);
-	}
+        // console.log(stateId)
+        const response = await fetch(`http://localhost:3007/search/city/${cityId}`);
+        const city = await response.json();
+        setCityData(city);
+    }
+    async function getState(stateId: number) {
+        // console.log(stateId)
+        const response = await fetch(`http://localhost:3007/search/state/${stateId}`);
+        const state = await response.json();
+        setStateData(state);
+    }
 
     // Adicione essa função no componente ProfileForm para enviar a imagem
     const uploadImage = async () => {
@@ -124,7 +124,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
         const formData = new FormData();
         formData.append('image', selectedImageFile);
-
+        // console.log(formData)
         try {
             const response = await fetch('http://localhost:3007/cover-image', {
                 method: 'POST',
@@ -132,6 +132,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             });
 
             const data = await response.json();
+            console.log(data)
             if (response.ok) {
                 return data.imageUrl; // Retorne a URL da imagem
             } else {
@@ -264,13 +265,16 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         setInputPresentation(e.target.value); // Atualiza o estado local
         setValue('bio', e.target.value); // Atualiza o valor do react-hook-form
     };
- 
+
     // Atualize handleFormSubmit para enviar a imagem antes do perfil
     const handleFormSubmit = async (data: ProfilePanelInput) => {
         console.log(`SUBMIT ========`)
         // console.log(data.stateId)
         data.oldCityId = Number(cityData?.id)
         data.oldStateId = Number(cityData?.stateId)
+        if (profileData?.images) {
+            data.oldImageId = Number(profileData?.images[0].id)
+        }
         
         if (data.cityId === undefined || data.phone === undefined || data.bio === undefined || data.minPrice === undefined || data.maxPrice === undefined || data.openHour === undefined || data.closeHour === undefined || data.startDay === undefined || data.finalDay === undefined || data.imageURL === undefined) {
             console.log(`PRIMEIRO IF ========`)
@@ -303,22 +307,63 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             if (data.bio === undefined) {
                 data.bio = String(profileData?.bio)
             }
-            if (data.imageURL == undefined) {
-                data.imageURL = profileData?.images && profileData.images[0] ? profileData.images[0].url : "";
+
+            if (!selectedImageFile) {
+                if (data.imageURL == undefined) {
+                    data.imageURL = profileData?.images && profileData.images[0] ? profileData.images[0].url : "";
+                }
+            } else {
+                const imageUrl = await uploadImage();
+
+                if (!imageUrl) {
+                    toast.error("Erro ao enviar a imagem.");
+                    return;
+                }
+
+                data.imageURL = imageUrl
+
+                // if (profileData?.images) {
+                //     try {
+                //         const response = await fetch(`http://localhost:3007/images`, {
+                //             method: "PUT",
+                //             headers: {
+                //                 "Content-Type": "application/json",
+                //                 "Authorization": `${Cookies.get("x-access-token")}`
+                //             },
+                //             body: JSON.stringify({
+                //                 url: data.imageURL,
+                //                 oldImageId: profileData?.images[0].id
+                //             })
+                //         });
+
+                //         if (response.status === 200) {
+                //             console.log("200 da imagem ========")
+                //             // toast.success("Perfil atualizado com sucesso!");
+                //             // router.replace(`/painel/${Cookies.get("user_login_id")}`);
+                //         } else {
+                //             toast.error("Não foi possível editar ou salvar as informações.");
+                //         }
+
+                //     } catch (error) {
+                //         console.error('Error uploading image:', error);
+                //         return null;
+                //     }
+                // }
+
             }
 
             // console.log(`selected ========`)
             // console.log(selectedCityId)
-            if(!selectedCityId || !selectedStateId){
+            if (!selectedCityId || !selectedStateId) {
                 // console.log(selectedCityId)
-                const updatedProfile = { ...data, cityId: Number(cityData?.id), stateId: Number(cityData?.stateId), imageURL: data.imageURL };
+                const updatedProfile = { ...data, cityId: Number(cityData?.id), stateId: Number(cityData?.stateId) };
                 console.log(`PRIMEIRO !selected ========`)
                 // console.log(data)
                 EditProfile(updatedProfile);
             } else {
                 // data.cityId = selectedCityId
-                const updatedProfile = { ...data, cityId: selectedCityId, stateId: selectedStateId, imageURL: data.imageURL };
-                console.log(`Segundo selected ========`)
+                const updatedProfile = { ...data, cityId: selectedCityId, stateId: selectedStateId };
+                console.log(`Segundo else selected ========`)
                 // console.log(updatedProfile)
                 EditProfile(updatedProfile);
             }
@@ -347,16 +392,16 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
         const data = await response.json();
         if (data.data.profileLocation && data.data.profileLocation.length > 0) {
-			await getState(data.data.profileLocation[0].stateId);
-			await getCity(data.data.profileLocation[0].cityId);
-		}
+            await getState(data.data.profileLocation[0].stateId);
+            await getCity(data.data.profileLocation[0].cityId);
+        }
         setProfileData(data.data);
     }
 
     async function EditProfile(data: ProfilePanelInput) {
-        console.log(data)
-        console.log(data.oldCityId)
-        const response = await fetch(`http://localhost:3007/profiles/${profileId}`, {
+        // console.log(data)
+        // console.log(data.oldCityId)
+        const response = await fetch(`http://localhost:3007/profiles/details/${profileId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -364,6 +409,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             },
             body: JSON.stringify({
                 imageURL: data.imageURL,
+                oldImageId: data.oldImageId,
                 bio: data.bio,
                 phone: data.phone,
                 startDay: data.startDay,
@@ -380,9 +426,9 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         });
 
         if (response.status === 200) {
-
-            // toast.success("Perfil atualizado com sucesso!");
-            // router.replace(`/painel/${Cookies.get("user_login_id")}`);
+            console.log("deu boa ======")
+            router.replace(`/painel/${Cookies.get("user_login_id")}`);
+            toast.success("Perfil atualizado com sucesso!");
         } else {
             toast.error("Não foi possível editar ou salvar as informações.");
         }
