@@ -49,16 +49,16 @@ export default function Home() {
 
 	return (
 		<div>
-			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-8 mb-10 sm:mb-0">
-				<div className="ml-4 sm:ml-0 flex flex-col gap-4">
-					<h1 className="text-2xl sm:text-5xl font-extrabold text-gray-800 text-balance">
+			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-8 mb-4 sm:mb-4">
+				<div className="ml-4 flex flex-col gap-4">
+					<h1 className="text-3xl sm:text-5xl font-extrabold text-gray-800 text-balance">
 						<span className="clear-left block mb-4">Encontre</span> 
-						<span className="clear-left block mb-4">lavagens e estéticas automotivas</span> 
-						na <span className="font-extrabold text-blue-500">CarWash</span>
+						<span className="clear-left block mb-4">estéticas automotivas</span> 
+						na <span className="font-extrabold sm:pl-4 pl-2 tracking-widest text-blue-500">lavar carro</span>
 					</h1>
-					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-2">
-						<span className="clear-left block">A maior plataforma de lavagens e estéticas</span>
-						automotivas do Brasil.
+					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-4">
+						<span className="clear-left block">A maior plataforma de estéticas automotivas</span>
+						do Brasil.
 					</h2>
 				</div>
 			</div>

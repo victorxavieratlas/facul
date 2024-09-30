@@ -134,7 +134,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     };
 
     async function EditProfile(data: ProfilePanelInput) {
-        
+
         const response = await fetch(`http://localhost:3007/profiles/${profileIncomplete.id}`, {
             method: "PUT",
             headers: {
@@ -166,7 +166,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     }
 
     return (
-        <div className="max-w bg-white border-none mb-10">
+        <div className="lg:min-w-max max-w-full bg-white border-none mb-10">
             <div className="min-w-full w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 text-wrap mb-4">
                     <h5 className="text-xl font-medium text-gray-500 text-center mb-10">Completar perfil na <span className="text-2xl text-blue-500">CarWash</span></h5>
@@ -213,7 +213,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             required
                         />
                         {results.length > 0 && (
-                            <ul className="absolute w-full max-w-lg bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
+                            <ul className="absolute w-full bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
                                 {results.map((city) => (
                                     <li key={city.id} className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
                                         onClick={() => handleSelectCity(city)}>
@@ -256,7 +256,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
                             </label>
                         </div>
-                        <input type="phone" id="phone" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
+                        <input type="number" id="phone" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00988888888"
                             required {...register("phone")} />
                     </div>
 
@@ -298,7 +298,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
                             </label>
                         </div>
-                        <input type="decimal" id="minPrice" placeholder="80" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="number" id="minPrice" placeholder="min" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("minPrice")} />
                     </div>
                     <div>
@@ -333,7 +333,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
                             </label>
                         </div>
-                        <input type="decimal" id="maxPrice" placeholder="200" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="number" id="maxPrice" placeholder="max" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("maxPrice")} />
                     </div>
 
@@ -516,7 +516,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
                             </label>
                         </div>
-                        <input type="string" id="bio" placeholder="Fundada em 2024 a CarWah veio para revolucionar o mercado de Lavagens e Estéticas Automotivas..." className="mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <textarea id="bio" placeholder="Fundada em 2024 a CarWah veio para revolucionar o mercado de Lavagens e Estéticas Automotivas..." className="mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("bio")} />
                     </div>
 

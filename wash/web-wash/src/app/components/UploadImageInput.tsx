@@ -28,8 +28,8 @@ export default function ImageUpload({ setImageFile }: ImageUploadProps) {
       >
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
           <AiOutlineUpload className="w-12 h-12 text-gray-400 mb-4" />
-          <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Clique para fazer upload</span> ou arraste e solte</p>
-          <p className="text-xs text-gray-500">PNG, JPG (MAX. 800x400px)</p>
+          <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Clique para carregar a imagem</span> ou arraste e solte</p>
+          {/* <p className="text-xs text-gray-500">PNG, JPG (MAX. 800x400px)</p> */}
         </div>
         <input
           id="image"
@@ -43,7 +43,7 @@ export default function ImageUpload({ setImageFile }: ImageUploadProps) {
         />
       </label>
       {previewImage && (
-        <div className="mt-4 w-full h-64 flex items-center justify-center">
+        <div className="mt-8 w-full lg:h-90 flex items-center justify-center">
           <img src={previewImage} alt="Preview" className="max-h-full max-w-full rounded-lg shadow-lg" />
         </div>
       )}

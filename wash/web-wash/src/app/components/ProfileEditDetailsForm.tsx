@@ -632,7 +632,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="decimal" id="minPrice" value={inputMinPrice} onChange={handleMinPriceChange} onFocus={handleFocusMinPriceInput} placeholder="80" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="number" id="minPrice" value={inputMinPrice} onChange={handleMinPriceChange} onFocus={handleFocusMinPriceInput} placeholder="min" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required />
                     </div>
                     <div>
@@ -667,7 +667,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
                             </label>
                         </div>
-                        <input type="decimal" id="maxPrice" value={inputMaxPrice} onChange={handleMaxPriceChange} onFocus={handleFocusMaxPriceInput} placeholder="200" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                        <input type="number" id="maxPrice" value={inputMaxPrice} onChange={handleMaxPriceChange} onFocus={handleFocusMaxPriceInput} placeholder="max" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required />
                     </div>
 

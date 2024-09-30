@@ -30,11 +30,11 @@ export default function Header() {
 
     function logout() {
         Swal.fire({
-            title: "Confirma saída do sistema?",
+            title: "Deseja sair da conta?",
             icon: "question",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: "#6b7280",
+            cancelButtonColor: "#2563EB",
             confirmButtonText: "Sim",
             cancelButtonText: "Não",
         }).then((result) => {
@@ -45,6 +45,7 @@ export default function Header() {
                 Cookies.remove("x-user-name");
                 Cookies.remove("x-profile-id");
                 router.refresh();
+                window.location.reload();
             }
         });
     }
@@ -53,9 +54,9 @@ export default function Header() {
         <nav className="bg-gray-200 border-gray-400 relative">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between lg:mx-auto p-4">
                 <Link href="/" passHref>
-                    <div className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12">
+                    <div className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12 pb-1">
                         <Image src="../logo2.svg" width={30} height={30} alt="Logotipo da CarWash em azul claro" />
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-blue-500">CarWash</span>
+                        <span className="self-center ml-10 pl-1 font-sans text-2xl font-extrabold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top">lavar carro</span>
                     </div>
                 </Link>
                 <div className="flex items-center justify-end">
@@ -65,7 +66,7 @@ export default function Header() {
                         </button>
                     )}
                     {isMenuOpen && (
-                        <div className="absolute right-0 top-full pb-1 w-48 bg-gray-200 shadow-lg z-50 sm:min-w-72 divide-y">
+                        <div className="min-h-screen h-screen absolute right-0 top-full pb-1 w-48 bg-gray-200 shadow-lg z-50 sm:min-w-72 divide-y">
                             {idClienteLogado ? (
                                 <>
                                     <p className="block px-4 py-4 text-md font-bold text-gray-700 border-solid border-b-2 border-gray-300">{nomeClienteLogado}</p>

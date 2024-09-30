@@ -38,8 +38,8 @@ export default function ImageUpload({ setImageFile, initialImageURL }: ImageUplo
             >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <AiOutlineUpload className="w-12 h-12 text-gray-400 mb-4" />
-                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Clique para fazer upload</span> ou arraste e solte</p>
-                    <p className="text-xs text-gray-500">PNG, JPG (MAX. 800x400px)</p>
+                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Clique para carregar a imagem</span> ou arraste e solte</p>
+                    {/* <p className="text-xs text-gray-500">PNG, JPG (MAX. 800x400px)</p> */}
                 </div>
                 <input
                     id="image"
