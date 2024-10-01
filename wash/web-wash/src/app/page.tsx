@@ -6,6 +6,11 @@ import Cookies from 'js-cookie'
 import { ClienteContext } from "./context/ClienteContext"
 import States from "./components/States";
 import Search from "./components/Search";
+import { Fredoka } from "next/font/google";
+
+const fredoka = Fredoka({
+  subsets: ['latin'],
+})
 
 export interface stateProps {
 	id: number
@@ -54,7 +59,7 @@ export default function Home() {
 					<h1 className="text-3xl sm:text-5xl font-extrabold text-gray-800 text-balance">
 						<span className="clear-left block mb-4">Encontre</span> 
 						<span className="clear-left block mb-4">estéticas automotivas</span> 
-						na <span className="font-extrabold sm:pl-4 pl-2 tracking-widest text-blue-500">lavar carro</span>
+						na <span className={`font-extrabold sm:pl-3 pl-1 tracking-wide text-blue-500 ${fredoka.className}`}>lavar carro</span>
 					</h1>
 					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-4">
 						<span className="clear-left block">A maior plataforma de estéticas automotivas</span>

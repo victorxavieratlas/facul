@@ -1,13 +1,18 @@
 
 import Link from "next/link"
 import Image from 'next/image'
+import { Fredoka } from "next/font/google";
+
+const fredoka = Fredoka({
+  subsets: ['latin'],
+})
 
 export default function Header() {
     return (
         <footer className="bg-white dark:bg-gray-900">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
-                    <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12 mb-4">
+                    <Link href="/" className="flex justify-center items-center space-x-3 rtl:space-x-reverse lg:ml-12 mb-4  pb-4 sm:pb-0">
                         <Image
                             src="../logo2.svg"
                             width={30}
@@ -15,9 +20,9 @@ export default function Header() {
                             alt="logotipo da CarWash em azul claro"
                         />
                         {/* <img src="./logo2.svg" className="h-8" alt="Logo e logotipo da CarWash e azul claro" /> */}
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-blue-500">CarWash</span>
+                        <span className={`self-center text-2xl font-semibold tracking-wide text-blue-500 ${fredoka.className}`}>lavar carro</span>
                     </Link>
-                    <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                    <div className="flex sm:grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
                             <ul className="text-gray-500 dark:text-gray-400 font-medium">
@@ -54,10 +59,10 @@ export default function Header() {
                     </div>
                 </div>
                 <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-                <div className="sm:flex sm:items-center sm:justify-between">
-                    <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="/" className="hover:underline">CarWash</a>. All Rights Reserved.
+                <div className="flex flex-col items-center justify-center">
+                    <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400 mb-6">© 2024 <a href="/" className="hover:underline">lavar carro</a>. Todos os direitos reservados.
                     </span>
-                    <div className="flex mt-4 sm:justify-center sm:mt-0">
+                    <div className="flex mt-4 sm:justify-center sm:mt-0 mb-2">
                         <a href="#" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
                             <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19">
                                 <path fillRule="evenodd" d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z" clipRule="evenodd" />

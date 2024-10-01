@@ -10,6 +10,12 @@ import Link from "next/link"
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { profile } from "console";
+import { Fredoka } from "next/font/google";
+
+const fredoka = Fredoka({
+  subsets: ['latin'],
+})
+
 
 export default function Header() {
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
@@ -17,7 +23,10 @@ export default function Header() {
     const [isMobile, setIsMobile] = useState(false);
     const router = useRouter();
 
+    
+
     useEffect(() => {
+        setIsMenuOpen(false)
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768);
         };
@@ -56,7 +65,7 @@ export default function Header() {
                 <Link href="/" passHref>
                     <div className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12 pb-1">
                         <Image src="../logo2.svg" width={30} height={30} alt="Logotipo da CarWash em azul claro" />
-                        <span className="self-center ml-10 pl-1 font-sans text-2xl font-extrabold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top">lavar carro</span>
+                        <span className={`self-center ml-6 text-2xl font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top ${fredoka.className}`}>lavar carro</span>
                     </div>
                 </Link>
                 <div className="flex items-center justify-end">
@@ -121,8 +130,8 @@ export default function Header() {
                                 </>
                             ) : (
                                 <>
-                                    <Link href="/cadastrar"><p className="block px-4 py-2 text-sm rounded md:bg-transparen text-blue-500">CADASTRE-SE GRÁTIS</p></Link>
-                                    <Link href="/entrar"><p className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">ENTRAR</p></Link>
+                                    <Link href="/cadastrar"><p className="block px-4 py-4 text-sm rounded md:bg-transparen text-blue-500 hover:bg-gray-300">CADASTRE-SE GRÁTIS</p></Link>
+                                    <Link href="/entrar"><p className="block px-4 py-4 text-sm text-gray-700 hover:bg-gray-300">ENTRAR</p></Link>
                                 </>
                             )}
                         </div>
