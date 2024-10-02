@@ -77,8 +77,8 @@ export default async function cityDetails({
 				</ol>
 			</nav>
 
-			<h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 text-balance mb-10 mt-4">
-				Lavagens e estéticas automotivas em <span className="text-3xl sm:text-4xl font-extrabold text-blue-500">{decodCityName}, {decodStateName}</span>
+			<h1 className="w-full text-2xl sm:text-3xl font-extrabold text-gray-800 text-balance mb-10 mt-4">
+				Estéticas automotivas em <span className="w-full font-extrabold text-blue-500">{decodCityName}, {decodStateName}</span>
 			</h1>
 
 			<div className="mb-10">
@@ -87,9 +87,9 @@ export default async function cityDetails({
 
 			<div>
 				{!listProfiles.length ?
-					<div className="w-full text-center">
+					<div className="w-full flex justify-center">
 						<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 my-40">
-							Nenhuma lavagem ou estética automotiva encontrada.
+						Nenhuma estética automotiva encontrada.
 						</h2>
 					</div>
 					:

@@ -9,7 +9,7 @@ import Search from "./components/Search";
 import { Fredoka } from "next/font/google";
 
 const fredoka = Fredoka({
-  subsets: ['latin'],
+	subsets: ['latin'],
 })
 
 export interface stateProps {
@@ -57,8 +57,8 @@ export default function Home() {
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-8 mb-4 sm:mb-4">
 				<div className="ml-4 flex flex-col gap-4">
 					<h1 className="text-3xl sm:text-5xl font-extrabold text-gray-800 text-balance">
-						<span className="clear-left block mb-4">Encontre</span> 
-						<span className="clear-left block mb-4">estéticas automotivas</span> 
+						<span className="clear-left block mb-4">Encontre</span>
+						<span className="clear-left block mb-4">estéticas automotivas</span>
 						na <span className={`font-extrabold sm:pl-3 pl-1 tracking-wide text-blue-500 ${fredoka.className}`}>lavar carro</span>
 					</h1>
 					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-4">
@@ -71,7 +71,101 @@ export default function Home() {
 			{/* Passando os estados para o componente Search */}
 			<Search states={states} />
 
+			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
+				<div className="w-full flex justify-center">
+					<h3 className="mb-2 text-lg font-semibold text-gray-900">Contrate com mais praticidade e segurança</h3>
+				</div>
+				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative">
+					<ul className="max-w-md space-y-1 text-gray-500 list-inside">
+						<li className="flex items-center">
+							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							At least 10 characters
+						</li>
+						<li className="flex items-center">
+							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							At least one lowercase character
+						</li>
+						<li className="flex items-center">
+							<svg className="w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							At least one special character, e.g., ! @ # ?
+						</li>
+					</ul>
+					<ul className="max-w-md space-y-1 text-gray-500 list-inside">
+						<li className="flex items-center">
+							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							At least 10 characters
+						</li>
+						<li className="flex items-center">
+							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							At least one lowercase character
+						</li>
+						<li className="flex items-center">
+							<svg className="w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							At least one special character, e.g., ! @ # ?
+						</li>
+					</ul>
+				</div>
+
+			</div>
+
+			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-20 mb-4 sm:mb-4">
+				<h3 className="ml-4 max-w-sm sm:max-w-md font-bold text-xl sm:text-2xl text-gray-500">
+					Maior plataforma de estéticas automotivas do Brasil
+				</h3>
+				<div className="w-full m-4">
+					<h4 className="font-semibold text-lg text-gray-600 mt-2 p-2 px-2 sm:px-4">
+						Apresentação
+					</h4>
+					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
+						A Lavar Carro foi fundada em 2024 e é a maior plataforma de estéticas automotivas do Brasil.
+						A paixão por automóveis limpos com os devidos e necessários cuidados é o foco princípal da
+						plataforma que visa transformar e melhorar a relação entre estéticas automotivas e clientes,
+						dando mais visibilidade para este mercado tão importante e em constante crescimento.
+					</p>
+					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
+						Desde o início, a plataforma oferece uma experiência única para estéticas automotivas e clientes,
+						onde as estéticas automotivas podem criar anúncios com informações de contato, serviços oferecidos e
+						dados importantes do negócio, e clientes podem fazer buscas por estados e cidades para escolher as
+						melhores estéticas automotivas confiáveis que supram suas necessidades.
+					</p>
+					<h4 className="font-semibold text-lg text-gray-600 mt-4 p-2 px-2 sm:px-4">
+						Escontre estéticas automotivas por todo o Brasil
+					</h4>
+					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
+						A Lavar Carro oferece uma busca poderosa que permite encontrar as melhores estéticas automotivas
+						da cidade escolhida. Ao acessar a busca de uma cidade e o perfil da estética automotiva, é possível comparar valores, horários de
+						atendimento e serviços, garantindo as estéticas automotivas que encontrem mais clientes e que
+						clientes consigam ter certeza de qual estética automotiva vão escolher.
+					</p>
+					<h4 className="font-semibold text-lg text-gray-600 mt-4 p-2 px-2 sm:px-4">
+						Segurança é uma prioridade
+					</h4>
+					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
+						A plataforma preza por estéticas automotivas e clientes confiáveis e sérios, também,
+						contamos com diversos integrações de segurança para garantir a melhor experiência.
+					</p>
+				</div>
+
+			</div>
+
 			{/* Renderizando a lista de estados */}
+			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-20 mb-4 sm:mb-4">
+				<h3 className="ml-4 max-w-sm sm:max-w-md font-bold text-xl sm:text-2xl text-gray-500">
+					Estéticas automotivas nos estados
+				</h3>
+			</div>
 			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10">
 				{listStates}
 			</div>

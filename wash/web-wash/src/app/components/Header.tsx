@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 import { ClienteContext } from "../context/ClienteContext"
 import Link from "next/link"
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { profile } from "console";
 import { Fredoka } from "next/font/google";
 
@@ -21,9 +21,13 @@ export default function Header() {
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const pathname = usePathname();
     const router = useRouter();
 
-    
+    useEffect(() => {
+        // Fechar o menu sempre que a rota mudar ou o cliente logado mudar
+        setIsMenuOpen(false);
+    }, [pathname, idClienteLogado]);
 
     useEffect(() => {
         setIsMenuOpen(false)
@@ -130,8 +134,8 @@ export default function Header() {
                                 </>
                             ) : (
                                 <>
-                                    <Link href="/cadastrar"><p className="block px-4 py-4 text-sm rounded md:bg-transparen text-blue-500 hover:bg-gray-300">CADASTRE-SE GRÁTIS</p></Link>
-                                    <Link href="/entrar"><p className="block px-4 py-4 text-sm text-gray-700 hover:bg-gray-300">ENTRAR</p></Link>
+                                    <Link href="/cadastrar"><p className="block px-4 py-4 text-sm font-medium rounded md:bg-transparen text-blue-500 hover:bg-gray-300">CADASTRE-SE GRÁTIS</p></Link>
+                                    <Link href="/entrar"><p className="block px-4 py-4 text-sm font-medium text-gray-700 hover:bg-gray-300">ENTRAR</p></Link>
                                 </>
                             )}
                         </div>

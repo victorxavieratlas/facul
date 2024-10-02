@@ -68,7 +68,7 @@ export default async function stateDetails({
 			</nav>
 
 			<h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 text-balance mb-10 mt-4">
-				Lavagens e Estéticas Automotivas em <span className="text-3xl sm:text-4xl font-extrabold text-blue-500">{decodStateName}</span>
+				Estéticas automotivas em <span className="font-extrabold text-blue-500">{decodStateName}</span>
 			</h1>
 			<ul className=" grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mr-4 sm:mr-20 mb-10 ml-4">
 				{listCities}
