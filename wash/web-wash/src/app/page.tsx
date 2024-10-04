@@ -59,7 +59,7 @@ export default function Home() {
 					<h1 className="text-3xl sm:text-5xl font-extrabold text-gray-800 text-balance">
 						<span className="clear-left block mb-4">Encontre</span>
 						<span className="clear-left block mb-4">estéticas automotivas</span>
-						na <span className={`font-extrabold sm:pl-3 pl-1 tracking-wide text-blue-500 ${fredoka.className}`}>lavar carro</span>
+						na <span className={`font-extrabold sm:pl-3 pl-1 tracking-wide text-blue-500 ${fredoka.className}`}>lavar auto</span>
 					</h1>
 					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-4">
 						<span className="clear-left block">A maior plataforma de estéticas automotivas</span>
@@ -73,59 +73,59 @@ export default function Home() {
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
 				<div className="w-full flex justify-center">
-					<h3 className="mb-2 text-lg font-semibold text-gray-900">Contrate com mais praticidade e segurança</h3>
+					<h3 className="mb-10 font-bold text-xl sm:text-2xl text-gray-500">Contrate com mais praticidade e segurança</h3>
 				</div>
-				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative">
-					<ul className="max-w-md space-y-1 text-gray-500 list-inside">
-						<li className="flex items-center">
-							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative sm:mx-56 ml-10">
+					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							At least 10 characters
+							Contato direto por WhatsApp
 						</li>
-						<li className="flex items-center">
-							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							At least one lowercase character
+							Lista de serviços
 						</li>
-						<li className="flex items-center">
-							<svg className="w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+						<li className="flex items-center sm:pb-2 pb-1">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							At least one special character, e.g., ! @ # ?
+							Busca por cidades
 						</li>
 					</ul>
-					<ul className="max-w-md space-y-1 text-gray-500 list-inside">
-						<li className="flex items-center">
-							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							At least 10 characters
+							Lista de valores
 						</li>
-						<li className="flex items-center">
-							<svg className="w-3.5 h-3.5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							At least one lowercase character
+							Fácil comparação
 						</li>
-						<li className="flex items-center">
-							<svg className="w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+						<li className="flex items-center sm:pb-2">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							At least one special character, e.g., ! @ # ?
+							Plataforma dedicada
 						</li>
 					</ul>
 				</div>
 
 			</div>
 
-			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-20 mb-4 sm:mb-4">
+			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap sm:mt-20 mt-14 mb-4 sm:mb-4">
 				<h3 className="ml-4 max-w-sm sm:max-w-md font-bold text-xl sm:text-2xl text-gray-500">
 					Maior plataforma de estéticas automotivas do Brasil
 				</h3>
-				<div className="w-full m-4">
-					<h4 className="font-semibold text-lg text-gray-600 mt-2 p-2 px-2 sm:px-4">
+				<div className="w-full m-4 ml-0 mt-0">
+					<h4 className="font-bold text-lg text-gray-500 mt-2 ml-2 p-2 px-2 sm:px-4">
 						Apresentação
 					</h4>
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
@@ -140,7 +140,7 @@ export default function Home() {
 						dados importantes do negócio, e clientes podem fazer buscas por estados e cidades para escolher as
 						melhores estéticas automotivas confiáveis que supram suas necessidades.
 					</p>
-					<h4 className="font-semibold text-lg text-gray-600 mt-4 p-2 px-2 sm:px-4">
+					<h4 className="font-bold text-lg text-gray-500 mt-4 p-2 px-2 sm:px-4">
 						Escontre estéticas automotivas por todo o Brasil
 					</h4>
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
@@ -149,7 +149,7 @@ export default function Home() {
 						atendimento e serviços, garantindo as estéticas automotivas que encontrem mais clientes e que
 						clientes consigam ter certeza de qual estética automotiva vão escolher.
 					</p>
-					<h4 className="font-semibold text-lg text-gray-600 mt-4 p-2 px-2 sm:px-4">
+					<h4 className="font-bold text-lg text-gray-500 mt-4 p-2 px-2 sm:px-4">
 						Segurança é uma prioridade
 					</h4>
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
@@ -166,7 +166,7 @@ export default function Home() {
 					Estéticas automotivas nos estados
 				</h3>
 			</div>
-			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10">
+			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10 font-semibold text-lg text-gray-500">
 				{listStates}
 			</div>
 		</div>

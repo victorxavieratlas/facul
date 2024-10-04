@@ -6,6 +6,11 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 
 import { ClienteContext } from "../context/ClienteContext"
+import { Fredoka } from "next/font/google";
+
+const fredoka = Fredoka({
+	subsets: ['latin'],
+})
 
 interface RegisterInput {
     email: string
@@ -115,7 +120,7 @@ export default function Login() {
             <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form className="space-y-6"
                     onSubmit={handleSubmit(registerVerify)}>
-                    <h5 className="text-xl font-medium text-gray-900 text-center">Cadastre-se grátis na <span className="text-2xl text-blue-500">CarWash</span></h5>
+                    <h5 className="text-xl font-medium text-gray-900 text-center">Cadastre-se grátis na <span className={`text-2xl text-blue-500 ${fredoka.className}`}> lavar carro</span></h5>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Seu email</label>
                         <input type="email" id="email" className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="email@email.com"

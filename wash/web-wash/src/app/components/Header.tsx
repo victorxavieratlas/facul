@@ -69,7 +69,7 @@ export default function Header() {
                 <Link href="/" passHref>
                     <div className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12 pb-1">
                         <Image src="../logo2.svg" width={30} height={30} alt="Logotipo da CarWash em azul claro" />
-                        <span className={`self-center ml-6 text-2xl font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top ${fredoka.className}`}>lavar carro</span>
+                        <span className={`self-center ml-6 text-2xl font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top ${fredoka.className}`}>lavar auto</span>
                     </div>
                 </Link>
                 <div className="flex items-center justify-end">

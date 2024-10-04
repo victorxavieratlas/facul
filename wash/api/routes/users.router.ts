@@ -7,7 +7,7 @@ const usersRouter = Router()
 usersRouter
     .get("/", getAllUsers)
     .get("/:id", getUserById)
-    .get("/generate-code/email", generateCode)
+    .post("/generate-code/email", generateCode)
     .get("/validate-code/email/:id", validateCode)
     .put("/change/user/password/:id", changeUserPassword)
     .post("/", createUser)

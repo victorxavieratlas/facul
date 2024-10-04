@@ -75,7 +75,7 @@ function passwordVerify(password) {
 }
 
 function emailVerify(email) {
-    var regex = /\S+@\S+\.\S+/;
+    var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(email);
 }
 
@@ -181,14 +181,16 @@ export const generateCode = async (req, res) => {
         return
     }
 
+
     const isValidEmail = emailVerify(email)
+    console.log(email)
     if (!isValidEmail) {
         res.status(405).json({ erro: "E-mail inválido!" })
         return
     }
     //talvez adicionar verificação se existe código válido
     const randomCode = Math.floor(Math.random() * 900000) + 100000;
-
+    console.log(email)
     try {
         const [user, code] = await prisma.$transaction([
             prisma.user.findUnique({ where: { email } }),
@@ -201,12 +203,14 @@ export const generateCode = async (req, res) => {
             })
         ])
 
+        console.log("aqui")
+        console.log(user)
         if (user) {
             if (code) {
+                //Enviar código por email aqui
                 res.status(200).json({
                     data: {
                         code: code.code,
-                        userId: user.id,
                         email: email,
                     }
                 })
@@ -214,7 +218,7 @@ export const generateCode = async (req, res) => {
                 res.status(400).json({ erro: "Erro ao gerar código!" })
             }
         } else {
-            res.status(405).json({ erro: "E-mail inválido!" })
+            res.status(405).json({ erro: "E-mail inválido! AQUI" })
         }
     } catch (error) {
         res.status(400).json(error)
