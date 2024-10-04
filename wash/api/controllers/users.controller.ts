@@ -226,9 +226,9 @@ export const generateCode = async (req, res) => {
 }
 
 export const validateCode = async (req, res) => {
-    const { id } = req.params
     const { email, code } = req.body
 
+    console.log(email, code)
     if (!email || !code) {
         res.status(400).json({ "erro": "E-mail e código são obrigatórios!" })
         return
@@ -260,7 +260,6 @@ export const validateCode = async (req, res) => {
                 res.status(200).json({
                     data: {
                         msg: "Código validado!",
-                        userId: id,
                         email: email
                     }
                 })
@@ -276,11 +275,10 @@ export const validateCode = async (req, res) => {
 }
 
 export const changeUserPassword = async (req, res) => {
-    const { id } = req.params
     const { email, password } = req.body
 
     if (!email || !password) {
-        res.status(400).json({ erro: "Senha é obrigatória!" })
+        res.status(400).json({ erro: "Email e senha são obrigatórios!" })
         return
     }
 
@@ -295,18 +293,11 @@ export const changeUserPassword = async (req, res) => {
     try {
         const user = await userClient.update({
             where: {
-                id: Number(id),
                 email: email
             },
             data: { password: hashedPassword }
         })
         if (user) {
-            await prisma.log.create({
-                data: {
-                    description: "Senha alterada!",
-                    userId: id
-                }
-            })
             res.status(200).json({ msg: "Senha alterada com sucesso!" })
         } else {
             res.status(400).json({ error: "Erro ao alterar a senha!" })

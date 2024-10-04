@@ -8,7 +8,7 @@ usersRouter
     .get("/", getAllUsers)
     .get("/:id", getUserById)
     .post("/generate-code/email", generateCode)
-    .get("/validate-code/email/:id", validateCode)
+    .post("/validate-code/email", validateCode)
     .put("/change/user/password/:id", changeUserPassword)
     .post("/", createUser)
     .delete("/:id", deleteUser)

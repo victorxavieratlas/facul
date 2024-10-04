@@ -9,22 +9,22 @@ import { ClienteContext } from "../../../context/ClienteContext"
 import { Fredoka } from "next/font/google";
 
 const fredoka = Fredoka({
-	subsets: ['latin'],
+    subsets: ['latin'],
 })
 
-interface loginInput {
-    email: string
-    password: string
+interface codeVerify {
+    email: string,
+    code: number
 }
 
 export default function Login({
-	params,
+    params,
 }: {
-	params: { email: string }
+    params: { email: string }
 }) {
 
     console.log(params.email)
-    const { register, handleSubmit, setFocus } = useForm<loginInput>()
+    const { register, handleSubmit, setFocus } = useForm<codeVerify>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
 
@@ -33,34 +33,34 @@ export default function Login({
             router.replace(`/painel/${Cookies.get("user_login_id")}`)
             mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" })
         } else {
-            setFocus("email")
+            setFocus("code")
         }
     }, [])
 
-    async function codeVerify(data: loginInput) {
-        const response = await fetch("http://localhost:3007/login", {
+    async function codeVerify(data: codeVerify) {
+        const response = await fetch("http://localhost:3007/users/validate-code/email", {
             cache: 'no-store',
             method: "POST",
             headers: { "Content-type": "application/json" },
-            body: JSON.stringify({ email: data.email, password: data.password })
+            body: JSON.stringify({ email: decodeURIComponent(params.email), code: data.code })
         })
 
-        
-        if (response.status == 201) {
+        console.log(response.status)
+        if (response.status == 200) {
             const user = await response.json()
             console.log(user)
-            Cookies.set("user_login_id", user.userId)
-            Cookies.set("x-access-token", user.token)
-            Cookies.set("x-user-name", user.userName)
-            Cookies.set("x-profile-id", user.profileId)
+            // Cookies.set("user_login_id", user.userId)
+            // Cookies.set("x-access-token", user.token)
+            // Cookies.set("x-user-name", user.userName)
+            // Cookies.set("x-profile-id", user.profileId)
 
-            mudaLogin({userId: Number(user.userId), userName: user.userName})
-            // console.log(typeof mudaLogin)
-            router.push(`/painel/${user.userId}`)
+            // mudaLogin({ userId: Number(user.userId), userName: user.userName })
+            // // console.log(typeof mudaLogin)
+            router.push(`${decodeURIComponent(params.email)}/alterar-senha`)
 
         } else {
-            toast.error("Erro...")
-            setFocus("email")
+            toast.error("Erro... AQUI")
+            setFocus("code")
         }
     }
 
@@ -81,7 +81,7 @@ export default function Login({
             toast.info("Novo código enviado!")
         } else {
             toast.error("Erro... aqui")
-            setFocus("email")
+            setFocus("code")
         }
     }
 
@@ -93,8 +93,8 @@ export default function Login({
                     <h5 className="text-xl font-medium text-gray-900 text-center">Digite o código recebido por email</h5>
                     <div className="mb-10">
                         <label htmlFor="code" className="block mb-2 text-sm font-medium text-gray-900">Seu código</label>
-                        <input type="number" id="code" className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="000000"
-                            required {...register("email")} />
+                        <input type="number" id="code" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="000000"
+                            required {...register("code")} />
                     </div>
                     <button type="submit" className="w-full mt-10 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Confirmar</button>
                 </form>

@@ -71,6 +71,7 @@ export default function Home() {
 			{/* Passando os estados para o componente Search */}
 			<Search states={states} />
 
+
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
 				<div className="w-full flex justify-center">
 					<h3 className="mb-10 font-bold text-xl sm:text-2xl text-gray-500">Contrate com mais praticidade e segurança</h3>
@@ -117,7 +118,12 @@ export default function Home() {
 						</li>
 					</ul>
 				</div>
+			</div>
 
+			<div className="flex justify-center mt-16">
+				<a href="#search" className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-600 transition duration-300">
+					Veja estéticas automotivas agora
+				</a>
 			</div>
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap sm:mt-20 mt-14 mb-4 sm:mb-4">

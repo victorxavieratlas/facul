@@ -6,9 +6,15 @@ import ClienteProvider from "./context/ClienteContext"
 
 export const metadata: Metadata = {
   title: "Encontre lavagens e estéticas automotivas",
-  description: "Encontre as melhores lavagens e estéticas automotivas em qualquer cidade",
-  keywords: ["Lavagem", "Estetica automotiva", "Lavagens", "Esteticas automoticas", "Lavagens automotivas", "lavagem de carro", "automotivo", "automotiva", "lavar carro"]
+  description: "A maior plataforma de estéticas automotivas do Brasil. Contrate estéticas automotivas de forma fácil e segura com a Lavar Auto.",
+  keywords: ["Lavagem", "Estetica automotiva", "estetica automotiva", "Lavagens", "Esteticas automoticas", "Lavagens automotivas", "lavagem de carro", "automotivo", "automotiva", "lavar carro", "lavar auto", "cuidados automotivos", "serviços automotivos"]
 }
+
+/* Schema Markup - Adicionar depois da logo*/
+// "sameAs": [
+//   "https://www.instagram.com/lavarcarro",
+//   "https://www.facebook.com/lavarcarro"
+// ]
 
 export default function RootLayout({
   children,
@@ -17,6 +23,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Lavar Carro",
+              "url": "https://www.lavarauto.com",
+              "logo": "https://www.lavarauto.com/logo2.svg"
+            })
+          }}
+        />
+      </head>
       <body>
         <ClienteProvider>
           <Header />
