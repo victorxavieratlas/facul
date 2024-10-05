@@ -9,7 +9,7 @@ usersRouter
     .get("/:id", getUserById)
     .post("/generate-code/email", generateCode)
     .post("/validate-code/email", validateCode)
-    .put("/change/user/password/:id", changeUserPassword)
+    .put("/change/user/password", changeUserPassword)
     .post("/", createUser)
     .delete("/:id", deleteUser)
     .put("/delete/:id", softDeleteUser)

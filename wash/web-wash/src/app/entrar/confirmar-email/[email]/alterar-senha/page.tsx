@@ -14,21 +14,25 @@ const fredoka = Fredoka({
 
 interface changePassword {
     email: string,
-    password: string
+    password: string,
+    confirmPassword: string
 }
 
-export default function Login({
+export default function ChangePassword({
     params,
 }: {
     params: { email: string }
 }) {
 
     console.log(params.email)
-    const { register, handleSubmit, setFocus } = useForm<changePassword>()
+    const { register, handleSubmit, setFocus, watch } = useForm<changePassword>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
 
     useEffect(() => {
+        if(!Cookies.get("x-email-user")) {
+            router.replace(`/`)
+        }
         if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
             router.replace(`/painel/${Cookies.get("user_login_id")}`)
             mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" })
@@ -38,31 +42,34 @@ export default function Login({
     }, [])
 
     async function changePassword(data: changePassword) {
-        const response = await fetch("http://localhost:3007/users/validate-code/email", {
+        if (data.password !== data.confirmPassword) {
+            toast.error("As senhas não coincidem!")
+            return
+        }
+        const response = await fetch("http://localhost:3007/users/change/user/password", {
             cache: 'no-store',
-            method: "POST",
+            method: "PUT",
             headers: { "Content-type": "application/json" },
-            body: JSON.stringify({ email: decodeURIComponent(params.email), code: data.password })
+            body: JSON.stringify({ email: decodeURIComponent(params.email), password: data.password })
         })
 
-        console.log(response.status)
         if (response.status == 200) {
-            const user = await response.json()
-            console.log(user)
-            // Cookies.set("user_login_id", user.userId)
-            // Cookies.set("x-access-token", user.token)
-            // Cookies.set("x-user-name", user.userName)
-            // Cookies.set("x-profile-id", user.profileId)
-
-            // mudaLogin({ userId: Number(user.userId), userName: user.userName })
-            // // console.log(typeof mudaLogin)
+            Cookies.remove("x-email-user")
             router.replace(`/entrar`)
-
         } else {
-            toast.error("Erro... AQUI")
+            toast.error("Erro... Ao alterar a senha!")
             setFocus("password")
         }
     }
+
+    const password = watch("password")
+    const confirmPassword = watch("confirmPassword")
+
+    const hasMinLength = password?.length >= 8
+    const hasLowerCase = /[a-z]/.test(password || '')
+    const hasUpperCase = /[A-Z]/.test(password || '')
+    const hasNumber = /[0-9]/.test(password || '')
+    const hasSymbol = /[.!?#$]/.test(password || '')
 
     return (
         <div className="sm:mx-48 mt-20 flex justify-center min-w-96 mb-96">
@@ -70,15 +77,35 @@ export default function Login({
                 <form className="space-y-6"
                     onSubmit={handleSubmit(changePassword)}>
                     <h5 className="text-xl font-medium text-gray-900 text-center">Digite o código recebido por email</h5>
-                    <div className="mb-10">
+                    <div className="mb-8">
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Sua nova senha</label>
-                        <input type="number" id="password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
+                        <input type="password" id="password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
                             required {...register("password")} />
+                        <ul className="ml-4 mt-3 space-y-1">
+                            <li className={`text-sm ${password ? (hasMinLength ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
+                                Mínimo 8 caracteres
+                            </li>
+                            <li className={`text-sm ${password ? (hasLowerCase ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
+                                Letra(s) minúscula(s): a-z
+                            </li>
+                            <li className={`text-sm ${password ? (hasUpperCase ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
+                                Letra(s) maiúscula(s): A-Z
+                            </li>
+                            <li className={`text-sm ${password ? (hasNumber ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
+                                Número(s): 0-9
+                            </li>
+                            <li className={`text-sm ${password ? (hasSymbol ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
+                                Símbolo(s): .!?#$
+                            </li>
+                        </ul>
                     </div>
                     <div className="mb-10">
                         <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900">Confirmar nova senha</label>
-                        <input type="number" id="confirm-password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
-                            required {...register("password")} />
+                        <input type="password" id="confirm-password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
+                            required {...register("confirmPassword")} />
+                        {password && confirmPassword && password !== confirmPassword && (
+                            <p className="text-red-500 text-sm mt-2">As senhas devem ser iguais.</p>
+                        )}
                     </div>
                     <button type="submit" className="w-full mt-12 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Alterar senha</button>
                 </form>

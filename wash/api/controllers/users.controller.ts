@@ -181,9 +181,7 @@ export const generateCode = async (req, res) => {
         return
     }
 
-
     const isValidEmail = emailVerify(email)
-    console.log(email)
     if (!isValidEmail) {
         res.status(405).json({ erro: "E-mail inválido!" })
         return
@@ -203,14 +201,11 @@ export const generateCode = async (req, res) => {
             })
         ])
 
-        console.log("aqui")
-        console.log(user)
         if (user) {
             if (code) {
                 //Enviar código por email aqui
                 res.status(200).json({
                     data: {
-                        code: code.code,
                         email: email,
                     }
                 })
@@ -276,7 +271,7 @@ export const validateCode = async (req, res) => {
 
 export const changeUserPassword = async (req, res) => {
     const { email, password } = req.body
-
+    console.log(email, password)
     if (!email || !password) {
         res.status(400).json({ erro: "Email e senha são obrigatórios!" })
         return

@@ -68,7 +68,7 @@ export default function Header() {
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between lg:mx-auto p-4">
                 <Link href="/" passHref>
                     <div className="flex items-center space-x-3 rtl:space-x-reverse lg:ml-12 pb-1">
-                        <Image src="../logo2.svg" width={30} height={30} alt="Logotipo da CarWash em azul claro" />
+                        <Image src="/logo2.svg" width={30} height={30} alt="Logotipo da CarWash em azul claro" />
                         <span className={`self-center ml-6 text-2xl font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top ${fredoka.className}`}>lavar auto</span>
                     </div>
                 </Link>

@@ -17,7 +17,7 @@ interface loginInput {
     password: string
 }
 
-export default function Login({
+export default function ConfirmEmail({
 	params,
 }: {
 	params: { email: string }
@@ -42,15 +42,13 @@ export default function Login({
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ email: data.email })
         })
-        const user = await response.json()
-        console.log(user.data.email)
+        
         if (response.status == 200) {
-            // const user = await response.json()
-            // console.log(user)
-
+            const user = await response.json()
+            Cookies.set("x-email-user", data.email)
             router.push(`confirmar-email/${user.data.email}`)
         } else {
-            toast.error("Erro... aqui")
+            toast.error("Erro... Ao verificar email!")
             setFocus("email")
         }
     }

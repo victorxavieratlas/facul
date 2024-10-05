@@ -43,7 +43,6 @@ export default function Login() {
         
         if (response.status == 201) {
             const user = await response.json()
-            console.log(user)
             Cookies.set("user_login_id", user.userId)
             Cookies.set("x-access-token", user.token)
             Cookies.set("x-user-name", user.userName)

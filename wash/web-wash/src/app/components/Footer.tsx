@@ -14,7 +14,7 @@ export default function Header() {
                 <div className="md:flex md:justify-between">
                     <Link href="/" className="flex justify-center items-center space-x-3 rtl:space-x-reverse lg:ml-12 mb-4  pb-4 sm:pb-0">
                         <Image
-                            src="../logo2.svg"
+                            src="/logo2.svg"
                             width={30}
                             height={30}
                             alt="logotipo da CarWash em azul claro"
