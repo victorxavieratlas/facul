@@ -24,6 +24,10 @@ interface ProfilePanelInput {
     minPrice: number;
     maxPrice: number;
     cityId: number;
+    adress: string;
+    adressNumber: number;
+    adressCEP: number;
+    adressComplement: string;
     stateId: number;
 }
 
@@ -41,6 +45,10 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     const [selectedStateId, setSelectedStateId] = useState<number | null>(null);
     const [results, setResults] = useState<City[]>([]);
     const [showTooltipCity, setShowTooltipCity] = useState(false);
+    const [showTooltipAdress, setShowTooltipAdress] = useState(false);
+    const [showTooltipAdressNumber, setShowTooltipAdressNumber] = useState(false);
+    const [showTooltipAdressCEP, setShowTooltipAdressCEP] = useState(false);
+    const [showTooltipAdressComplement, setShowTooltipAdressComplement] = useState(false);
     const [showTooltipPhoneNumber, setShowTooltipPhoneNumber] = useState(false);
     const [showTooltipOpenHour, setShowTooltipOpenHour] = useState(false);
     const [showTooltipCloseHour, setShowTooltipCloseHour] = useState(false);
@@ -223,6 +231,149 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             </ul>
                         )}
                     </div>
+
+                    <div>
+                        <div className="w-full">
+                            <div className="inline-flex justify-end float-right ml-30 mb-4">
+                                <span
+                                    className="inline-block ml-2 text-gray-500 cursor-pointer"
+                                    onMouseEnter={() => setShowTooltipAdress(true)}
+                                    onMouseLeave={() => setShowTooltipAdress(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipAdress && (
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                        Endereço no formato de texto com o nome da rua ou avenida - Avenida Paulista.
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="adress" className="block mb-2 text-sm font-medium text-gray-500">
+                                <svg className="inline pb-1 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
+                                    <path d="M17 2V5M7 2V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M13 3.5H11C7.22876 3.5 5.34315 3.5 4.17157 4.67157C3 5.84315 3 7.72876 3 11.5V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V11.5C21 7.72876 21 5.84315 19.8284 4.67157C18.6569 3.5 16.7712 3.5 13 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M3.5 8.5H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M9 15.5C9 15.5 10.5 16 11 17.5C11 17.5 13.1765 13.5 16 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Endereço
+
+                            </label>
+                        </div>
+                        <input type="string" id="adress" placeholder="Avenida Paulista" className=" bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required {...register("adress")} />
+                    </div>
+
+                    <div className="flex w-full">
+                        <div className="w-1/2 pr-4">
+                            <div className="inline-flex justify-end float-right ml-30 mb-4">
+                                <span
+                                    className="inline-block ml-2 text-gray-500 cursor-pointer"
+                                    onMouseEnter={() => setShowTooltipAdressNumber(true)}
+                                    onMouseLeave={() => setShowTooltipAdressNumber(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipAdressNumber && (
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                        Número de endereço e localização na rua ou avenida - 1234.
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="adressNumber" className="block mb-2 text-sm font-medium text-gray-500">
+                                <svg className="inline mr-1 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
+                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.3789 2.27907 14.6926 2.78382 15.8877C3.06278 16.5481 3.20226 16.8784 3.21953 17.128C3.2368 17.3776 3.16334 17.6521 3.01642 18.2012L2 22L5.79877 20.9836C6.34788 20.8367 6.62244 20.7632 6.87202 20.7805C7.12161 20.7977 7.45185 20.9372 8.11235 21.2162C9.30745 21.7209 10.6211 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                                    <path d="M8.58815 12.3773L9.45909 11.2956C9.82616 10.8397 10.2799 10.4153 10.3155 9.80826C10.3244 9.65494 10.2166 8.96657 10.0008 7.58986C9.91601 7.04881 9.41086 7 8.97332 7C8.40314 7 8.11805 7 7.83495 7.12931C7.47714 7.29275 7.10979 7.75231 7.02917 8.13733C6.96539 8.44196 7.01279 8.65187 7.10759 9.07169C7.51023 10.8548 8.45481 12.6158 9.91948 14.0805C11.3842 15.5452 13.1452 16.4898 14.9283 16.8924C15.3481 16.9872 15.558 17.0346 15.8627 16.9708C16.2477 16.8902 16.7072 16.5229 16.8707 16.165C17 15.8819 17 15.5969 17 15.0267C17 14.5891 16.9512 14.084 16.4101 13.9992C15.0334 13.7834 14.3451 13.6756 14.1917 13.6845C13.5847 13.7201 13.1603 14.1738 12.7044 14.5409L11.6227 15.4118" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                                Número
+
+                            </label>
+                            <input type="number" id="adressNumber" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="1234"
+                            required {...register("adressNumber")} />
+                        </div>
+
+                        <div className="w-1/2 pl-4">
+                            <div className="inline-flex justify-end float-right ml-30 mb-4">
+                                <span
+                                    className="inline-block ml-2 text-gray-500 cursor-pointer"
+                                    onMouseEnter={() => setShowTooltipAdressCEP(true)}
+                                    onMouseLeave={() => setShowTooltipAdressCEP(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipAdressCEP && (
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                       CEP de endereço e localização na rua ou avenida - 96300000.
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="adressCEP" className="block mb-2 text-sm font-medium text-gray-500">
+                                <svg className="inline mr-1 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
+                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.3789 2.27907 14.6926 2.78382 15.8877C3.06278 16.5481 3.20226 16.8784 3.21953 17.128C3.2368 17.3776 3.16334 17.6521 3.01642 18.2012L2 22L5.79877 20.9836C6.34788 20.8367 6.62244 20.7632 6.87202 20.7805C7.12161 20.7977 7.45185 20.9372 8.11235 21.2162C9.30745 21.7209 10.6211 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                                    <path d="M8.58815 12.3773L9.45909 11.2956C9.82616 10.8397 10.2799 10.4153 10.3155 9.80826C10.3244 9.65494 10.2166 8.96657 10.0008 7.58986C9.91601 7.04881 9.41086 7 8.97332 7C8.40314 7 8.11805 7 7.83495 7.12931C7.47714 7.29275 7.10979 7.75231 7.02917 8.13733C6.96539 8.44196 7.01279 8.65187 7.10759 9.07169C7.51023 10.8548 8.45481 12.6158 9.91948 14.0805C11.3842 15.5452 13.1452 16.4898 14.9283 16.8924C15.3481 16.9872 15.558 17.0346 15.8627 16.9708C16.2477 16.8902 16.7072 16.5229 16.8707 16.165C17 15.8819 17 15.5969 17 15.0267C17 14.5891 16.9512 14.084 16.4101 13.9992C15.0334 13.7834 14.3451 13.6756 14.1917 13.6845C13.5847 13.7201 13.1603 14.1738 12.7044 14.5409L11.6227 15.4118" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                                CEP
+
+                            </label>
+                            <input type="number" id="adressCEP" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00000000"
+                            required {...register("adressCEP")} />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="w-full">
+                            <div className="inline-flex justify-end float-right ml-30 mb-4">
+                                <span
+                                    className="inline-block ml-2 text-gray-500 cursor-pointer"
+                                    onMouseEnter={() => setShowTooltipAdressComplement(true)}
+                                    onMouseLeave={() => setShowTooltipAdressComplement(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipAdressComplement && (
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                        Complemento de endereço ou localização - Loja vermelha, prédio de esquina.
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="adressComplement" className="block mb-2 text-sm font-medium text-gray-500">
+                                <svg className="inline pb-1 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
+                                    <path d="M17 2V5M7 2V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M13 3.5H11C7.22876 3.5 5.34315 3.5 4.17157 4.67157C3 5.84315 3 7.72876 3 11.5V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V11.5C21 7.72876 21 5.84315 19.8284 4.67157C18.6569 3.5 16.7712 3.5 13 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M3.5 8.5H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M9 15.5C9 15.5 10.5 16 11 17.5C11 17.5 13.1765 13.5 16 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Complemento
+
+                            </label>
+                        </div>
+                        <input type="string" id="adressComplement" placeholder="Prédio azul de esquina" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required {...register("adressComplement")} />
+                    </div>
+
 
                     <div>
                         <p className="font-medium text-gray-500 underline underline-offset-8 mb-6">Informações de contato</p>

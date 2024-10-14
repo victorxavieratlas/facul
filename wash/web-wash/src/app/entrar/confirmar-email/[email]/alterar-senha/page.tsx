@@ -30,7 +30,7 @@ export default function ChangePassword({
     const router = useRouter()
 
     useEffect(() => {
-        if(!Cookies.get("x-email-user")) {
+        if (!Cookies.get("x-email-user")) {
             router.replace(`/`)
         }
         if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
@@ -44,6 +44,26 @@ export default function ChangePassword({
     async function changePassword(data: changePassword) {
         if (data.password !== data.confirmPassword) {
             toast.error("As senhas não coincidem!")
+            return
+        }
+        if (!hasMinLength) {
+            toast.error("A senha deve ter no mínimo 8 caracteres!")
+            return
+        }
+        if (!hasLowerCase) {
+            toast.error("A senha deve conter letra(s) minúscula(s)!")
+            return
+        }
+        if (!hasUpperCase) {
+            toast.error("A senha deve conter letra(s) maiúscula(s)!")
+            return
+        }
+        if (!hasNumber) {
+            toast.error("A senha deve conter número(s)!")
+            return
+        }
+        if (!hasSymbol) {
+            toast.error("A senha deve conter símbolo(s)!")
             return
         }
         const response = await fetch("http://localhost:3007/users/change/user/password", {
@@ -81,21 +101,24 @@ export default function ChangePassword({
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Sua nova senha</label>
                         <input type="password" id="password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
                             required {...register("password")} />
-                        <ul className="ml-4 mt-3 space-y-1">
-                            <li className={`text-sm ${password ? (hasMinLength ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
-                                Mínimo 8 caracteres
+                        <ul className="ml-4 mt-3 space-y-1 font-semibold">
+                            <li className={`text-sm ${password || confirmPassword ? (password === confirmPassword ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - As senhas devem ser iguais
                             </li>
-                            <li className={`text-sm ${password ? (hasLowerCase ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
-                                Letra(s) minúscula(s): a-z
+                            <li className={`text-sm ${password ? (hasMinLength ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Mínimo 8 caracteres
                             </li>
-                            <li className={`text-sm ${password ? (hasUpperCase ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
-                                Letra(s) maiúscula(s): A-Z
+                            <li className={`text-sm ${password ? (hasLowerCase ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Letra(s) minúscula(s): a-z
                             </li>
-                            <li className={`text-sm ${password ? (hasNumber ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
-                                Número(s): 0-9
+                            <li className={`text-sm ${password ? (hasUpperCase ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Letra(s) maiúscula(s): A-Z
                             </li>
-                            <li className={`text-sm ${password ? (hasSymbol ? 'text-green-500' : 'text-red-500') : 'text-black'}`}>
-                                Símbolo(s): .!?#$
+                            <li className={`text-sm ${password ? (hasNumber ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Número(s): 0-9
+                            </li>
+                            <li className={`text-sm ${password ? (hasSymbol ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Símbolo(s): .!?#$
                             </li>
                         </ul>
                     </div>

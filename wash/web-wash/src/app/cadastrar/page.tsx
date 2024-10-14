@@ -9,17 +9,18 @@ import { ClienteContext } from "../context/ClienteContext"
 import { Fredoka } from "next/font/google";
 
 const fredoka = Fredoka({
-	subsets: ['latin'],
+    subsets: ['latin'],
 })
 
 interface RegisterInput {
     email: string
     password: string
+    confirmPassword: string
     name: string
 }
 
 export default function Login() {
-    const { register, handleSubmit, setFocus } = useForm<RegisterInput>()
+    const { register, handleSubmit, setFocus, watch } = useForm<RegisterInput>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
 
@@ -33,6 +34,30 @@ export default function Login() {
     }, [])
 
     async function registerVerify(data: RegisterInput) {
+        if (data.password !== data.confirmPassword) {
+            toast.error("As senhas não coincidem!")
+            return
+        }
+        if (!hasMinLength) {
+            toast.error("A senha deve ter no mínimo 8 caracteres!")
+            return
+        }
+        if (!hasLowerCase) {
+            toast.error("A senha deve conter letra(s) minúscula(s)!")
+            return
+        }
+        if (!hasUpperCase) {
+            toast.error("A senha deve conter letra(s) maiúscula(s)!")
+            return
+        }
+        if (!hasNumber) {
+            toast.error("A senha deve conter número(s)!")
+            return
+        }
+        if (!hasSymbol) {
+            toast.error("A senha deve conter símbolo(s)!")
+            return
+        }
         const createUserResponse = await fetch("http://localhost:3007/users", {
             cache: 'no-store',
             method: "POST",
@@ -115,6 +140,15 @@ export default function Login() {
         }
     }
 
+    const password = watch("password")
+    const confirmPassword = watch("confirmPassword")
+
+    const hasMinLength = password?.length >= 8
+    const hasLowerCase = /[a-z]/.test(password || '')
+    const hasUpperCase = /[A-Z]/.test(password || '')
+    const hasNumber = /[0-9]/.test(password || '')
+    const hasSymbol = /[.!?#$]/.test(password || '')
+
     return (
         <div className="sm:mx-48 mt-20 mb-20 flex justify-center min-w-96">
             <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
@@ -130,6 +164,32 @@ export default function Login() {
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Sua senha</label>
                         <input type="password" id="password" placeholder="••••••••" className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             required {...register("password")} />
+                    </div>
+
+                    <div className="mb-10">
+                        <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900">Confirmar nova senha</label>
+                        <input type="password" id="confirm-password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
+                            required {...register("confirmPassword")} />
+                        <ul className="ml-4 mt-3 space-y-1 font-semibold">
+                            <li className={`text-sm ${password || confirmPassword ? (password === confirmPassword ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - As senhas devem ser iguais
+                            </li>
+                            <li className={`text-sm ${password ? (hasMinLength ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Mínimo 8 caracteres
+                            </li>
+                            <li className={`text-sm ${password ? (hasLowerCase ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Letra(s) minúscula(s): a-z
+                            </li>
+                            <li className={`text-sm ${password ? (hasUpperCase ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Letra(s) maiúscula(s): A-Z
+                            </li>
+                            <li className={`text-sm ${password ? (hasNumber ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Número(s): 0-9
+                            </li>
+                            <li className={`text-sm ${password ? (hasSymbol ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
+                                - Símbolo(s): .!?#$
+                            </li>
+                        </ul>
                     </div>
 
                     <div>

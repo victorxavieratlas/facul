@@ -248,8 +248,13 @@ export const validateCode = async (req, res) => {
                 return;
             }
 
-            const deletedCode = await prisma.code.delete({
-                where: { id: Number(responseCode.id) }
+            const deletedCode = await prisma.code.deleteMany({
+                where: {
+                    id: responseCode.id,
+                    email: email,
+                    code: code,
+                    deletedAt: null
+                }
             })
             if (deletedCode) {
                 res.status(200).json({
