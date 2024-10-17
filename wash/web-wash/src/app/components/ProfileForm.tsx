@@ -13,6 +13,12 @@ interface City {
     stateId: number;
 }
 
+interface Neighborhood {
+    id: number;
+    name: string;
+    cityId: number;
+}
+
 interface ProfilePanelInput {
     imageURL: string;
     bio: string;
@@ -24,6 +30,7 @@ interface ProfilePanelInput {
     minPrice: number;
     maxPrice: number;
     cityId: number;
+    neighborhoodId: number;
     adress: string;
     adressNumber: number;
     adressCEP: number;
@@ -44,7 +51,12 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
     const [selectedStateId, setSelectedStateId] = useState<number | null>(null);
     const [results, setResults] = useState<City[]>([]);
+    const [neighborhoodInput, setNeighborhoodInput] = useState('');
+    const [selectedNeighborhoodId, setSelectedNeighborhoodId] = useState<number | null>(null);
+    const [neighborhoodResults, setNeighborhoodResults] = useState<Neighborhood[]>([]);
+
     const [showTooltipCity, setShowTooltipCity] = useState(false);
+    const [showTooltipNeighborhood, setShowTooltipNeighborhood] = useState(false);
     const [showTooltipAdress, setShowTooltipAdress] = useState(false);
     const [showTooltipAdressNumber, setShowTooltipAdressNumber] = useState(false);
     const [showTooltipAdressCEP, setShowTooltipAdressCEP] = useState(false);
@@ -112,12 +124,62 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         return () => clearTimeout(debounceTimeout);
     }, [input]);
 
+    // Fetch neighborhoods as the user types, only if a city is selected
+    useEffect(() => {
+        if (!selectedCityId) {
+            setNeighborhoodResults([]);
+            return;
+        }
+
+        const debounceTimeout = setTimeout(() => {
+            if (neighborhoodInput.length >= 3) {
+                fetch(`http://localhost:3007/neighborhoods/search/${selectedCityId}/${encodeURIComponent(neighborhoodInput)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (Array.isArray(data)) {
+                            setNeighborhoodResults(data);
+                        } else {
+                            setNeighborhoodResults([]);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching neighborhoods:', error);
+                        setNeighborhoodResults([]);
+                    });
+            } else {
+                setNeighborhoodResults([]);
+            }
+        }, 300);
+
+        return () => clearTimeout(debounceTimeout);
+    }, [neighborhoodInput, selectedCityId]);
+
     const handleSelectCity = (city: City) => {
         setInput(`${city.name} - ${city.uf}`); // Set the visible input field to city name and UF
         setSelectedCityId(city.id); // Keep the city ID in state
         setSelectedStateId(city.stateId); // Keep the state ID
         setResults([]); // Clear results after selection
+
+        // Clear neighborhood input when city changes
+        setNeighborhoodInput('');
+        setSelectedNeighborhoodId(null);
     };
+
+    // Handle neighborhood selection
+    const handleSelectNeighborhood = (neighborhood: Neighborhood) => {
+        setNeighborhoodInput(neighborhood.name);
+        setSelectedNeighborhoodId(neighborhood.id);
+        setNeighborhoodResults([]);
+    };
+
+    // Clear neighborhood input if city input changes
+    useEffect(() => {
+        if (!selectedCityId) {
+            setNeighborhoodInput('');
+            setSelectedNeighborhoodId(null);
+            setNeighborhoodResults([]);
+        }
+    }, [selectedCityId]);
 
     // Atualize handleFormSubmit para enviar a imagem antes do perfil
     const handleFormSubmit = async (data: ProfilePanelInput) => {
@@ -125,6 +187,11 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
         if (!selectedCityId || !selectedStateId) {
             toast.error("Por favor, selecione uma cidade válida.");
+            return;
+        }
+
+        if (!selectedNeighborhoodId) {
+            toast.error("Por favor, selecione um bairro válido.");
             return;
         }
 
@@ -160,6 +227,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                 minPrice: data.minPrice,
                 maxPrice: data.maxPrice,
                 cityId: data.cityId,
+                neighborhoodId: data.neighborhoodId,
                 stateId: data.stateId
             })
         });
@@ -200,30 +268,33 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             </span>
                             {/* Caixa com a explicação */}
                             {showTooltipCity && (
-                                <div className="absolute mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                <div className="absolute mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-60 w-64">
                                     A cidade da localização do negócio, no formato de texto - São Paulo.
                                 </div>
                             )}
                         </div>
-
-
-                    </div>
-                    <div className="relative w-full">
                         <label htmlFor="cityId" className="w-full text-sm font-medium text-gray-500">
                             Digite sua cidade
                         </label>
+                        <div className="relative w-full">
                         <input
                             type="search"
                             id="cityId"
                             className="block mt-2 p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             placeholder="São Paulo - SP"
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={(e) => {
+                                setInput(e.target.value);
+                                setSelectedCityId(null);
+                                setSelectedStateId(null);
+                                setNeighborhoodInput('');
+                                setSelectedNeighborhoodId(null);
+                            }}
                             autoComplete="off"
                             required
                         />
                         {results.length > 0 && (
-                            <ul className="absolute w-full bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
+                            <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
                                 {results.map((city) => (
                                     <li key={city.id} className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
                                         onClick={() => handleSelectCity(city)}>
@@ -232,8 +303,64 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 ))}
                             </ul>
                         )}
+                        </div>
                     </div>
-
+                    <div>
+                        <div className='w-full'>
+                            <div className="inline-flex justify-end float-right ml-30">
+                                <span
+                                    className="inline-block ml-2 text-gray-500 cursor-pointer z-60"
+                                    onMouseEnter={() => setShowTooltipNeighborhood(true)}
+                                    onMouseLeave={() => setShowTooltipNeighborhood(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipNeighborhood && (
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-70 w-64">
+                                        O bairro da localização do negócio, no formato de texto - Centro.
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="neighborhood" className="w-full text-sm font-medium text-gray-500">
+                                Digite seu bairro
+                            </label>
+                            <div className="relative w-full">
+                                <input
+                                    type="search"
+                                    id="neighborhood"
+                                    className="block mt-2 p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                                    placeholder="Centro"
+                                    value={neighborhoodInput}
+                                    onChange={(e) => {
+                                        setNeighborhoodInput(e.target.value);
+                                        setSelectedNeighborhoodId(null);
+                                    }}
+                                    autoComplete="off"
+                                    disabled={!selectedCityId}
+                                    required
+                                />
+                                {neighborhoodResults.length > 0 && (
+                                    <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
+                                        {neighborhoodResults.map((neighborhood) => (
+                                            <li
+                                                key={neighborhood.id}
+                                                className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
+                                                onClick={() => handleSelectNeighborhood(neighborhood)}
+                                            >
+                                                {neighborhood.name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <div className="w-full">
                             <div className="inline-flex justify-end float-right ml-30">
@@ -256,7 +383,6 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     </div>
                                 )}
                             </div>
-
                         </div>
                         <label htmlFor="adress" className="block text-sm font-medium text-gray-500">
                             Endereço

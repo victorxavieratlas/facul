@@ -12,6 +12,7 @@ import loginRouter from './routes/login.router'
 import profilesRoutes from './routes/profiles.router'
 import ratingsRoutes from './routes/ratings'
 import citiesRouter from './routes/cities'
+import neighborhoodsRouter from './routes/neighborhoods'
 import imagesRoutes from './routes/images'
 import schedulesRoutes from './routes/schedules'
 import workingHoursRoutes from './routes/hours'
@@ -33,6 +34,7 @@ app
   .use("/profiles", profilesRoutes)
   .use("/ratings", ratingsRoutes)
   .use("/cities", citiesRouter)
+  .use("/neighborhoods", neighborhoodsRouter)
   .use("/images", imagesRoutes)
   .use("/schedules", schedulesRoutes)
   .use("/workingHours", workingHoursRoutes)

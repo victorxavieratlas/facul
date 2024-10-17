@@ -4,16 +4,15 @@ import { Router } from "express"
 const prisma = new PrismaClient()
 const router = Router()
 
-type CitiesInput = {
+type NeighborhoodsInput = {
 	name: string;
-	uf: string;
-	stateId: number;
+	cityId: number;
 };
 
 router.get("/", async (req, res) => {
 	try {
-		const cities = await prisma.city.findMany()
-		res.status(200).json(cities)
+		const neighborhoods = await prisma.neighborhoods.findMany()
+		res.status(200).json(neighborhoods)
 	} catch (error) {
 		res.status(400).json(error)
 	}
@@ -23,10 +22,10 @@ router.get("/:id", async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const city = await prisma.city.findUnique({
+		const neighborhoods = await prisma.neighborhoods.findUnique({
 			where: { id: Number(id) }
 		})
-		res.status(200).json(city)
+		res.status(200).json(neighborhoods)
 	} catch (error) {
 		res.status(400).json(error)
 	}
@@ -36,30 +35,31 @@ router.get("/list/:name", async (req, res) => {
 	const { name } = req.params
 
 	try {
-		const cities = await prisma.city.findMany({
+		const neighborhoods = await prisma.neighborhoods.findMany({
 			where: {
 				name
 			}
 		})
-		res.status(200).json(cities)
+		res.status(200).json(neighborhoods)
 	} catch (error) {
 		res.status(400).json(error)
 	}
 })
 
-router.get("/search/:name", async (req, res) => {
-	const { name } = req.params
-	console.log(name)
+router.get("/search/:cityId/:name", async (req, res) => {
+	const { cityId, name } = req.params
+	console.log(cityId, name)
 	try {
-		const cities = await prisma.city.findMany({
+		const neighborhoods = await prisma.neighborhoods.findMany({
 			where: {
 			 	name: {
 					contains: name
-				}
+				},
+                cityId: Number(cityId)
 			}
 		})
-		console.log(cities)
-		res.status(200).json(cities)
+		console.log(neighborhoods)
+		res.status(200).json(neighborhoods)
 	} catch (error) {
 		res.status(400).json(error)
 	}
@@ -107,34 +107,6 @@ router.get("/search/:name", async (req, res) => {
 // 	}
 // });
 
-router.delete("/:id", async (req, res) => {
-	const { id } = req.params
-
-	try {
-		const rating = await prisma.rating.delete({
-			where: { id: Number(id) }
-		})
-		res.status(200).json(rating)
-	} catch (error) {
-		res.status(400).json(error)
-	}
-})
-
-router.put("/delete/:id", async (req, res) => {
-	const { id } = req.params
-	const deletedAt = new Date()
-
-	try {
-		const rating = await prisma.rating.update({
-			where: { id: Number(id) },
-			data: { deletedAt }
-		})
-		res.status(200).json(rating)
-	} catch (error) {
-		res.status(400).json(error)
-	}
-})
-
 router.put("/:id", async (req, res) => {
 	const { id } = req.params
 	const {
@@ -142,13 +114,13 @@ router.put("/:id", async (req, res) => {
 	} = req.body
 
 	try {
-		const cities = await prisma.city.update({
+		const neighborhoods = await prisma.neighborhoods.update({
 			where: { id: Number(id) },
 			data: {
 				name
 			}
 		})
-		res.status(200).json(cities)
+		res.status(200).json(neighborhoods)
 	} catch (error) {
 		res.status(400).json(error)
 	}

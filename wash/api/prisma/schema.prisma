@@ -150,7 +150,7 @@ model Category {
 }
 
 model State {
-  id              Int               @id @default(autoincrement())
+  id              Int               @id
   name            String
   cities          City[]
   profiles        Profile[]
@@ -163,7 +163,7 @@ model State {
 }
 
 model City {
-  id              Int               @id @default(autoincrement())
+  id              Int               @id
   uf              String            @db.VarChar(2)
   name            String
   state           State             @relation(fields: [stateId], references: [id])
@@ -172,6 +172,7 @@ model City {
   cityZones       CityZone[]
   districts       District[]
   districtsZones  DistrictZone[]
+  neighborhoods   Neighborhoods[]
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   deletedAt       DateTime?
@@ -180,15 +181,29 @@ model City {
 }
 
 model ProfileLocation {
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
-  city      City    @relation(fields: [cityId], references: [id])
-  cityId    Int
-  state     State   @relation(fields: [stateId], references: [id])
-  stateId   Int
+  profile         Profile       @relation(fields: [profileId], references: [id])
+  profileId       Int
+  city            City          @relation(fields: [cityId], references: [id])
+  cityId          Int
+  neighborhood    Neighborhoods @relation(fields: [neighborhoodsId], references: [id])
+  neighborhoodsId Int
+  state           State         @relation(fields: [stateId], references: [id])
+  stateId         Int
 
   @@id([profileId, cityId, stateId]) // Chave composta para garantir unicidade
 }
+
+model Neighborhoods {
+  id              Int               @id
+  idCity          Int
+  city            City              @relation(fields: [cityId], references: [id])
+  cityId          Int
+  name            String
+  profileLocation ProfileLocation[]
+
+  @@map("neighborhoods")
+}
+
 
 model CityZone {
   id             Int            @id @default(autoincrement())

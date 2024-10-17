@@ -118,7 +118,7 @@ CREATE TABLE `categories` (
 
 -- CreateTable
 CREATE TABLE `states` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE `states` (
 
 -- CreateTable
 CREATE TABLE `cities` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL,
     `uf` VARCHAR(2) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `stateId` INTEGER NOT NULL,
@@ -141,11 +141,23 @@ CREATE TABLE `cities` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `ProfileCity` (
+CREATE TABLE `ProfileLocation` (
     `profileId` INTEGER NOT NULL,
     `cityId` INTEGER NOT NULL,
+    `neighborhoodsId` INTEGER NOT NULL,
+    `stateId` INTEGER NOT NULL,
 
-    PRIMARY KEY (`profileId`, `cityId`)
+    PRIMARY KEY (`profileId`, `cityId`, `stateId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `neighborhoods` (
+    `id` INTEGER NOT NULL,
+    `idCity` INTEGER NOT NULL,
+    `cityId` INTEGER NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -323,10 +335,19 @@ ALTER TABLE `ratings` ADD CONSTRAINT `ratings_profileId_fkey` FOREIGN KEY (`prof
 ALTER TABLE `cities` ADD CONSTRAINT `cities_stateId_fkey` FOREIGN KEY (`stateId`) REFERENCES `states`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProfileCity` ADD CONSTRAINT `ProfileCity_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `profiles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProfileCity` ADD CONSTRAINT `ProfileCity_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_neighborhoodsId_fkey` FOREIGN KEY (`neighborhoodsId`) REFERENCES `neighborhoods`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_stateId_fkey` FOREIGN KEY (`stateId`) REFERENCES `states`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `neighborhoods` ADD CONSTRAINT `neighborhoods_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `cities-zones` ADD CONSTRAINT `cities-zones_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `cities`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
