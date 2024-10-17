@@ -215,18 +215,22 @@ export const updateProfile = async (req, res) => {
         closeHour,
         minPrice,
         maxPrice,
-        neighborhoodsId,
+        neighborhoodId,
+        address,
+        addressNumber,
+        addressCEP,
+        addressComplement,
         cityId,
         stateId,
         imageURL
     } = req.body
 
-
-    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !neighborhoodsId || !cityId || !stateId || !imageURL) {
+    console.log(req.body)
+    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !neighborhoodId || !address || !addressNumber || !addressCEP || !addressComplement || !cityId || !stateId || !imageURL) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
     }
 
-    console.log(req.body)
+    
     try {
         const profile = await profileClient.update({
             where: { id: Number(id) },
@@ -243,7 +247,11 @@ export const updateProfile = async (req, res) => {
                     create: {
                         cityId: Number(cityId),
                         stateId: Number(stateId),
-                        neighborhoodsId: Number(neighborhoodsId)
+                        neighborhoodsId: Number(neighborhoodId),
+                        address: String(address),
+                        addressNumber: String(addressNumber),
+                        addressCEP: String(addressCEP),
+                        addressComplement: String(addressComplement)
                     }
                 },
                 images: {

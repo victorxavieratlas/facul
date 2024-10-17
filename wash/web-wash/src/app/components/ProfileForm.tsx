@@ -31,10 +31,10 @@ interface ProfilePanelInput {
     maxPrice: number;
     cityId: number;
     neighborhoodId: number;
-    adress: string;
-    adressNumber: number;
-    adressCEP: number;
-    adressComplement: string;
+    address: string;
+    addressNumber: number;
+    addressCEP: number;
+    addressComplement: string;
     stateId: number;
 }
 
@@ -57,10 +57,10 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
     const [showTooltipCity, setShowTooltipCity] = useState(false);
     const [showTooltipNeighborhood, setShowTooltipNeighborhood] = useState(false);
-    const [showTooltipAdress, setShowTooltipAdress] = useState(false);
-    const [showTooltipAdressNumber, setShowTooltipAdressNumber] = useState(false);
-    const [showTooltipAdressCEP, setShowTooltipAdressCEP] = useState(false);
-    const [showTooltipAdressComplement, setShowTooltipAdressComplement] = useState(false);
+    const [showTooltipAddress, setShowTooltipAddress] = useState(false);
+    const [showTooltipAddressNumber, setShowTooltipAddressNumber] = useState(false);
+    const [showTooltipAddressCEP, setShowTooltipAddressCEP] = useState(false);
+    const [showTooltipAddressComplement, setShowTooltipAddressComplement] = useState(false);
     const [showTooltipPhoneNumber, setShowTooltipPhoneNumber] = useState(false);
     const [showTooltipOpenHour, setShowTooltipOpenHour] = useState(false);
     const [showTooltipCloseHour, setShowTooltipCloseHour] = useState(false);
@@ -131,8 +131,14 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             return;
         }
 
+        if (selectedNeighborhoodId) {
+            // Neighborhood is already selected; do not fetch
+            setNeighborhoodResults([]);
+            return;
+          }
+
         const debounceTimeout = setTimeout(() => {
-            if (neighborhoodInput.length >= 3) {
+            if (neighborhoodInput.length >= 1) {
                 fetch(`http://localhost:3007/neighborhoods/search/${selectedCityId}/${encodeURIComponent(neighborhoodInput)}`)
                     .then(response => response.json())
                     .then(data => {
@@ -204,12 +210,13 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         }
 
         // Se a imagem foi enviada com sucesso, inclua a URL da imagem nos dados do perfil
-        const updatedProfile = { ...data, cityId: selectedCityId, imageURL: imageUrl, stateId: selectedStateId ? selectedStateId : 0 };
+        const updatedProfile = { ...data, cityId: selectedCityId, neighborhoodId: selectedNeighborhoodId, imageURL: imageUrl, stateId: selectedStateId ? selectedStateId : 0 };
         EditProfile(updatedProfile);
     };
 
     async function EditProfile(data: ProfilePanelInput) {
-
+        console.log(data.neighborhoodId)
+        console.log(selectedNeighborhoodId)
         const response = await fetch(`http://localhost:3007/profiles/${profileIncomplete.id}`, {
             method: "PUT",
             headers: {
@@ -228,6 +235,10 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                 maxPrice: data.maxPrice,
                 cityId: data.cityId,
                 neighborhoodId: data.neighborhoodId,
+                address: data.address,
+                addressNumber: data.addressNumber,
+                addressCEP: data.addressCEP,
+                addressComplement: data.addressComplement,
                 stateId: data.stateId
             })
         });
@@ -253,7 +264,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                         </svg>
                         Informações de localização</p>
                     <div className='w-full'>
-                        <div className="inline-flex justify-end float-right ml-30">
+                        <div className="inline-flex justify-end float-right ml-30 z-40">
                             <span
                                 className="ml-2 text-gray-500 cursor-pointer "
                                 onMouseEnter={() => setShowTooltipCity(true)}
@@ -268,7 +279,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             </span>
                             {/* Caixa com a explicação */}
                             {showTooltipCity && (
-                                <div className="absolute mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-60 w-64">
+                                <div className="absolute mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-50 w-64">
                                     A cidade da localização do negócio, no formato de texto - São Paulo.
                                 </div>
                             )}
@@ -280,7 +291,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                         <input
                             type="search"
                             id="cityId"
-                            className="block mt-2 p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            className="block mt-2 p-3 w-full h-14 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             placeholder="São Paulo - SP"
                             value={input}
                             onChange={(e) => {
@@ -294,7 +305,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             required
                         />
                         {results.length > 0 && (
-                            <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
+                            <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-30 rounded-lg">
                                 {results.map((city) => (
                                     <li key={city.id} className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
                                         onClick={() => handleSelectCity(city)}>
@@ -307,7 +318,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                     </div>
                     <div>
                         <div className='w-full'>
-                            <div className="inline-flex justify-end float-right ml-30">
+                            <div className="inline-flex justify-end float-right ml-30 z-40">
                                 <span
                                     className="inline-block ml-2 text-gray-500 cursor-pointer z-60"
                                     onMouseEnter={() => setShowTooltipNeighborhood(true)}
@@ -322,7 +333,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 </span>
                                 {/* Caixa com a explicação */}
                                 {showTooltipNeighborhood && (
-                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-70 w-64">
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-50 w-64">
                                         O bairro da localização do negócio, no formato de texto - Centro.
                                     </div>
                                 )}
@@ -340,13 +351,13 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     onChange={(e) => {
                                         setNeighborhoodInput(e.target.value);
                                         setSelectedNeighborhoodId(null);
-                                    }}
+                                      }}
                                     autoComplete="off"
                                     disabled={!selectedCityId}
                                     required
                                 />
                                 {neighborhoodResults.length > 0 && (
-                                    <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg">
+                                    <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-30 rounded-lg">
                                         {neighborhoodResults.map((neighborhood) => (
                                             <li
                                                 key={neighborhood.id}
@@ -366,8 +377,8 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             <div className="inline-flex justify-end float-right ml-30">
                                 <span
                                     className="inline-block ml-2 text-gray-500 cursor-pointer"
-                                    onMouseEnter={() => setShowTooltipAdress(true)}
-                                    onMouseLeave={() => setShowTooltipAdress(false)}
+                                    onMouseEnter={() => setShowTooltipAddress(true)}
+                                    onMouseLeave={() => setShowTooltipAddress(false)}
                                 >
                                     {/* Ícone de informação */}
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -377,18 +388,18 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     </svg>
                                 </span>
                                 {/* Caixa com a explicação */}
-                                {showTooltipAdress && (
+                                {showTooltipAddress && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                         Endereço no formato de texto com o nome da rua ou avenida - Avenida Paulista.
                                     </div>
                                 )}
                             </div>
                         </div>
-                        <label htmlFor="adress" className="block text-sm font-medium text-gray-500">
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-500">
                             Endereço
                         </label>
-                        <input type="string" id="adress" placeholder="Avenida Paulista" className="mt-2 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("adress")} />
+                        <input type="string" id="address" placeholder="Avenida Paulista" className="mt-2 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required {...register("address")} />
                     </div>
 
                     <div className="flex w-full">
@@ -396,8 +407,8 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             <div className="inline-flex justify-end float-right ml-30">
                                 <span
                                     className="inline-block ml-2 text-gray-500 cursor-pointer"
-                                    onMouseEnter={() => setShowTooltipAdressNumber(true)}
-                                    onMouseLeave={() => setShowTooltipAdressNumber(false)}
+                                    onMouseEnter={() => setShowTooltipAddressNumber(true)}
+                                    onMouseLeave={() => setShowTooltipAddressNumber(false)}
                                 >
                                     {/* Ícone de informação */}
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -407,25 +418,25 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     </svg>
                                 </span>
                                 {/* Caixa com a explicação */}
-                                {showTooltipAdressNumber && (
+                                {showTooltipAddressNumber && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                         Número de endereço e localização na rua ou avenida - 1234.
                                     </div>
                                 )}
                             </div>
-                            <label htmlFor="adressNumber" className="block mb-2 text-sm font-medium text-gray-500">
+                            <label htmlFor="addressNumber" className="block mb-2 text-sm font-medium text-gray-500">
                                 Número
                             </label>
-                            <input type="number" id="adressNumber" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="1234"
-                                required {...register("adressNumber")} />
+                            <input type="number" id="addressNumber" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="1234"
+                                required {...register("addressNumber")} />
                         </div>
 
                         <div className="w-1/2 pl-4">
                             <div className="inline-flex justify-end float-right ml-30">
                                 <span
                                     className="inline-block ml-2 text-gray-500 cursor-pointer"
-                                    onMouseEnter={() => setShowTooltipAdressCEP(true)}
-                                    onMouseLeave={() => setShowTooltipAdressCEP(false)}
+                                    onMouseEnter={() => setShowTooltipAddressCEP(true)}
+                                    onMouseLeave={() => setShowTooltipAddressCEP(false)}
                                 >
                                     {/* Ícone de informação */}
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -435,17 +446,17 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     </svg>
                                 </span>
                                 {/* Caixa com a explicação */}
-                                {showTooltipAdressCEP && (
+                                {showTooltipAddressCEP && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                         CEP de endereço e localização na rua ou avenida - 96300000.
                                     </div>
                                 )}
                             </div>
-                            <label htmlFor="adressCEP" className="block mb-2 text-sm font-medium text-gray-500">
+                            <label htmlFor="addressCEP" className="block mb-2 text-sm font-medium text-gray-500">
                                 CEP
                             </label>
-                            <input type="number" id="adressCEP" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00000000"
-                                required {...register("adressCEP")} />
+                            <input type="number" id="addressCEP" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="00000000"
+                                required {...register("addressCEP")} />
                         </div>
                     </div>
 
@@ -454,8 +465,8 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             <div className="inline-flex justify-end float-right ml-30">
                                 <span
                                     className="inline-block ml-2 text-gray-500 cursor-pointer"
-                                    onMouseEnter={() => setShowTooltipAdressComplement(true)}
-                                    onMouseLeave={() => setShowTooltipAdressComplement(false)}
+                                    onMouseEnter={() => setShowTooltipAddressComplement(true)}
+                                    onMouseLeave={() => setShowTooltipAddressComplement(false)}
                                 >
                                     {/* Ícone de informação */}
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -465,18 +476,18 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     </svg>
                                 </span>
                                 {/* Caixa com a explicação */}
-                                {showTooltipAdressComplement && (
+                                {showTooltipAddressComplement && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                         Complemento de endereço ou localização - Loja vermelha, prédio de esquina.
                                     </div>
                                 )}
                             </div>
-                            <label htmlFor="adressComplement" className="block mb-2 text-sm font-medium text-gray-500">
+                            <label htmlFor="addressComplement" className="block mb-2 text-sm font-medium text-gray-500">
                                 Complemento
                             </label>
                         </div>
-                        <input type="string" id="adressComplement" placeholder="Prédio azul de esquina" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required {...register("adressComplement")} />
+                        <input type="string" id="addressComplement" placeholder="Prédio azul de esquina" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            required {...register("addressComplement")} />
                     </div>
 
 

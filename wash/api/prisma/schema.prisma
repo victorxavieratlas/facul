@@ -181,14 +181,21 @@ model City {
 }
 
 model ProfileLocation {
-  profile         Profile       @relation(fields: [profileId], references: [id])
-  profileId       Int
-  city            City          @relation(fields: [cityId], references: [id])
-  cityId          Int
-  neighborhood    Neighborhoods @relation(fields: [neighborhoodsId], references: [id])
-  neighborhoodsId Int
-  state           State         @relation(fields: [stateId], references: [id])
-  stateId         Int
+  profile           Profile       @relation(fields: [profileId], references: [id])
+  profileId         Int
+  city              City          @relation(fields: [cityId], references: [id])
+  cityId            Int
+  neighborhood      Neighborhoods @relation(fields: [neighborhoodsId], references: [id])
+  neighborhoodsId   Int
+  state             State         @relation(fields: [stateId], references: [id])
+  stateId           Int
+  address           String?
+  addressNumber     String?
+  addressCEP        String?
+  addressComplement String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  deletedAt         DateTime?
 
   @@id([profileId, cityId, stateId]) // Chave composta para garantir unicidade
 }
@@ -200,10 +207,12 @@ model Neighborhoods {
   cityId          Int
   name            String
   profileLocation ProfileLocation[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
 
   @@map("neighborhoods")
 }
-
 
 model CityZone {
   id             Int            @id @default(autoincrement())
