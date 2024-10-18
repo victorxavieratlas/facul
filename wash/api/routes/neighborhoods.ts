@@ -22,10 +22,10 @@ router.get("/:id", async (req, res) => {
 	const { id } = req.params
 
 	try {
-		const neighborhoods = await prisma.neighborhoods.findUnique({
+		const neighborhood = await prisma.neighborhoods.findUnique({
 			where: { id: Number(id) }
 		})
-		res.status(200).json(neighborhoods)
+		res.status(200).json(neighborhood)
 	} catch (error) {
 		res.status(400).json(error)
 	}

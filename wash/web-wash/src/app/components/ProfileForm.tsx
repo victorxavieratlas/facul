@@ -570,7 +570,6 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     required {...register("minPrice")} />
                             </div>
 
-
                             <div className="w-1/2 pl-4">
                                 <div className="inline-flex justify-end float-right ml-30">
                                     <span

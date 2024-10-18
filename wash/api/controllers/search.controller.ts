@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client"
 import { profile } from "console"
 
 const cityClient = new PrismaClient().city
+const neighborhoodClient = new PrismaClient().neighborhoods
 const stateClient = new PrismaClient().state
 const profileLocationClient = new PrismaClient().profileLocation
 
@@ -22,6 +23,19 @@ export const getCityById = async (req, res) => {
 			where: { id: Number(id) }
 		})
 		res.status(200).json(city)
+	} catch (error) {
+		res.status(400).json(error)
+	}
+}
+
+export const getNeighborhoodById = async (req, res) => {
+	const { id } = req.params
+
+	try {
+		const neighborhood = await neighborhoodClient.findUnique({
+			where: { id: Number(id) }
+		})
+		res.status(200).json(neighborhood)
 	} catch (error) {
 		res.status(400).json(error)
 	}
