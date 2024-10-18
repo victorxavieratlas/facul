@@ -5,6 +5,11 @@ import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner'
 import Cookies from 'js-cookie'
 import UploadImageInput from './UploadImageInput';
+import { Fredoka } from "next/font/google";
+
+const fredoka = Fredoka({
+    subsets: ['latin'],
+})
 
 interface City {
     id: number;
@@ -256,7 +261,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         <div className="lg:min-w-max max-w-full bg-white border-none mb-10">
             <div className="min-w-full w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 text-wrap mb-4">
-                    <h5 className="text-xl font-medium text-gray-500 text-center mb-10">Completar perfil na <span className="text-2xl text-blue-500">CarWash</span></h5>
+                    <h5 className="text-xl font-medium text-gray-500 text-center mb-10">Completar perfil na<span className={`ml-2 font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 align-center ${fredoka.className}`}>lavar auto</span></h5>
                     <p className="font-medium text-lg text-gray-500 mb-6">
                         <svg className="inline mr-1 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
                             <path d="M13.6177 21.367C13.1841 21.773 12.6044 22 12.0011 22C11.3978 22 10.8182 21.773 10.3845 21.367C6.41302 17.626 1.09076 13.4469 3.68627 7.37966C5.08963 4.09916 8.45834 2 12.0011 2C15.5439 2 18.9126 4.09916 20.316 7.37966C22.9082 13.4393 17.599 17.6389 13.6177 21.367Z" stroke="currentColor" stroke-width="1.5" />

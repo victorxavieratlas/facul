@@ -9,7 +9,7 @@ const fredoka = Fredoka({
 
 export default function Header() {
     return (
-        <footer className="bg-white dark:bg-gray-900">
+        <footer className="bg-white dark:bg-gray-900 z-50">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <Link href="/" className="flex justify-center items-center space-x-3 rtl:space-x-reverse lg:ml-12 mb-4  pb-4 sm:pb-0">

@@ -30,7 +30,11 @@ export const getProfileById = async (req, res) => {
             include: {
                 images: true,
                 states: true,
-                profileLocation: true,
+                profileLocation: {
+                    include: {
+                        neighborhood: true
+                    }
+                },
                 schedules: true,
             }
         })

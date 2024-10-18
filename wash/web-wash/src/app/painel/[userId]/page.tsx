@@ -143,7 +143,7 @@ export default function Panel() {
                                 Apresentação de <p className="inline font-bold text-blue-500">{profileData.name}
                                 </p>
                             </h3>
-                            <div className="flex items-start w-full px-12">
+                            <div className="flex items-start w-full px-12 mb-40 sm:mb-0">
                                 <p className="my-6 font-normal text-gray-700">{profileData.bio}</p>
                             </div>
                         </div>
