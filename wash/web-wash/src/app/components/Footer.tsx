@@ -20,7 +20,7 @@ export default function Header() {
                             alt="logotipo da CarWash em azul claro"
                         />
                         {/* <img src="./logo2.svg" className="h-8" alt="Logo e logotipo da CarWash e azul claro" /> */}
-                        <span className={`self-center text-2xl font-semibold tracking-wide text-blue-500 ${fredoka.className}`}>lavar carro</span>
+                        <span className={`self-center text-2xl font-semibold tracking-wide text-blue-500 ${fredoka.className}`}>lavar auto</span>
                     </Link>
                     <div className="flex sm:grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
                         <div>

@@ -30,7 +30,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Lavar Carro",
+              "name": "Lavar Auto",
               "url": "https://www.lavarauto.com",
               "logo": "https://www.lavarauto.com/logo2.svg"
             })

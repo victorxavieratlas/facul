@@ -25,6 +25,19 @@ export interface profileProps {
 		url: string
 		published: boolean
 	}]
+	profileLocation: [{
+        profileId: number,
+        cityId: number,
+        stateId: number,
+        neighborhoodsId: number,
+        address: string,
+        addressNumber: string,
+        addressCEP: string,
+        addressComplement: string,
+		neighborhood: {
+			name: string
+		}
+    }]
 }
 
 

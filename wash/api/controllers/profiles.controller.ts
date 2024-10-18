@@ -279,6 +279,11 @@ export const updateProfileEditDetails = async (req, res) => {
         closeHour,
         minPrice,
         maxPrice,
+        neighborhoodId,
+        address,
+        addressNumber,
+        addressCEP,
+        addressComplement,
         cityId,
         oldCityId,
         stateId,
@@ -288,7 +293,7 @@ export const updateProfileEditDetails = async (req, res) => {
     } = req.body
 
 
-    if (!bio || !phone || !startDay || !finalDay || !openHour || !closeHour ||!minPrice || !maxPrice || !cityId || !oldCityId || !stateId || !oldStateId || !imageURL || !oldImageId) {
+    if (!bio || !phone || !startDay || !finalDay || !openHour || !closeHour ||!minPrice || !maxPrice || !neighborhoodId || !address || !addressNumber || !addressCEP || !addressComplement || !cityId || !oldCityId || !stateId || !oldStateId || !imageURL || !oldImageId) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
     }
 
@@ -318,6 +323,11 @@ export const updateProfileEditDetails = async (req, res) => {
                         data: {
                             cityId: Number(cityId),
                             stateId: Number(stateId),
+                            neighborhoodsId: Number(neighborhoodId),
+                            address: String(address),
+                            addressNumber: String(addressNumber),
+                            addressCEP: String(addressCEP),
+                            addressComplement: String(addressComplement)
                         },
                     },
                 },

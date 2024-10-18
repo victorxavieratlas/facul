@@ -280,7 +280,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             {/* Caixa com a explicação */}
                             {showTooltipCity && (
                                 <div className="absolute mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-50 w-64">
-                                    A cidade da localização do negócio, no formato de texto - São Paulo.
+                                    A cidade da localização do negócio, no formato de texto - Ex: São Paulo.
                                 </div>
                             )}
                         </div>
@@ -334,7 +334,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 {/* Caixa com a explicação */}
                                 {showTooltipNeighborhood && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-50 w-64">
-                                        O bairro da localização do negócio, no formato de texto - Centro.
+                                        O bairro da localização do negócio, no formato de texto - Ex: Centro.
                                     </div>
                                 )}
                             </div>
@@ -390,7 +390,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 {/* Caixa com a explicação */}
                                 {showTooltipAddress && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                        Endereço no formato de texto com o nome da rua ou avenida - Avenida Paulista.
+                                        Endereço no formato de texto com o nome da rua ou avenida - Ex: Avenida Paulista ou Rua da Paz.
                                     </div>
                                 )}
                             </div>
@@ -420,7 +420,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 {/* Caixa com a explicação */}
                                 {showTooltipAddressNumber && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                        Número de endereço e localização na rua ou avenida - 1234.
+                                        Número de endereço e localização na rua ou avenida - Ex: 1234.
                                     </div>
                                 )}
                             </div>
@@ -448,7 +448,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 {/* Caixa com a explicação */}
                                 {showTooltipAddressCEP && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                        CEP de endereço e localização na rua ou avenida - 96300000.
+                                        CEP de endereço e localização na rua ou avenida, no formato de números - Ex: 96300000.
                                     </div>
                                 )}
                             </div>
@@ -478,7 +478,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 {/* Caixa com a explicação */}
                                 {showTooltipAddressComplement && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                        Complemento de endereço ou localização - Loja vermelha, prédio de esquina.
+                                        Complemento de endereço ou localização - Ex: Loja vermelha, prédio de esquina ou próximo a...
                                     </div>
                                 )}
                             </div>
@@ -519,7 +519,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 {/* Caixa com a explicação */}
                                 {showTooltipPhoneNumber && (
                                     <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                        Número WhatsApp onde Clientes podem entrar em contato, no formato somente números com DDD - 00988888888.
+                                        Número WhatsApp onde Clientes podem entrar em contato, no formato somente números com DDD - Ex: 00988888888.
                                     </div>
                                 )}
                             </div>
@@ -559,7 +559,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     {/* Caixa com a explicação */}
                                     {showTooltipLowerPrice && (
                                         <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                            Preço mais baixo de um serviço, no formato valor em Reais - 80.
+                                            Preço mais baixo de um serviço independente do tipo de veículo, no formato de valor em números - Ex: 80.
                                         </div>
                                     )}
                                 </div>
@@ -587,7 +587,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     {/* Caixa com a explicação */}
                                     {showTooltipHighPrice && (
                                         <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                            Preço mais alto combinando possíveis serviços, no formato valor em Reais - 200.
+                                            Preço mais alto combinando possíveis serviços independente do tipo de veículo, no formato de valor em números - Ex: 200.
                                         </div>
                                     )}
                                 </div>
@@ -627,7 +627,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     {/* Caixa com a explicação */}
                                     {showTooltipOpenDay && (
                                         <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                            Dia em que o serviço começa a operar, no formato de nome do dia - Segunda.
+                                            Dia em que o serviço começa a operar, no formato de nome do dia em texto - Ex: Segunda.
                                         </div>
                                     )}
                                 </div>
@@ -655,7 +655,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     {/* Caixa com a explicação */}
                                     {showTooltipCloseDay && (
                                         <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                            Dia em que o serviço para de operar, no formato de nome do dia - Sexta.
+                                            Dia em que o serviço para de operar, no formato de nome do dia em texto - Ex: Sexta.
                                         </div>
                                     )}
                                 </div>
@@ -684,7 +684,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     {/* Caixa com a explicação */}
                                     {showTooltipOpenHour && (
                                         <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                            Horário em que o serviço começa a operar, no formato 24 horas - HH:MM.
+                                            Horário em que o serviço começa a operar, no formato 24 horas - Ex: 09:00
                                         </div>
                                     )}
                                 </div>
@@ -712,7 +712,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     {/* Caixa com a explicação */}
                                     {showTooltipCloseHour && (
                                         <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
-                                            Horário em que o serviço para de operar, no formato 24 horas - HH:MM.
+                                            Horário em que o serviço para de operar, no formato 24 horas - Ex: 18:00.
                                         </div>
                                     )}
                                 </div>

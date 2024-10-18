@@ -65,7 +65,12 @@ export const getProfilesByCityById = async (req, res) => {
 			include: {
 				profile: {
 					include: {
-						images: true
+						images: true,
+						profileLocation: {
+							include: {
+								neighborhood: true
+							}
+						}
 					}
 				}
 			}
@@ -75,7 +80,6 @@ export const getProfilesByCityById = async (req, res) => {
 			.map(item => item.profile)
 			.sort((a, b) => b.totalPointsPlans - a.totalPointsPlans);
 
-		console.log(sortedProfiles)
 		res.status(200).json(sortedProfiles);
 	} catch (error) {
 		res.status(400).json(error)
