@@ -2,7 +2,7 @@
 import { useEffect, useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
-
+import Image from 'next/image'
 import { ClienteContext } from "./context/ClienteContext"
 import States from "./components/States";
 import Search from "./components/Search";
@@ -55,7 +55,7 @@ export default function Home() {
 	return (
 		<div>
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap mt-8 mb-4 sm:mb-4">
-				<div className="ml-4 flex flex-col gap-4">
+				<div className="ml-4 mt-10 flex flex-col gap-4">
 					<h1 className="text-3xl sm:text-5xl font-extrabold text-gray-800 text-balance">
 						<span className="clear-left block mb-4">Encontre</span>
 						<span className="clear-left block mb-4">estéticas automotivas</span>
@@ -66,15 +66,72 @@ export default function Home() {
 						do Brasil.
 					</h2>
 				</div>
+				{/* <Image src="/car.webp" width={400} height={220} alt="Logotipo da CarWash em azul claro" /> */}
+				<Image className="ml-8" src="/car.webp" width={600} height={330} alt="Logotipo da CarWash em azul claro" />
 			</div>
 
 			{/* Passando os estados para o componente Search */}
 			<Search states={states} />
 
+			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
+				<div className="w-full flex justify-center">
+					<h3 className="mb-10 px-4 font-bold text-xl sm:text-2xl text-gray-500">Anuncie grátis na primeira plataforma de estéticas automotivas do Brasil.</h3>
+				</div>
+				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative sm:mx-56 ml-10">
+					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							Você não paga nada para anunciar
+						</li>
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							Publique contato, preços e serviços
+						</li>
+						<li className="flex items-center sm:pb-2 pb-1">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							Receba muitos clientes de graça
+						</li>
+					</ul>
+					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							Domine sua cidade e seu bairro
+						</li>
+						<li className="flex items-center sm:pb-2 pb-4">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							Aumente o faturamento
+						</li>
+						<li className="flex items-center sm:pb-2">
+							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+							</svg>
+							Faça parte de uma plataforma dedicada
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div className="flex justify-center mt-16">
+				<a href="#search" className="bg-blue-500 text-white font-bold py-3 px-20 rounded-lg hover:bg-blue-600 transition duration-300">
+					Anunciar grátis
+				</a>
+			</div>
+
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
 				<div className="w-full flex justify-center">
-					<h3 className="mb-10 font-bold text-xl sm:text-2xl text-gray-500">Contrate com mais praticidade e segurança</h3>
+					<h3 className="mb-10 px-4 font-bold text-xl sm:text-2xl text-gray-500">Contrate com mais praticidade e segurança</h3>
+					<p className="block">Na Lavar Auto, você encontra as melhores estéticas automotivas, e pode comparar e contratar sem complicações</p>
 				</div>
 				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative sm:mx-56 ml-10">
 					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
@@ -94,7 +151,7 @@ export default function Home() {
 							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							Busca por cidades
+							Pesquisa por cidades e bairros
 						</li>
 					</ul>
 					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
