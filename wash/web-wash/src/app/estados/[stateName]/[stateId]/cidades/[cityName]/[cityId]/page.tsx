@@ -26,18 +26,18 @@ export interface profileProps {
 		published: boolean
 	}]
 	profileLocation: [{
-        profileId: number,
-        cityId: number,
-        stateId: number,
-        neighborhoodsId: number,
-        address: string,
-        addressNumber: string,
-        addressCEP: string,
-        addressComplement: string,
+		profileId: number,
+		cityId: number,
+		stateId: number,
+		neighborhoodsId: number,
+		address: string,
+		addressNumber: string,
+		addressCEP: string,
+		addressComplement: string,
 		neighborhood: {
 			name: string
 		}
-    }]
+	}]
 }
 
 
@@ -74,7 +74,7 @@ export default async function cityDetails({
 							<svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
 								<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
 							</svg>
-							<Link href={`/estados/${params.stateName}/${params.stateId}`} className="ms-1 text-md sm:text-sm font-medium text-gray-700 hover:text-blue-500 md:ms-2">
+							<Link href={`/estados/${params.stateName}/${params.stateId}`} className="text-center min-w-24 ms-1 text-md sm:text-sm font-medium text-gray-700 hover:text-blue-500 md:ms-2">
 								{decodStateName}
 							</Link>
 						</div>
@@ -100,10 +100,20 @@ export default async function cityDetails({
 
 			<div>
 				{!listProfiles.length ?
-					<div className="w-full flex justify-center">
-						<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 my-40">
-						Nenhuma estética automotiva encontrada.
+					<div className="w-full flex flex-col items-center text-center pr-5 sm:pr-48 mb-48">
+						<h2 className="text-md sm:text-lg font-semibold text-gray-600 mt-16 mb-12">
+							Nenhuma estética automotiva encontrada.
 						</h2>
+
+						<h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 my-6">
+							Seja o primeiro e domine a cidade!
+						</h3>
+
+						<div className="mt-8">
+							<Link href="/cadastrar" className="bg-blue-500 text-white font-bold py-3 px-20 rounded-lg hover:bg-blue-600 transition duration-300">
+								Anunciar grátis
+							</Link>
+						</div>
 					</div>
 					:
 					<ul className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:mr-20 mb-10 ml-2 mr-4">

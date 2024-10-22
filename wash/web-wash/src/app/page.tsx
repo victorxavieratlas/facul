@@ -3,6 +3,7 @@ import { useEffect, useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import Image from 'next/image'
+import Link from 'next/link'
 import { ClienteContext } from "./context/ClienteContext"
 import States from "./components/States";
 import Search from "./components/Search";
@@ -67,7 +68,7 @@ export default function Home() {
 					</h2>
 				</div>
 				{/* <Image src="/car.webp" width={400} height={220} alt="Logotipo da CarWash em azul claro" /> */}
-				<Image className="ml-8" src="/car.webp" width={600} height={330} alt="Logotipo da CarWash em azul claro" />
+				{/* <Image className="ml-8 mt-12" src="/car8.webp" width={400} height={330} alt="Logotipo da CarWash em azul claro" /> */}
 			</div>
 
 			{/* Passando os estados para o componente Search */}
@@ -122,16 +123,20 @@ export default function Home() {
 			</div>
 
 			<div className="flex justify-center mt-16">
-				<a href="#search" className="bg-blue-500 text-white font-bold py-3 px-20 rounded-lg hover:bg-blue-600 transition duration-300">
+				<Link href="/cadastrar" className="bg-blue-500 text-white font-bold py-3 px-20 rounded-lg hover:bg-blue-600 transition duration-300">
 					Anunciar grátis
-				</a>
+				</Link>
 			</div>
 
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
-				<div className="w-full flex justify-center">
-					<h3 className="mb-10 px-4 font-bold text-xl sm:text-2xl text-gray-500">Contrate com mais praticidade e segurança</h3>
-					<p className="block">Na Lavar Auto, você encontra as melhores estéticas automotivas, e pode comparar e contratar sem complicações</p>
+				<div className="w-full flex flex-col items-center text-center">
+					<h3 className="mb-4 px-4 font-bold text-xl sm:text-2xl text-gray-500">
+						Contrate com mais praticidade e segurança
+					</h3>
+					<p className="px-4 mb-8">
+						Na Lavar Auto, você encontra as melhores estéticas automotivas, e pode comparar e contratar sem complicações
+					</p>
 				</div>
 				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative sm:mx-56 ml-10">
 					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
@@ -178,7 +183,7 @@ export default function Home() {
 			</div>
 
 			<div className="flex justify-center mt-16">
-				<a href="#search" className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-600 transition duration-300">
+				<a href="#search" className="bg-blue-500 text-white font-bold py-3 px-12 rounded-lg hover:bg-blue-600 transition duration-300">
 					Veja estéticas automotivas agora
 				</a>
 			</div>
@@ -192,7 +197,7 @@ export default function Home() {
 						Apresentação
 					</h4>
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
-						A Lavar Carro foi fundada em 2024 e é a maior plataforma de estéticas automotivas do Brasil.
+						A Lavar Carro foi fundada em 2024 e é a primeira plataforma de estéticas automotivas do Brasil.
 						A paixão por automóveis limpos com os devidos e necessários cuidados é o foco princípal da
 						plataforma que visa transformar e melhorar a relação entre estéticas automotivas e clientes,
 						dando mais visibilidade para este mercado tão importante e em constante crescimento.

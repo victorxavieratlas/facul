@@ -5,9 +5,9 @@ import Footer from "./components/Footer"
 import ClienteProvider from "./context/ClienteContext"
 
 export const metadata: Metadata = {
-  title: "Encontre lavagens e estéticas automotivas",
+  title: "Encontre estéticas automotivas",
   description: "A maior plataforma de estéticas automotivas do Brasil. Contrate estéticas automotivas de forma fácil e segura com a Lavar Auto.",
-  keywords: ["Lavagem", "Estetica automotiva", "estetica automotiva", "Lavagens", "Esteticas automoticas", "Lavagens automotivas", "lavagem de carro", "automotivo", "automotiva", "lavar carro", "lavar auto", "cuidados automotivos", "serviços automotivos"]
+  keywords: [ "Estetica automotiva", "Lavagem", "estetica automotiva", "Lavagens", "Esteticas automoticas", "Lavagens automotivas", "lavagem de carro", "automotivo", "automotiva", "lavar carro", "lavar auto", "cuidados automotivos", "serviços automotivos"]
 }
 
 /* Schema Markup - Adicionar depois da logo*/

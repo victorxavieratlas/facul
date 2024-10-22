@@ -141,6 +141,7 @@ export const createProfileComplete = async (req, res) => {
         maxPrice,
         totalPointsPlans,
         neighborhoodsId,
+        zoneId,
         cityId,
         stateId,
         schedules,
@@ -182,7 +183,8 @@ export const createProfileComplete = async (req, res) => {
                 profileId: profile.id,
                 cityId: Number(cityId),
                 stateId: Number(stateId),
-                neighborhoodsId: Number(neighborhoodsId)
+                neighborhoodsId: Number(neighborhoodsId),
+                zoneId: Number(zoneId)
             }
         });
 
@@ -220,6 +222,7 @@ export const updateProfile = async (req, res) => {
         minPrice,
         maxPrice,
         neighborhoodId,
+        zoneId,
         address,
         addressNumber,
         addressCEP,
@@ -230,9 +233,34 @@ export const updateProfile = async (req, res) => {
     } = req.body
 
     console.log(req.body)
-    if (!bio || !phone || !startDay || !finalDay || !minPrice || !maxPrice || !neighborhoodId || !address || !addressNumber || !addressCEP || !addressComplement || !cityId || !stateId || !imageURL) {
-        return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
+    
+     // Função auxiliar para verificar se um valor é nulo ou string vazia
+     function isEmpty(value) {
+        return value == null || (typeof value === 'string' && value.trim() === '');
     }
+
+    if (
+        isEmpty(bio) ||
+        isEmpty(phone) ||
+        isEmpty(startDay) ||
+        isEmpty(finalDay) ||
+        isEmpty(openHour) ||
+        isEmpty(closeHour) ||
+        isEmpty(minPrice) ||
+        isEmpty(maxPrice) ||
+        zoneId == null ||
+        neighborhoodId == null ||
+        isEmpty(address) ||
+        isEmpty(addressNumber) ||
+        isEmpty(addressCEP) ||
+        isEmpty(addressComplement) ||
+        cityId == null ||
+        stateId == null ||
+        isEmpty(imageURL)
+    ) {
+        return res.status(400).json({ error: "Todos os campos são obrigatórios!" });
+    }
+
 
     
     try {
@@ -252,6 +280,7 @@ export const updateProfile = async (req, res) => {
                         cityId: Number(cityId),
                         stateId: Number(stateId),
                         neighborhoodsId: Number(neighborhoodId),
+                        zoneId: Number(zoneId),
                         address: String(address),
                         addressNumber: String(addressNumber),
                         addressCEP: String(addressCEP),

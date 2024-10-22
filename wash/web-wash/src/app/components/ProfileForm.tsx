@@ -24,6 +24,11 @@ interface Neighborhood {
     cityId: number;
 }
 
+interface Zone {
+    id: number;
+    name: string;
+}
+
 interface ProfilePanelInput {
     imageURL: string;
     bio: string;
@@ -35,6 +40,8 @@ interface ProfilePanelInput {
     minPrice: number;
     maxPrice: number;
     cityId: number;
+    zoneId: number;
+    zoneName: string;
     neighborhoodId: number;
     address: string;
     addressNumber: number;
@@ -60,7 +67,23 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     const [selectedNeighborhoodId, setSelectedNeighborhoodId] = useState<number | null>(null);
     const [neighborhoodResults, setNeighborhoodResults] = useState<Neighborhood[]>([]);
 
+    // Estados para zonas
+    const [zoneInput, setZoneInput] = useState('');
+    const [selectedZoneId, setSelectedZoneId] = useState<number | null>(null);
+    const [showZoneDropdown, setShowZoneDropdown] = useState(false);
+    const [isArrowRotated, setIsArrowRotated] = useState(false);
+
+    // Definição das zonas com IDs
+    const zones: Zone[] = [
+        { id: 1, name: 'Central' },
+        { id: 2, name: 'Norte' },
+        { id: 3, name: 'Sul' },
+        { id: 4, name: 'Leste' },
+        { id: 5, name: 'Oeste' },
+    ];
+
     const [showTooltipCity, setShowTooltipCity] = useState(false);
+    const [showTooltipZone, setShowTooltipZone] = useState(false);
     const [showTooltipNeighborhood, setShowTooltipNeighborhood] = useState(false);
     const [showTooltipAddress, setShowTooltipAddress] = useState(false);
     const [showTooltipAddressNumber, setShowTooltipAddressNumber] = useState(false);
@@ -140,7 +163,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             // Neighborhood is already selected; do not fetch
             setNeighborhoodResults([]);
             return;
-          }
+        }
 
         const debounceTimeout = setTimeout(() => {
             if (neighborhoodInput.length >= 1) {
@@ -171,9 +194,13 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         setSelectedStateId(city.stateId); // Keep the state ID
         setResults([]); // Clear results after selection
 
-        // Clear neighborhood input when city changes
+        // Limpar bairro e zona ao alterar a cidade
         setNeighborhoodInput('');
         setSelectedNeighborhoodId(null);
+        setZoneInput('');
+        setSelectedZoneId(null);
+        setShowZoneDropdown(false);
+        setIsArrowRotated(false);
     };
 
     // Handle neighborhood selection
@@ -183,12 +210,23 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         setNeighborhoodResults([]);
     };
 
-    // Clear neighborhood input if city input changes
+    const handleSelectZone = (zone: Zone) => {
+        setZoneInput(zone.name);
+        setSelectedZoneId(zone.id);
+        setShowZoneDropdown(false);
+        setIsArrowRotated(false);
+    };
+
+    // Limpar bairro e zona se a cidade mudar
     useEffect(() => {
         if (!selectedCityId) {
             setNeighborhoodInput('');
             setSelectedNeighborhoodId(null);
             setNeighborhoodResults([]);
+            setZoneInput('');
+            setSelectedZoneId(null);
+            setShowZoneDropdown(false);
+            setIsArrowRotated(false);
         }
     }, [selectedCityId]);
 
@@ -206,6 +244,11 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             return;
         }
 
+        if (selectedZoneId === null) {
+            toast.error("Por favor, selecione uma zona válida.");
+            return;
+        }
+
         // Primeiro, envie a imagem e obtenha a URL
         const imageUrl = await uploadImage();
 
@@ -215,12 +258,12 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         }
 
         // Se a imagem foi enviada com sucesso, inclua a URL da imagem nos dados do perfil
-        const updatedProfile = { ...data, cityId: selectedCityId, neighborhoodId: selectedNeighborhoodId, imageURL: imageUrl, stateId: selectedStateId ? selectedStateId : 0 };
+        const updatedProfile = { ...data, cityId: selectedCityId, neighborhoodId: selectedNeighborhoodId, zoneId: Number(selectedZoneId), imageURL: imageUrl, stateId: selectedStateId ? selectedStateId : 0 };
         EditProfile(updatedProfile);
     };
 
     async function EditProfile(data: ProfilePanelInput) {
-        console.log(data.neighborhoodId)
+        console.log(data.zoneId)
         console.log(selectedNeighborhoodId)
         const response = await fetch(`http://localhost:3007/profiles/${profileIncomplete.id}`, {
             method: "PUT",
@@ -239,6 +282,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                 minPrice: data.minPrice,
                 maxPrice: data.maxPrice,
                 cityId: data.cityId,
+                zoneId: data.zoneId,
                 neighborhoodId: data.neighborhoodId,
                 address: data.address,
                 addressNumber: data.addressNumber,
@@ -293,32 +337,104 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                             Digite sua cidade
                         </label>
                         <div className="relative w-full">
-                        <input
-                            type="search"
-                            id="cityId"
-                            className="block mt-2 p-3 w-full h-14 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            placeholder="São Paulo - SP"
-                            value={input}
-                            onChange={(e) => {
-                                setInput(e.target.value);
-                                setSelectedCityId(null);
-                                setSelectedStateId(null);
-                                setNeighborhoodInput('');
-                                setSelectedNeighborhoodId(null);
-                            }}
-                            autoComplete="off"
-                            required
-                        />
-                        {results.length > 0 && (
-                            <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-30 rounded-lg">
-                                {results.map((city) => (
-                                    <li key={city.id} className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
-                                        onClick={() => handleSelectCity(city)}>
-                                        {city.name} - {city.uf}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
+                            <input
+                                type="search"
+                                id="cityId"
+                                className="block mt-2 p-3 w-full h-14 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                                placeholder="São Paulo - SP"
+                                value={input}
+                                onChange={(e) => {
+                                    setInput(e.target.value);
+                                    setSelectedCityId(null);
+                                    setSelectedStateId(null);
+                                    setNeighborhoodInput('');
+                                    setSelectedNeighborhoodId(null);
+                                }}
+                                autoComplete="off"
+                                required
+                            />
+                            {results.length > 0 && (
+                                <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-30 rounded-lg">
+                                    {results.map((city) => (
+                                        <li key={city.id} className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
+                                            onClick={() => handleSelectCity(city)}>
+                                            {city.name} - {city.uf}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
+                    <div>
+                        <div className='w-full'>
+                            <div className="inline-flex justify-end float-right ml-30 z-40">
+                                <span
+                                    className="inline-block ml-2 text-gray-500 cursor-pointer z-60"
+                                    onMouseEnter={() => setShowTooltipZone(true)}
+                                    onMouseLeave={() => setShowTooltipZone(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipZone && (
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-50 w-64">
+                                        A zona da localização do negócio, no formato de texto - Ex: Norte.
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="zone" className="w-full text-sm font-medium text-gray-500">
+                                Selecione a zona
+                            </label>
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    id="zone"
+                                    className="block mt-2 p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out cursor-pointer"
+                                    placeholder="Selecione uma zona"
+                                    value={zoneInput}
+                                    onClick={() => {
+                                        if (selectedCityId) {
+                                            setShowZoneDropdown(!showZoneDropdown);
+                                            setIsArrowRotated(!isArrowRotated);
+                                        }
+                                    }}
+                                    readOnly
+                                    autoComplete="off"
+                                    disabled={!selectedCityId}
+                                    required
+                                />
+                                {/* Ícone de seta */}
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg
+                                        className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${isArrowRotated ? 'transform rotate-180' : ''
+                                            }`}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                {showZoneDropdown && (
+                                    <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-30 rounded-lg">
+                                        {zones.map((zone) => (
+                                            <li
+                                                key={zone.id}
+                                                className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
+                                                onClick={() => handleSelectZone(zone)}
+                                            >
+                                                {zone.name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
                         </div>
                     </div>
                     <div>
@@ -356,7 +472,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                     onChange={(e) => {
                                         setNeighborhoodInput(e.target.value);
                                         setSelectedNeighborhoodId(null);
-                                      }}
+                                    }}
                                     autoComplete="off"
                                     disabled={!selectedCityId}
                                     required

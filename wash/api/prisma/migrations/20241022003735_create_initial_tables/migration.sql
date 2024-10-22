@@ -19,7 +19,7 @@ CREATE TABLE `profiles` (
     `userId` INTEGER NOT NULL,
     `name` VARCHAR(30) NULL,
     `phone` VARCHAR(20) NULL,
-    `bio` VARCHAR(191) NULL,
+    `bio` TEXT NULL,
     `openHour` VARCHAR(5) NULL,
     `closeHour` VARCHAR(5) NULL,
     `startDay` VARCHAR(30) NULL,
@@ -145,6 +145,7 @@ CREATE TABLE `ProfileLocation` (
     `profileId` INTEGER NOT NULL,
     `cityId` INTEGER NOT NULL,
     `neighborhoodsId` INTEGER NOT NULL,
+    `zoneId` INTEGER NOT NULL,
     `stateId` INTEGER NOT NULL,
     `address` VARCHAR(191) NULL,
     `addressNumber` VARCHAR(191) NULL,
@@ -155,6 +156,17 @@ CREATE TABLE `ProfileLocation` (
     `deletedAt` DATETIME(3) NULL,
 
     PRIMARY KEY (`profileId`, `cityId`, `stateId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `zones` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `deletedAt` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -352,6 +364,9 @@ ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_cityId_fkey` FOREI
 
 -- AddForeignKey
 ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_neighborhoodsId_fkey` FOREIGN KEY (`neighborhoodsId`) REFERENCES `neighborhoods`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_zoneId_fkey` FOREIGN KEY (`zoneId`) REFERENCES `zones`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ProfileLocation` ADD CONSTRAINT `ProfileLocation_stateId_fkey` FOREIGN KEY (`stateId`) REFERENCES `states`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -127,6 +127,28 @@ async function main() {
       console.error(`Erro ao inserir o bairro ${bairro}: ${error.message}`);
     }
   }
+
+  // Definir um array com os nomes das zonas
+  const zones = [
+    { name: 'Central' },
+    { name: 'Norte' },
+    { name: 'Sul' },
+    { name: 'Leste' },
+    { name: 'Oeste' },
+  ];
+
+  // Inserir as zonas no banco de dados
+  for (const zone of zones) {
+    try {
+      await prisma.zone.create({
+        data: {
+          name: zone.name,
+        },
+      });
+    } catch (error: any) {
+      console.error(`Erro ao inserir a zona ${zone.name}: ${error.message}`);
+    }
+  }
 }
 
 main()
