@@ -29,6 +29,7 @@ interface ProfilePanelInput {
     closeHour: string;
     minPrice: number;
     maxPrice: number;
+    zoneId: number;
     cityId: number;
     oldCityId: number;
     neighborhoodId: number;
@@ -53,6 +54,10 @@ interface ProfileData {
         cityId: number,
         stateId: number,
         neighborhoodsId: number,
+        zone: {
+            id: number;
+            name: string;
+        }
         address: string,
         addressNumber: string,
         addressCEP: string,
@@ -83,11 +88,17 @@ interface Neighborhood {
     cityId: number;
 }
 
-const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {    
+interface Zone {
+    id: number;
+    name: string;
+}
+
+const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const { register, handleSubmit, setFocus, setValue } = useForm<ProfilePanelInput>();
     const router = useRouter();
 
     const [inputCity, setInputCity] = useState('');
+    const [inputZone, setInputZone] = useState('');
     const [inputNeighborhood, setInputNeighborhood] = useState('');
     const [inputAddress, setInputAddress] = useState('');
     const [inputAddressNumber, setInputAddressNumber] = useState('');
@@ -104,6 +115,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [inputImage, setInputImage] = useState('');
 
     const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+    const [selectedZoneId, setSelectedZoneId] = useState<number | null>(null);
     const [neighborhoodInput, setNeighborhoodInput] = useState('');
     const [selectedNeighborhoodId, setSelectedNeighborhoodId] = useState<number | null>(null);
     const [neighborhoodResults, setNeighborhoodResults] = useState<Neighborhood[]>([]);
@@ -112,6 +124,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [results, setResults] = useState<City[]>([]);
 
     const [showTooltipCity, setShowTooltipCity] = useState(false);
+    const [showTooltipZone, setShowTooltipZone] = useState(false);
     const [showTooltipNeighborhood, setShowTooltipNeighborhood] = useState(false);
     const [showTooltipAddress, setShowTooltipAddress] = useState(false);
     const [showTooltipAddressNumber, setShowTooltipAddressNumber] = useState(false);
@@ -131,6 +144,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
     const [initialImageURL, setInitialImageURL] = useState<string | null>(null);
     const [isFocusedCityInput, setIsFocusedCityInput] = useState(false);
+    const [isFocusedZoneInput, setIsFocusedZoneInput] = useState(false);
     const [isFocusedNeighborhoodInput, setIsFocusedNeighborhoodInput] = useState(false);
     const [isFocusedAddressInput, setIsFocusedAddressInput] = useState(false);
     const [isFocusedAddressNumberInput, setIsFocusedAddressNumberInput] = useState(false);
@@ -148,6 +162,20 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const [stateData, setStateData] = useState<State | null>(null);
     const [cityData, setCityData] = useState<City | null>(null);
     const [neighborhoodData, setNeighborhoodData] = useState<Neighborhood | null>(null);
+
+    //Zone dropdown
+    const [showZoneDropdown, setShowZoneDropdown] = useState(false);
+    const [isArrowRotated, setIsArrowRotated] = useState(false);
+
+    // Definição das zonas com IDs
+    const zones: Zone[] = [
+        { id: 1, name: 'Central' },
+        { id: 2, name: 'Norte' },
+        { id: 3, name: 'Sul' },
+        { id: 4, name: 'Leste' },
+        { id: 5, name: 'Oeste' },
+        { id: 6, name: 'Não dividida por zona / Cidade pequena' },
+    ];
 
     async function getCity(cityId: number) {
         // console.log(stateId)
@@ -169,18 +197,18 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     }
 
     useEffect(() => {
-		if (profileData) {
-		  // Verifique se os campos obrigatórios estão preenchidos
-		  const missingFields =
-			!profileData.name ||
-			!profileData.bio ||
-			!profileData.profileLocation
-	  
-		  if (missingFields) {
-			router.replace(`/painel/${Cookies.get("user_login_id")}`);
-		  }
-		}
-	  }, [profileData]);
+        if (profileData) {
+            // Verifique se os campos obrigatórios estão preenchidos
+            const missingFields =
+                !profileData.name ||
+                !profileData.bio ||
+                !profileData.profileLocation
+
+            if (missingFields) {
+                router.replace(`/painel/${Cookies.get("user_login_id")}`);
+            }
+        }
+    }, [profileData]);
 
     // Adicione essa função no componente ProfileForm para enviar a imagem
     const uploadImage = async () => {
@@ -220,15 +248,17 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             cityData &&
             neighborhoodData &&
             !isFocusedCityInput
-          ) {
+        ) {
+            console.log(profileData.profileLocation[0].zone.name)
             setInputCity(`${cityData.name} - ${cityData.uf}`);
             setInitialImageURL(profileData.images?.[0]?.url || null);
             setInputNeighborhood(`${neighborhoodData.name}`);
+            setInputZone(`${profileData.profileLocation[0].zone.name}`)
             setInputAddress(`${profileData.profileLocation[0].address}`);
             setInputAddressNumber(`${profileData.profileLocation[0].addressNumber}`);
             setInputAddressCEP(`${profileData.profileLocation[0].addressCEP}`);
             setInputAddressComplement(`${profileData.profileLocation[0].addressComplement}`);
-          }
+        }
         //
         // if (profileData?.profileLocation && !isFocusedCityInput) {
         //     setInputCity(`${cityData?.name} - ${cityData?.uf}`);
@@ -343,7 +373,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
         return () => clearTimeout(debounceTimeout);
     }, [neighborhoodInput, selectedCityId]);
-    
+
     const handleSelectCity = (city: City) => {
         setInputCity(`${city.name} - ${city.uf}`); // Set the visible input field to city name and UF
         setSelectedCityId(city.id); // Keep the city ID in state
@@ -360,6 +390,13 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         setNeighborhoodInput(neighborhood.name);
         setSelectedNeighborhoodId(neighborhood.id);
         setNeighborhoodResults([]);
+    };
+
+    const handleSelectZone = (zone: Zone) => {
+        setInputZone(zone.name);
+        setSelectedZoneId(zone.id);
+        setShowZoneDropdown(false);
+        setIsArrowRotated(false);
     };
 
     useEffect(() => {
@@ -629,6 +666,9 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
             setInputNeighborhood(inputNeighborhood);
             setNeighborhoodInput('')
+
+            setInputZone(inputZone);
+            setInputZone('')
         }
     };
 
@@ -757,15 +797,17 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                                 </div>
                             )}
                         </div>
-                        <label htmlFor="cityId" className="w-full text-sm font-medium text-gray-500">
-                            Digite sua cidade
-                        </label>
+
                     </div>
+
                     <div className="relative w-full">
+                        <label htmlFor="cityId" className="w-full text-sm font-medium text-gray-500">
+                            Digitar sua cidade
+                        </label>
                         <input
                             type="search"
                             id="cityId"
-                            className="block p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                            className="block mt-2 p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                             placeholder="São Paulo - SP"
                             value={inputCity}
                             onChange={(e) => {
@@ -787,7 +829,78 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                             </ul>
                         )}
                     </div>
-
+                    <div>
+                        <div className='w-full'>
+                            <div className="inline-flex justify-end float-right ml-30 z-40">
+                                <span
+                                    className="inline-block ml-2 text-gray-500 cursor-pointer z-60"
+                                    onMouseEnter={() => setShowTooltipZone(true)}
+                                    onMouseLeave={() => setShowTooltipZone(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipZone && (
+                                    <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-50 w-64">
+                                        A zona da localização do negócio, no formato de texto - Ex: Norte.
+                                    </div>
+                                )}
+                            </div>
+                            <label htmlFor="zone" className="w-full text-sm font-medium text-gray-500">
+                                Selecionar zona
+                            </label>
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    id="zone"
+                                    className="block mt-2 p-3 w-full h-14 z-20 text-sm text-gray-500 bg-gray-50 rounded-lg border-gray-300 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out cursor-pointer"
+                                    placeholder="Selecione uma zona"
+                                    value={inputZone}
+                                    onClick={() => {
+                                        if (selectedCityId) {
+                                            setShowZoneDropdown(!showZoneDropdown);
+                                            setIsArrowRotated(!isArrowRotated);
+                                        }
+                                    }}
+                                    readOnly
+                                    autoComplete="off"
+                                    disabled={!selectedCityId}
+                                    required
+                                />
+                                {/* Ícone de seta */}
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg
+                                        className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${isArrowRotated ? 'transform rotate-180' : ''
+                                            }`}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                {showZoneDropdown && (
+                                    <ul className="absolute left-0 right-0 bg-white shadow-lg max-h-60 overflow-auto z-30 rounded-lg">
+                                        {zones.map((zone) => (
+                                            <li
+                                                key={zone.id}
+                                                className="border-b-2 border-gray-200 p-3 hover:bg-gray-100 cursor-pointer transition duration-200 ease-in-out"
+                                                onClick={() => handleSelectZone(zone)}
+                                            >
+                                                {zone.name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <div className='w-full'>
                             <div className="inline-flex justify-end float-right ml-30 z-40">
@@ -811,7 +924,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                                 )}
                             </div>
                             <label htmlFor="neighborhood" className="w-full text-sm font-medium text-gray-500">
-                                Digite seu bairro
+                                Digitar seu bairro
                             </label>
                             <div className="relative w-full">
                                 <input
@@ -1168,7 +1281,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                                     Horário de abertura
                                 </label>
                                 <input type="string" id="openHour" value={inputOpenHour} onChange={handleOpenHourChange} onFocus={handleFocusOpenHourInput} placeholder="09:00" className="mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                                required />
+                                    required />
                             </div>
 
                             <div className="w-1/2 pl-4">
@@ -1196,23 +1309,23 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                                     Horário de fechamento
                                 </label>
                                 <input type="string" id="closeHour" value={inputCloseHour} onChange={handleCloseHourChange} onFocus={handleFocusCloseHourInput} placeholder="18:00" className="mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                                required />
+                                    required />
                             </div>
                         </div>
                     </div>
                     <div className='break-words text-wrap'>
                         <p className="font-medium text-lg text-gray-500 mb-6">
-                        <svg className="inline pb-1 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
-                                    <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                    <path d="M3 10H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                    <path d="M13.5 10L21 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                    <path d="M3 14H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                    <path d="M10 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                    <path d="M17 14H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                    <path d="M3 18H5.11765M8.29412 18H10.4118M13.5882 18H15.7059M18.8824 18H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                </svg>
+                            <svg className="inline pb-1 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#6b7280" fill="none">
+                                <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M3 10H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M13.5 10L21 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M3 14H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M10 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M17 14H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M3 18H5.11765M8.29412 18H10.4118M13.5882 18H15.7059M18.8824 18H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
                             Informações gerais
-                            </p>
+                        </p>
                         <div className="w-full">
                             <div className="inline-flex justify-end float-right ml-30 mb-4">
                                 <span
@@ -1238,7 +1351,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                                 Faça uma apresentação
                             </label>
                             <textarea id="bio" value={inputPresentation} onChange={handlePresentationChange} onFocus={handleFocusPresentationInput} placeholder="Fundada em 2024 a CarWah veio para revolucionar o mercado de Lavagens e Estéticas Automotivas..." className="placeholder:break-words mb-4 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-20 p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
-                            required />
+                                required />
                         </div>
                     </div>
 

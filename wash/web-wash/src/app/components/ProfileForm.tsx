@@ -80,6 +80,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         { id: 3, name: 'Sul' },
         { id: 4, name: 'Leste' },
         { id: 5, name: 'Oeste' },
+        { id: 6, name: 'Não dividida por zona / Cidade pequena' },
     ];
 
     const [showTooltipCity, setShowTooltipCity] = useState(false);
@@ -333,10 +334,11 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 </div>
                             )}
                         </div>
-                        <label htmlFor="cityId" className="w-full text-sm font-medium text-gray-500">
-                            Digite sua cidade
-                        </label>
+
                         <div className="relative w-full">
+                            <label htmlFor="cityId" className="w-full text-sm font-medium text-gray-500">
+                                Digitar sua cidade
+                            </label>
                             <input
                                 type="search"
                                 id="cityId"
@@ -388,7 +390,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 )}
                             </div>
                             <label htmlFor="zone" className="w-full text-sm font-medium text-gray-500">
-                                Selecione a zona
+                                Selecionar zona
                             </label>
                             <div className="relative w-full">
                                 <input
@@ -460,7 +462,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                 )}
                             </div>
                             <label htmlFor="neighborhood" className="w-full text-sm font-medium text-gray-500">
-                                Digite seu bairro
+                                Digitar seu bairro
                             </label>
                             <div className="relative w-full">
                                 <input

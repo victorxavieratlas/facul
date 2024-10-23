@@ -32,13 +32,14 @@ export const getProfileById = async (req, res) => {
                 states: true,
                 profileLocation: {
                     include: {
-                        neighborhood: true
+                        neighborhood: true,
+                        zone: true
                     }
                 },
                 schedules: true,
             }
         })
-        console.log(profile)
+        console.log(profile.profileLocation[0].zone.name)
         res.status(200).json({ data: profile })
     } catch (error) {
         res.status(400).json(error)
@@ -233,7 +234,7 @@ export const updateProfile = async (req, res) => {
     } = req.body
 
     console.log(req.body)
-    
+
      // Função auxiliar para verificar se um valor é nulo ou string vazia
      function isEmpty(value) {
         return value == null || (typeof value === 'string' && value.trim() === '');

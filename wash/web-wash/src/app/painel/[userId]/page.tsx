@@ -129,7 +129,7 @@ export default function Panel() {
                             </p>
                         </div>
                         <ServicesAccordion services={services} profileId={profileData.id} updateServices={fetchServices} />
-                        <div className=" w-full p-5 my-6 shadow rounded-lg">
+                        <div className=" w-full p-5 my-6 shadow rounded-lg mb-20 sm:mb-0">
                             <h3 className="font-semibold text-gray-500">
                                 <svg className="inline pb-1 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#6b7280" fill="none">
                                     <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -143,7 +143,7 @@ export default function Panel() {
                                 Apresentação de <p className="inline font-bold text-blue-500">{profileData.name}
                                 </p>
                             </h3>
-                            <div className="flex items-start w-full px-12 mb-40 sm:mb-0">
+                            <div className="flex items-start w-full px-12">
                                 <p className="my-6 font-normal text-gray-700">{profileData.bio}</p>
                             </div>
                         </div>

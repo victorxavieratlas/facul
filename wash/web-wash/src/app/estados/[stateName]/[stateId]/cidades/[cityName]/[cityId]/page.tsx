@@ -36,6 +36,9 @@ export interface profileProps {
 		addressComplement: string,
 		neighborhood: {
 			name: string
+		},
+		zone: {
+			name: string
 		}
 	}]
 }
