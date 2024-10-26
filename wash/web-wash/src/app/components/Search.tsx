@@ -20,7 +20,7 @@ interface SearchProps {
 const Search = ({ states }: SearchProps) => {
     const [input, setInput] = useState<string>('');
     const [results, setResults] = useState<City[]>([]);
-    
+
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
             if (input.length >= 3) {
@@ -66,23 +66,24 @@ const Search = ({ states }: SearchProps) => {
                         </svg>
                         <span className="sr-only">Search</span>
                     </button>
+
+                    {Array.isArray(results) && results.length > 0 && (
+                        <ul className="scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100 absolute w-full max-w-lg bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg mr-20 pr-20">
+                            {results.map((city) => {
+                                const state = states.find(state => state.id === city.stateId);
+                                const stateName = state ? state.name : 'Unknown';
+                                return (
+                                    <Link href={`/estados/${stateName}/${city.stateId}/cidades/${city.name}/${city.id}`} className="hover:bg-gray-400 transition duration-200 ease-in-out">
+                                        <li key={city.id} className="border-b-2 border-gray-200 p-3 cursor-pointer transition duration-200 ease-in-out">
+                                            <p className="block text-gray-800 hover:text-blue-500">{city.name} - {city.uf}</p>
+                                        </li>
+                                    </Link>
+                                );
+                            })}
+                        </ul>
+                    )}
                 </div>
             </div>
-            {Array.isArray(results) && results.length > 0 && (
-                <ul className="scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100 absolute w-full max-w-lg bg-white shadow-lg max-h-60 overflow-auto z-50 rounded-lg mr-20 pr-20">
-                    {results.map((city) => {
-                        const state = states.find(state => state.id === city.stateId);
-                        const stateName = state ? state.name : 'Unknown';
-                        return (
-                            <Link href={`/estados/${stateName}/${city.stateId}/cidades/${city.name}/${city.id}`} className="hover:bg-gray-400 transition duration-200 ease-in-out">
-                                <li key={city.id} className="border-b-2 border-gray-200 p-3 cursor-pointer transition duration-200 ease-in-out">
-                                    <p className="block text-gray-800 hover:text-blue-500">{city.name} - {city.uf}</p>
-                                </li>
-                            </Link>
-                        );
-                    })}
-                </ul>
-            )}
         </form>
     );
 };

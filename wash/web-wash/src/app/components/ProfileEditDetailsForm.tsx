@@ -20,6 +20,7 @@ interface City {
 
 interface ProfilePanelInput {
     imageURL: string;
+    imageFileName: string;
     oldImageId: number;
     bio: string;
     phone: string;
@@ -226,7 +227,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             const data = await response.json();
             console.log(data)
             if (response.ok) {
-                return data.imageUrl; // Retorne a URL da imagem
+                return data // Retorna image URL e image File Name
             } else {
                 console.error(data.error);
                 return null;
@@ -234,6 +235,27 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         } catch (error) {
             console.error('Error uploading image:', error);
             return null;
+        }
+    };
+
+    const deleteImage = async (imageFileName: string) => {
+        try {
+            const response = await fetch('http://localhost:3007/cover-image', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${Cookies.get("x-access-token")}`
+                },
+                body: JSON.stringify({ imageFileName }),
+            });
+    
+            if (!response.ok) {
+                console.error('Error deleting image:', response.statusText);
+            } else {
+                console.log('Image deleted successfully');
+            }
+        } catch (error) {
+            console.error('Error deleting image:', error);
         }
     };
 
@@ -522,49 +544,20 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             if (data.bio === undefined) {
                 data.bio = String(profileData?.bio)
             }
-
+            
             if (!selectedImageFile) {
-                if (data.imageURL == undefined) {
-                    data.imageURL = profileData?.images && profileData.images[0] ? profileData.images[0].url : "";
-                }
+                // Handle the case when the image is not changed
+                data.imageURL = profileData?.images?.[0]?.url || "";
             } else {
-                const imageUrl = await uploadImage();
-
-                if (!imageUrl) {
+                const imageData = await uploadImage();
+        
+                if (!imageData) {
                     toast.error("Erro ao enviar a imagem.");
                     return;
                 }
-
-                data.imageURL = imageUrl
-
-                // if (profileData?.images) {
-                //     try {
-                //         const response = await fetch(`http://localhost:3007/images`, {
-                //             method: "PUT",
-                //             headers: {
-                //                 "Content-Type": "application/json",
-                //                 "Authorization": `${Cookies.get("x-access-token")}`
-                //             },
-                //             body: JSON.stringify({
-                //                 url: data.imageURL,
-                //                 oldImageId: profileData?.images[0].id
-                //             })
-                //         });
-
-                //         if (response.status === 200) {
-                //             console.log("200 da imagem ========")
-                //             // toast.success("Perfil atualizado com sucesso!");
-                //             // router.replace(`/painel/${Cookies.get("user_login_id")}`);
-                //         } else {
-                //             toast.error("Não foi possível editar ou salvar as informações.");
-                //         }
-
-                //     } catch (error) {
-                //         console.error('Error uploading image:', error);
-                //         return null;
-                //     }
-                // }
-
+        
+                data.imageURL = imageData.imageUrl;
+                data.imageFileName = imageData.imageFileName;
             }
 
             // console.log(`selected ========`)
@@ -649,12 +642,27 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                 oldStateId: profileData?.profileLocation[0].stateId
             })
         });
-
+        console.log(response.status)
+        console.log(selectedImageFile)
         if (response.status === 200) {
             console.log("deu boa ======")
             router.replace(`/painel/${Cookies.get("user_login_id")}`);
             toast.success("Perfil atualizado com sucesso!");
+        } else if (response.status === 401) {
+
+            
+            Cookies.remove("user_login_id")
+            Cookies.remove("x-access-token")
+            Cookies.remove("x-user-name")
+            Cookies.remove("x-profile-id")
+
+            router.replace(`/entrar`);
+            toast.info("Acesse a conta novamente!");
         } else {
+            if (selectedImageFile != null) {
+                console.log("AQUIIiiiiiiiii")
+                await deleteImage(data.imageFileName)  
+            }
             toast.error("Não foi possível editar ou salvar as informações.");
         }
     }

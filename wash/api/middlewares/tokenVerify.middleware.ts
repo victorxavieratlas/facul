@@ -13,12 +13,15 @@ export async function tokenVerify(req, res, next) {
     if (!token) {
         return res.status(401).json({ erro: "Acesso restrito!" })
     }
-
+    console.log(token)
     try {
         const tokenDecode = jwt.verify(token, process.env.JWT_KEY)
-        // console.log(tokenDecode)
+        console.log("TRY")
+        console.log(tokenDecode)
         req.userId = tokenDecode.userId
         req.userName = tokenDecode.userName
+        console.log(req.userId)
+        console.log(req.userName)
 
         const user = await userClient.findUnique({
             where: { id: Number(tokenDecode.userId) }
