@@ -1,5 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { ClienteContext } from "../context/ClienteContext"
+import { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner'
@@ -96,6 +97,7 @@ interface Zone {
 
 const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     const { register, handleSubmit, setFocus, setValue } = useForm<ProfilePanelInput>();
+    const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
     const router = useRouter();
 
     const [inputCity, setInputCity] = useState('');
@@ -248,7 +250,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                 },
                 body: JSON.stringify({ imageFileName }),
             });
-    
+
             if (!response.ok) {
                 console.error('Error deleting image:', response.statusText);
             } else {
@@ -544,18 +546,18 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             if (data.bio === undefined) {
                 data.bio = String(profileData?.bio)
             }
-            
+
             if (!selectedImageFile) {
                 // Handle the case when the image is not changed
                 data.imageURL = profileData?.images?.[0]?.url || "";
             } else {
                 const imageData = await uploadImage();
-        
+
                 if (!imageData) {
                     toast.error("Erro ao enviar a imagem.");
                     return;
                 }
-        
+
                 data.imageURL = imageData.imageUrl;
                 data.imageFileName = imageData.imageFileName;
             }
@@ -650,18 +652,19 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
             toast.success("Perfil atualizado com sucesso!");
         } else if (response.status === 401) {
 
-            
+
             Cookies.remove("user_login_id")
             Cookies.remove("x-access-token")
             Cookies.remove("x-user-name")
             Cookies.remove("x-profile-id")
+            mudaLogin({ userId: null, userName: "" });
 
             router.replace(`/entrar`);
             toast.info("Acesse a conta novamente!");
         } else {
             if (selectedImageFile != null) {
                 console.log("AQUIIiiiiiiiii")
-                await deleteImage(data.imageFileName)  
+                await deleteImage(data.imageFileName)
             }
             toast.error("Não foi possível editar ou salvar as informações.");
         }
@@ -784,7 +787,8 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                             <path d="M15.5 11C15.5 12.933 13.933 14.5 12 14.5C10.067 14.5 8.5 12.933 8.5 11C8.5 9.067 10.067 7.5 12 7.5C13.933 7.5 15.5 9.067 15.5 11Z" stroke="currentColor" stroke-width="1.5" />
                         </svg>
                         Informações de localização</p>
-                    <div className='w-full'>
+
+                    <div className="relative w-full">
                         <div className="inline-flex justify-end float-right ml-30">
                             <span
                                 className="ml-2 text-gray-500 cursor-pointer "
@@ -805,10 +809,6 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
                                 </div>
                             )}
                         </div>
-
-                    </div>
-
-                    <div className="relative w-full">
                         <label htmlFor="cityId" className="w-full text-sm font-medium text-gray-500">
                             Digitar sua cidade
                         </label>

@@ -18,6 +18,7 @@ import schedulesRoutes from './routes/schedules'
 import workingHoursRoutes from './routes/hours'
 import searchRouter from './routes/search.router'
 import servicesRouter from './routes/services.router'
+import tokenVerifyRouter from './routes/tokenVerify.router'
 
 import { tokenVerify } from './middlewares/tokenVerify.middleware'
 
@@ -40,6 +41,7 @@ app
   .use("/workingHours", workingHoursRoutes)
   .use("/search", searchRouter)
   .use("/services", servicesRouter)
+  .use("/token", tokenVerifyRouter)
   .use('/cover-image', coverImageRouter)
 
   .use('/uploads', express.static(path.join(__dirname, 'uploads')))

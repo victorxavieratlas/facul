@@ -35,26 +35,83 @@ export default function Panel() {
     const [services, setServices] = useState<Service[]>([]);
     const { mudaLogin } = useContext(ClienteContext);
 
+    async function tokenVerify() {
+        try {
+            const response = await fetch(`http://localhost:3007/token/verify`, {
+                cache: 'no-store',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${Cookies.get("x-access-token")}`
+                }
+            });
+
+            console.log(response.ok)
+
+            if (response.ok) {
+                console.log('Verified token!');
+                router.replace(`/painel/${Cookies.get("user_login_id")}`);
+                mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" });
+            } else {
+                Cookies.remove("user_login_id");
+                Cookies.remove("x-access-token");
+                Cookies.remove("x-user-name");
+                Cookies.remove("x-profile-id");
+                mudaLogin({ userId: null, userName: "" });
+                router.replace("/")
+
+                console.warn('Error verifying token:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error verifying token:', error);
+        }
+    }
+
     useEffect(() => {
         if (!Cookies.get("x-access-token") || !Cookies.get("user_login_id") || !Cookies.get("x-profile-id")) {
             router.replace("/entrar");
             return;
-        } else {
-            router.replace(`/painel/${Cookies.get("user_login_id")}`);
-            mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" });
+        } else if (Cookies.get("x-access-token")) {
+            tokenVerify()
         }
 
-        const profileId = Cookies.get("x-profile-id");
-        if (profileId) {
+        if (Cookies.get("x-profile-id")) {
+            const profileId = String(Cookies.get("x-profile-id"));
             getProfile(profileId);
             fetchServices(profileId);
         }
     }, [router]);
 
+    // useEffect(() => {
+    //     const profileId = Cookies.get("x-profile-id");
+    //     console.log(profileId)
+    //     if (profileId) {
+    //         getProfile(profileId);
+    //         fetchServices(profileId);
+    //     }
+    // }, [router]);
+
     async function getProfile(profileId: string) {
-        const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
-        const data = await response.json();
-        setProfileData(data.data);
+        try {
+            const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
+            const data = await response.json();
+            console.log('API response:', data);
+
+            if (!response.ok) {
+                console.log('Error fetching profile:', data.error || response.statusText);
+                // Handle the error as needed, e.g., show a message to the user
+                return;
+            }
+
+            // Ensure data.data exists
+            if (data && data.data) {
+                setProfileData(data.data);
+            } else {
+                console.log('No data received from API');
+            }
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+            // Handle the error as needed
+        }
     }
 
     async function fetchServices(profileId: string) {

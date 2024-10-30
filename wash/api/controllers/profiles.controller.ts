@@ -39,8 +39,10 @@ export const getProfileById = async (req, res) => {
                 schedules: true,
             }
         })
-        console.log(profile.profileLocation[0].zone.name)
-        res.status(200).json({ data: profile })
+        if (!profile) {
+            return res.status(404).json({ error: 'Profile not found' });
+        }
+        res.status(200).json({data: profile})
     } catch (error) {
         res.status(400).json(error)
     }

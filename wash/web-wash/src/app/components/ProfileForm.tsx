@@ -1,5 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { ClienteContext } from "../context/ClienteContext"
+import { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner'
@@ -31,6 +32,7 @@ interface Zone {
 
 interface ProfilePanelInput {
     imageURL: string;
+    imageFileName: string;
     bio: string;
     phone: string;
     startDay: string;
@@ -57,6 +59,7 @@ interface ProfileIncomplete {
 
 const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomplete }) => {
     const { register, handleSubmit, setFocus } = useForm<ProfilePanelInput>();
+    const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
     const router = useRouter();
 
     const [input, setInput] = useState('');
@@ -117,7 +120,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
             const data = await response.json();
             if (response.ok) {
-                return data.imageUrl; // Retorne a URL da imagem
+                return data; // Retorne image URL e image File Name
             } else {
                 console.error(data.error);
                 return null;
@@ -128,7 +131,26 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         }
     };
 
+    const deleteImage = async (imageFileName: string) => {
+        try {
+            const response = await fetch('http://localhost:3007/cover-image', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${Cookies.get("x-access-token")}`
+                },
+                body: JSON.stringify({ imageFileName }),
+            });
 
+            if (!response.ok) {
+                console.error('Error deleting image:', response.statusText);
+            } else {
+                console.log('Image deleted successfully');
+            }
+        } catch (error) {
+            console.error('Error deleting image:', error);
+        }
+    };
 
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
@@ -250,16 +272,23 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             return;
         }
 
-        // Primeiro, envie a imagem e obtenha a URL
-        const imageUrl = await uploadImage();
+        if (!selectedImageFile) {
+            // Handle the case when the image is not changed
+            console.log('aguardando upload da imagem')
+        } else {
+            const imageData = await uploadImage();
+            console.log(imageData)
+            if (!imageData) {
+                toast.error("Erro ao enviar a imagem.");
+                return;
+            }
 
-        if (!imageUrl) {
-            toast.error("Erro ao enviar a imagem.");
-            return;
+            data.imageURL = imageData.imageUrl;
+            data.imageFileName = imageData.imageFileName;
         }
 
         // Se a imagem foi enviada com sucesso, inclua a URL da imagem nos dados do perfil
-        const updatedProfile = { ...data, cityId: selectedCityId, neighborhoodId: selectedNeighborhoodId, zoneId: Number(selectedZoneId), imageURL: imageUrl, stateId: selectedStateId ? selectedStateId : 0 };
+        const updatedProfile = { ...data, cityId: selectedCityId, neighborhoodId: selectedNeighborhoodId, zoneId: Number(selectedZoneId), imageURL: data.imageURL, stateId: selectedStateId ? selectedStateId : 0 };
         EditProfile(updatedProfile);
     };
 
@@ -274,6 +303,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             },
             body: JSON.stringify({
                 imageURL: data.imageURL,
+                imageFileName: data.imageFileName,
                 bio: data.bio,
                 phone: data.phone,
                 startDay: data.startDay,
@@ -294,10 +324,27 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         });
 
         if (response.status === 200) {
-            // console.log(response.status)
-            // toast.success("Perfil atualizado com sucesso!");
+            console.log("deu boa ======")
+            router.replace(`/painel/${Cookies.get("user_login_id")}`);
+            toast.success("Perfil atualizado com sucesso!");
             window.location.reload()
+        } else if (response.status === 401) {
+
+
+            Cookies.remove("user_login_id")
+            Cookies.remove("x-access-token")
+            Cookies.remove("x-user-name")
+            Cookies.remove("x-profile-id")
+            mudaLogin({ userId: null, userName: "" });
+
+            router.replace(`/entrar`);
+            toast.info("Acesse a conta novamente!");
         } else {
+            if (selectedImageFile != null) {
+                console.log("AQUIIiiiiiiiii")
+                console.log(data.imageFileName)
+                await deleteImage(data.imageFileName)
+            }
             toast.error("Não foi possível editar ou salvar as informações.");
         }
     }
@@ -314,28 +361,27 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                         </svg>
                         Informações de localização</p>
                     <div className='w-full'>
-                        <div className="inline-flex justify-end float-right ml-30 z-40">
-                            <span
-                                className="ml-2 text-gray-500 cursor-pointer "
-                                onMouseEnter={() => setShowTooltipCity(true)}
-                                onMouseLeave={() => setShowTooltipCity(false)}
-                            >
-                                {/* Ícone de informação */}
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                                    <line x1="12" y1="8" x2="12" y2="8"></line>
-                                </svg>
-                            </span>
-                            {/* Caixa com a explicação */}
-                            {showTooltipCity && (
-                                <div className="absolute mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-50 w-64">
-                                    A cidade da localização do negócio, no formato de texto - Ex: São Paulo.
-                                </div>
-                            )}
-                        </div>
-
                         <div className="relative w-full">
+                            <div className="inline-flex justify-end float-right ml-30">
+                                <span
+                                    className="ml-2 text-gray-500 cursor-pointer "
+                                    onMouseEnter={() => setShowTooltipCity(true)}
+                                    onMouseLeave={() => setShowTooltipCity(false)}
+                                >
+                                    {/* Ícone de informação */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                </span>
+                                {/* Caixa com a explicação */}
+                                {showTooltipCity && (
+                                    <div className="absolute mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                        A cidade da localização do negócio, no formato de texto - Ex: São Paulo.
+                                    </div>
+                                )}
+                            </div>
                             <label htmlFor="cityId" className="w-full text-sm font-medium text-gray-500">
                                 Digitar sua cidade
                             </label>
