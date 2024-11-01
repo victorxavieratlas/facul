@@ -7,7 +7,7 @@ export const getServiceByProfileId = async (req, res) => {
 
     try {
         const services = await prisma.service.findMany({
-            where: { profileId: Number(id) }
+            where: { profileId: String(id) }
         })
         res.status(200).json(services)
     } catch (error) {
@@ -21,7 +21,7 @@ export const createService = async (req, res) => {
     try {
         const newService = await prisma.service.create({
             data: {
-                profileId: Number(profileId),
+                profileId: String(profileId),
                 title,
                 description,
                 value,

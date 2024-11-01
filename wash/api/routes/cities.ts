@@ -49,12 +49,13 @@ router.get("/list/:name", async (req, res) => {
 
 router.get("/search/:name", async (req, res) => {
 	const { name } = req.params
-	console.log(name)
+	console.log("AQUIIIII")
 	try {
 		const cities = await prisma.city.findMany({
 			where: {
 			 	name: {
-					contains: name
+					contains: name,
+					mode: 'insensitive'
 				}
 			}
 		})

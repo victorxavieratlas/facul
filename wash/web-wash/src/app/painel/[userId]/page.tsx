@@ -8,9 +8,23 @@ import { ClienteContext } from "../../context/ClienteContext";
 import ServicesAccordion from "../../components/ServicesAccordion";
 
 interface ProfileData {
-    id: number;
+    id: string;
     phone?: string;
     images?: [{ url: string }];
+    profileLocation: [{
+        profileId: string,
+        cityId: number,
+        stateId: number,
+        neighborhoodsId: number,
+        zone: {
+            id: number;
+            name: string;
+        }
+        address: string,
+        addressNumber: string,
+        addressCEP: string,
+        addressComplement: string
+    }];
     name: string;
     startDay: string;
     finalDay: string;
@@ -50,7 +64,7 @@ export default function Panel() {
             if (response.ok) {
                 console.log('Verified token!');
                 router.replace(`/painel/${Cookies.get("user_login_id")}`);
-                mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" });
+                mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
             } else {
                 Cookies.remove("user_login_id");
                 Cookies.remove("x-access-token");
@@ -146,6 +160,13 @@ export default function Panel() {
                             </Link>
                             <p className="mt-6 mb-3 font-normal text-gray-700">
                                 <svg className="inline mr-2 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#6b7280" fill="none">
+                                    <path d="M13.6177 21.367C13.1841 21.773 12.6044 22 12.0011 22C11.3978 22 10.8182 21.773 10.3845 21.367C6.41302 17.626 1.09076 13.4469 3.68627 7.37966C5.08963 4.09916 8.45834 2 12.0011 2C15.5439 2 18.9126 4.09916 20.316 7.37966C22.9082 13.4393 17.599 17.6389 13.6177 21.367Z" stroke="currentColor" stroke-width="1.5" />
+                                    <path d="M15.5 11C15.5 12.933 13.933 14.5 12 14.5C10.067 14.5 8.5 12.933 8.5 11C8.5 9.067 10.067 7.5 12 7.5C13.933 7.5 15.5 9.067 15.5 11Z" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                                Zona {profileData.profileLocation[0].zone.name}, {profileData.profileLocation[0].address}, {profileData.profileLocation[0].addressNumber}
+                            </p>
+                            <p className="mb-3 font-normal text-gray-700">
+                                <svg className="inline mr-2 pb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#6b7280" fill="none">
                                     <path d="M18 2V4M6 2V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M11.9955 13H12.0045M11.9955 17H12.0045M15.991 13H16M8 13H8.00897M8 17H8.00897" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M3.5 8H20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -186,7 +207,7 @@ export default function Panel() {
                             </p>
                         </div>
                         <ServicesAccordion services={services} profileId={profileData.id} updateServices={fetchServices} />
-                        <div className=" w-full p-5 my-6 shadow rounded-lg mb-20 sm:mb-0">
+                        <div className=" w-full p-5 my-6 shadow rounded-lg mb-20 sm:mb-8">
                             <h3 className="font-semibold text-gray-500">
                                 <svg className="inline pb-1 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#6b7280" fill="none">
                                     <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />

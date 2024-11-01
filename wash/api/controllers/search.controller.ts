@@ -88,7 +88,7 @@ export const getProfilesByCityById = async (req, res) => {
 
 export const getCityByName = async (req, res) => {
 	const { name } = req.params
-
+	console.log("AQUIIIIIIIIIIII")
 	try {
 		const cities = await cityClient.findFirst({
 			where: {

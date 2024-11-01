@@ -9,12 +9,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(uuid(7)) @db.Uuid
   profile   Profile?
   role      Role      @default(USER)
   email     String    @unique
@@ -29,9 +29,9 @@ model User {
 }
 
 model Profile {
-  id               Int               @id @default(autoincrement())
+  id               String            @id @default(uuid(7)) @db.Uuid
   user             User              @relation(fields: [userId], references: [id])
-  userId           Int               @unique
+  userId           String            @unique @db.Uuid
   name             String?           @db.VarChar(30)
   phone            String?           @db.VarChar(20)
   bio              String?           @db.Text
@@ -68,7 +68,7 @@ model Profile {
 model Image {
   id        Int       @id @default(autoincrement())
   profile   Profile   @relation(fields: [profileId], references: [id])
-  profileId Int
+  profileId String    @db.Uuid
   url       String
   published Boolean   @default(false)
   createdAt DateTime  @default(now())
@@ -81,7 +81,7 @@ model Image {
 model Schedule {
   id           Int           @id @default(autoincrement())
   profile      Profile       @relation(fields: [profileId], references: [id])
-  profileId    Int
+  profileId    String        @db.Uuid
   day          Day
   isWorkingDay Boolean       @default(false)
   workingHours WorkingHour[]
@@ -96,7 +96,7 @@ model Schedule {
 model WorkingHour {
   id          Int          @id @default(autoincrement())
   profile     Profile      @relation(fields: [profileId], references: [id])
-  profileId   Int
+  profileId   String       @db.Uuid
   schedule    Schedule     @relation(fields: [scheduleId], references: [id])
   scheduleId  Int
   hoursPoints HourPoints[]
@@ -110,7 +110,7 @@ model WorkingHour {
 model HourPoints {
   id            Int         @id @default(autoincrement())
   profile       Profile     @relation(fields: [profileId], references: [id])
-  profileId     Int
+  profileId     String      @db.Uuid
   schedule      Schedule    @relation(fields: [scheduleId], references: [id])
   scheduleId    Int
   workingHour   WorkingHour @relation(fields: [workingHourId], references: [id])
@@ -127,7 +127,7 @@ model HourPoints {
 model Rating {
   id              Int       @id @default(autoincrement())
   profile         Profile   @relation(fields: [profileId], references: [id])
-  profileId       Int
+  profileId       String    @db.Uuid
   comment         String
   numberOfRatings Int
   totalOfRatings  Int
@@ -182,7 +182,7 @@ model City {
 
 model ProfileLocation {
   profile           Profile       @relation(fields: [profileId], references: [id])
-  profileId         Int
+  profileId         String        @db.Uuid
   city              City          @relation(fields: [cityId], references: [id])
   cityId            Int
   neighborhood      Neighborhoods @relation(fields: [neighborhoodsId], references: [id])
@@ -331,7 +331,7 @@ model Log {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])
-  userId      Int
+  userId      String   @db.Uuid
 
   @@map("logs")
 }
@@ -339,7 +339,7 @@ model Log {
 model Service {
   id          Int       @id @default(autoincrement())
   profile     Profile   @relation(fields: [profileId], references: [id])
-  profileId   Int
+  profileId   String    @db.Uuid
   title       String
   description String
   value       String    @db.VarChar(5)

@@ -53,7 +53,7 @@ interface ProfilePanelInput {
 }
 
 interface ProfileIncomplete {
-    id: number;
+    id: string;
 }
 
 

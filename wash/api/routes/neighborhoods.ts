@@ -53,7 +53,8 @@ router.get("/search/:cityId/:name", async (req, res) => {
 		const neighborhoods = await prisma.neighborhoods.findMany({
 			where: {
 			 	name: {
-					contains: name
+					contains: name,
+					mode: 'insensitive'
 				},
                 cityId: Number(cityId)
 			}

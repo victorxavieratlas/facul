@@ -80,7 +80,7 @@ export default function Panel({
 
 	useEffect(() => {
 		if (Cookies.get("x-access-token") || Cookies.get("user_login_id") || Cookies.get("x-profile-id")) {
-			mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" });
+			mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
 		}
 
 		getProfile(params.profileId)

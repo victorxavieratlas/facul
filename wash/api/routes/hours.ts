@@ -66,7 +66,7 @@ router.get("/profile/:profileId", async (req, res) => {
     try {
         const workingHours = await prisma.workingHour.findMany({
             where: {
-                profileId: Number(profileId)
+                profileId: String(profileId)
             },
             include: {
                 schedule: true,
@@ -98,25 +98,25 @@ router.post("/", async (req, res) => {
     }
 })
 
-router.post("/create", async (req, res) => {
-    const workingHours: WorkingHourInput[] = req.body.workingHours;
+// router.post("/create", async (req, res) => {
+//     const workingHours: WorkingHourInput[] = req.body.workingHours;
 
-    try {
-        const creates = workingHours.map(({ start, end, scheduleId, profileId }) => 
-            prisma.workingHour.create({
-                data: {
-                    scheduleId,
-                    profileId
-                }
-            })
-        );
+//     try {
+//         const creates = workingHours.map(({ start, end, scheduleId, profileId }) => 
+//             prisma.workingHour.create({
+//                 data: {
+//                     scheduleId,
+//                     profileId
+//                 }
+//             })
+//         );
 
-        const workingHourRecords = await Promise.all(creates);
-        res.status(201).json(workingHourRecords);
-    } catch (error) {
-        res.status(400).json(error);
-    }
-});
+//         const workingHourRecords = await Promise.all(creates);
+//         res.status(201).json(workingHourRecords);
+//     } catch (error) {
+//         res.status(400).json(error);
+//     }
+// });
 
 router.delete("/:id", async (req, res) => {
     const { id } = req.params

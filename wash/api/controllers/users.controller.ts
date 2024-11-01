@@ -22,7 +22,7 @@ export const getUserById = async (req, res) => {
 
     try {
         const user = await userClient.findUnique({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             include: {
                 profile: true
             }
@@ -123,7 +123,7 @@ export const deleteUser = async (req, res) => {
 
     try {
         const user = await userClient.delete({
-            where: { id: Number(id) }
+            where: { id: String(id) }
         })
 
         await prisma.log.create({
@@ -144,7 +144,7 @@ export const softDeleteUser = async (req, res) => {
 
     try {
         const user = await userClient.update({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             data: { deletedAt }
         })
         res.status(200).json({ data: user })
@@ -164,7 +164,7 @@ export const updateUser = async (req, res) => {
 
     try {
         const user = await userClient.update({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             data: { email, password, name },
         })
         res.status(200).json({ data: user })
@@ -319,7 +319,7 @@ export const userRoleUpdate = async (req, res) => {
 
     try {
         const user = await userClient.update({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             data: { role }
         })
         await prisma.log.create({

@@ -26,7 +26,7 @@ export const getProfileById = async (req, res) => {
 
     try {
         const profile = await profileClient.findUnique({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             include: {
                 images: true,
                 states: true,
@@ -36,7 +36,7 @@ export const getProfileById = async (req, res) => {
                         zone: true
                     }
                 },
-                schedules: true,
+                schedules: true
             }
         })
         if (!profile) {
@@ -204,7 +204,7 @@ export const softDeleteProfile = async (req, res) => {
 
     try {
         const profile = await profileClient.update({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             data: { deletedAt }
         })
         res.status(200).json({ data: profile })
@@ -268,7 +268,7 @@ export const updateProfile = async (req, res) => {
     
     try {
         const profile = await profileClient.update({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             data: {
                 bio,
                 phone,
@@ -337,7 +337,7 @@ export const updateProfileEditDetails = async (req, res) => {
     
     try {
         const profile = await profileClient.update({
-            where: { id: Number(id) },
+            where: { id: String(id) },
             data: {
                 bio,
                 phone,
@@ -351,7 +351,7 @@ export const updateProfileEditDetails = async (req, res) => {
                     update: {
                         where: {
                             profileId_cityId_stateId: {
-                                profileId: Number(id),
+                                profileId: String(id),
                                 cityId: Number(oldCityId),
                                 stateId: Number(oldStateId),
                             },
@@ -406,7 +406,7 @@ export const updateProfileEditDetails = async (req, res) => {
 //     }
 
 //     // const existingImage = await imageClient.findFirst({
-//     //     where: { profileId: Number(id) }
+//     //     where: { profileId: String(id) }
 //     // })
 
 //     // if (!existingImage) {
@@ -414,7 +414,7 @@ export const updateProfileEditDetails = async (req, res) => {
 //     // }
 
 //     // const existingCity = await cityClient.findFirst({
-//     //     where: { B: Number(id) }
+//     //     where: { B: String(id) }
 //     // })
 
 //     // if (!existingCity) {
@@ -423,7 +423,7 @@ export const updateProfileEditDetails = async (req, res) => {
 
 //     try {
 //         const profile = await profileClient.update({
-//             where: { id: Number(id) },
+//             where: { id: String(id) },
 //             data: {
 //                 bio,
 //                 phone,

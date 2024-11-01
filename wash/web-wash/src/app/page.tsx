@@ -30,7 +30,7 @@ export default function Home() {
 		if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
 			router.replace(`/`)
 			mudaLogin({
-				userId: Number(Cookies.get("user_login_id")) || 0,
+				userId: String(Cookies.get("user_login_id")) || null,
 				userName: Cookies.get("x-user-name") || ""
 			})
 		}

@@ -25,11 +25,11 @@ export default function editDetails({
             return;
         } else {
 
-            if (Number(params.profileId) != Number(Cookies.get("x-profile-id"))) {
+            if (String(params.profileId) != String(Cookies.get("x-profile-id"))) {
                 router.replace(`/painel/${Cookies.get("user_login_id")}`);
             } else {
                 router.replace(`/${Cookies.get("x-profile-id")}/editar`);
-                mudaLogin({ userId: Number(Cookies.get("user_login_id")) || 0, userName: Cookies.get("x-user-name") || "" });
+                mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
             }
         }
     }, [router]);

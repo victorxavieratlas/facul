@@ -47,8 +47,8 @@ export default function Header() {
     const ProfileRoute = `/${Cookies.get("x-profile-id")}`;
     const isOnProfilePage = Cookies.get("x-profile-id") && pathname === ProfileRoute;
 
-    const EditRoute = `/${idClienteLogado}/editar`;
-    const isOnEditPage = idClienteLogado && pathname === EditRoute;
+    const EditRoute = `/${Cookies.get("x-profile-id")}/editar`;
+    const isOnEditPage = Cookies.get("x-profile-id") && pathname === EditRoute;
 
     function logout() {
         Swal.fire({

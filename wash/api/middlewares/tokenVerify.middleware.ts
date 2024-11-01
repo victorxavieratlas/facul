@@ -24,7 +24,7 @@ export async function tokenVerify(req, res, next) {
         console.log(req.userName)
 
         const user = await userClient.findUnique({
-            where: { id: Number(tokenDecode.userId) }
+            where: { id: String(tokenDecode.userId) }
         })
 
         if (!user) {

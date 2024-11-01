@@ -10,7 +10,7 @@ interface Service {
 
 interface Props {
     services: Service[];
-    profileId: number;
+    profileId: string;
     updateServices: (profileId: string) => Promise<void>;
 }
 

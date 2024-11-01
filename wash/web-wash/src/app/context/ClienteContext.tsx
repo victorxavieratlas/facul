@@ -2,12 +2,12 @@
 import { ReactNode, createContext, useState } from "react"
 
 interface ClienteProps {
-  userId: number | null
+  userId: string | null
   userName: string
 }
 
 type ClienteContextData = {
-  idClienteLogado: number | null
+  idClienteLogado: string | null
   nomeClienteLogado: string
   mudaLogin: ({ userId, userName }: ClienteProps) => void
 }
@@ -16,7 +16,7 @@ type ClienteContextData = {
 export const ClienteContext = createContext({} as ClienteContextData)
 
 function ClienteProvider({ children }: { children: ReactNode } ) {
-  const [idClienteLogado, setIdClienteLogado] = useState<number|null>(null)
+  const [idClienteLogado, setIdClienteLogado] = useState<string|null>(null)
   const [nomeClienteLogado, setNomeClienteLogado] = useState<string>("")
 
   function mudaLogin({userId, userName}: ClienteProps) {
