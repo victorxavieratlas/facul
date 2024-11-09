@@ -1,5 +1,5 @@
 'use client'
-import { profileProps } from "../estados/[stateName]/[stateId]/cidades/[cityName]/[cityId]/page"
+import { profileProps } from "../estados/[stateSlug]/[stateId]/cidades/[citySlug]/[cityId]/page"
 
 import Link from "next/link"
 

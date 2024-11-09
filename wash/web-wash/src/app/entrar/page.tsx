@@ -63,7 +63,7 @@ export default function Login() {
             <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                 <form className="space-y-6"
                     onSubmit={handleSubmit(loginVerify)}>
-                    <h5 className="text-xl font-medium text-gray-900 text-center">Acessar conta na <span className={`text-2xl text-blue-500 ${fredoka.className}`}> lavar carro</span></h5>
+                    <h5 className="text-xl font-medium text-gray-900 text-center">Acessar conta na <span className={`text-2xl text-blue-500 ${fredoka.className}`}> lavar auto</span></h5>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Seu email</label>
                         <input type="email" id="email" className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="email@email.com"

@@ -234,7 +234,7 @@ export default function Home() {
 					Estéticas automotivas nos estados
 				</h3>
 			</div>
-			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10 font-semibold text-lg text-gray-500">
+			<div className="mt-10 text-center grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-3 sm:mx-20 mx-2 mb-10 sm:pl-14 font-semibold text-lg text-gray-500">
 				{listStates}
 			</div>
 		</div>

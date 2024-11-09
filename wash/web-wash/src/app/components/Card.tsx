@@ -1,12 +1,12 @@
 'use client'
 
-import { profileProps } from "../estados/[stateName]/[stateId]/cidades/[cityName]/[cityId]/page"
+import { profileProps } from "../estados/[stateSlug]/[stateId]/cidades/[citySlug]/[cityId]/page"
 import Link from "next/link"
 
 export default function ItemCard({ profile }: { profile: profileProps }) {
     return (
         <>
-            <li className="mb-10">
+            <li className="mb-10 min-w-56">
                 <div className="max-w-sm">
                     <Link href={`/${profile.id}`}>
                         <div className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300">

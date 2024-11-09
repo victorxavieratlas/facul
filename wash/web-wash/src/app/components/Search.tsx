@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { slugify } from '../utils/slugify';
 
 interface City {
     id: number;
@@ -72,8 +73,11 @@ const Search = ({ states }: SearchProps) => {
                             {results.map((city) => {
                                 const state = states.find(state => state.id === city.stateId);
                                 const stateName = state ? state.name : 'Unknown';
+
+                                const stateSlug = slugify(stateName)
+                                const citySlug = slugify(city.name)
                                 return (
-                                    <Link href={`/estados/${stateName}/${city.stateId}/cidades/${city.name}/${city.id}`} className="hover:bg-gray-400 transition duration-200 ease-in-out">
+                                    <Link href={`/estados/${stateSlug}/${city.stateId}/cidades/${citySlug}/${city.id}`} className="hover:bg-gray-400 transition duration-200 ease-in-out">
                                         <li key={city.id} className="border-b-2 border-gray-200 p-3 cursor-pointer transition duration-200 ease-in-out">
                                             <p className="block text-gray-800 hover:text-blue-500">{city.name} - {city.uf}</p>
                                         </li>
