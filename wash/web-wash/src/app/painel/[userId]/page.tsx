@@ -33,6 +33,7 @@ interface ProfileData {
     bio: string;
     openHour: string;
     closeHour: string;
+    verified: boolean;
 }
 
 interface Service {
@@ -142,8 +143,29 @@ export default function Panel() {
         <div className="mt-4 w-full lg:flex lg:justify-center">
             <div className="mt-4 w-full max-w-2xl">
                 {!profileData.phone ?
-                    <ProfileForm profileIncomplete={profileData} /> :
+                    <ProfileForm profileIncomplete={profileData} />
+                    :
                     <div className="max-w-full min-w-full">
+                        {profileData.verified == false ?
+                            <div className="max-w-full min-w-full p-4 mb-4 bg-blue-100 border-2 rounded-lg border-blue-300">
+                                <p className="font-bold text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mb-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="8"></line>
+                                    </svg>
+                                    Confirmação de e-mail
+                                </p>
+                                <p className="mx-6 mt-2 font-semibold text-gray-600">
+                                    Seja bem-vindo(a) a Lavar Auto!
+                                </p>
+                                <p className="mx-6 mt-2 font-semibold text-gray-600">
+                                    Acesse seu e-mail e clique no link do e-mail enviado pela Lavar Auto. É necessário ter o e-mail confirmado para receber contato de clientes.
+                                </p>
+                            </div>
+                            :
+                            <></>
+                        }
                         {profileData.images && profileData.images[0] ?
                             <img className="object-cover h-96 w-full rounded-t-lg" src={profileData.images[0].url} alt="" /> : <></>
                         }

@@ -111,7 +111,34 @@ export const createUser = async (req, res) => {
         if (user) {
             const to = email
             const subject = "Lavar Auto - Confirme seu e-mail."
-            const body = `Clique no link e confirme seu email http://localhost:3000/painel/${user.id}/${email}`
+            const body = `
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <head>
+            <meta charset="UTF-8">
+            <title>Confirmação de E-mail</title>
+            </head>
+                <body style="font-family: 'Arial', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+                        <!-- Cabeçalho -->
+                        <div style="padding: 20px; text-align: center;">
+                        <img src="https://www.creativefabrica.com/wp-content/uploads/2021/02/15/Flat-car-wash-logo-background-Best-logo-Graphics-8633754-1-312x208.png" alt="Logo Lavar Auto" style="width: 120px;">
+                        </div>
+                        <!-- Conteúdo -->
+                        <div style="padding: 30px 20px; text-align: center;">
+                        <h1 style="font-size: 24px; color: #333333; margin-bottom: 20px;">Confirme seu e-mail</h1>
+                        <p style="font-size: 16px; color: #555555;">Para concluir seu cadastro na Lavar Auto, clique no botão abaixo:</p>
+                        <a href="http://localhost:3000/painel/${user.id}/${email}" style="display: inline-block; padding: 15px 25px; background-color: #437FE5; color: #ffffff; text-decoration: none; font-size: 20px; border-radius: 5px; margin: 20px 0;">Clique aqui para confirmar o e-mail</a>
+                        <p style="font-size: 16px; color: #555555;">Se você não solicitou este e-mail, por favor ignore-o.</p>
+                        </div>
+                        <!-- Rodapé -->
+                        <div style="padding: 20px; text-align: center; font-size: 12px; color: #999999;">
+                        © 2024 Lavar Auto. Todos os direitos reservados.
+                        </div>
+                    </div>
+                </body>
+            </html>
+            `
             await sendEmail(to, subject, body)
             res.status(201).json({
                 data: {
@@ -218,7 +245,34 @@ export const generateCode = async (req, res) => {
             if (code) {
                 const to = email
                 const subject = "Lavar Auto - Código para alteração de senha."
-                const body = `Seu código de recuperação de senha é ${code.code}`
+                const body = `
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                <meta charset="UTF-8">
+                <title>Recuperação de Senha</title>
+                </head>
+                    <body style="font-family: 'Arial', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0;">
+                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+                            <!-- Cabeçalho -->
+                            <div style="padding: 20px; text-align: center;">
+                            <img src="https://www.creativefabrica.com/wp-content/uploads/2021/02/15/Flat-car-wash-logo-background-Best-logo-Graphics-8633754-1-312x208.png" alt="Logo Lavar Auto" style="width: 120px;">
+                            </div>
+                            <!-- Conteúdo -->
+                            <div style="padding: 30px 20px; text-align: center;">
+                            <h1 style="font-size: 24px; color: #333333; margin-bottom: 20px;">Código de Recuperação de Senha</h1>
+                            <p style="font-size: 16px; color: #555555;">Use o código abaixo para redefinir sua senha:</p>
+                            <div style="font-size: 48px; color: #3B82F6; margin: 20px 0; letter-spacing: 5px;">${code.code}</div>
+                            <p style="font-size: 16px; color: #555555;">Este código expira em 15 minutos.</p>
+                            </div>
+                            <!-- Rodapé -->
+                            <div style="padding: 20px; text-align: center; font-size: 12px; color: #999999;">
+                            © 2024 Lavar Auto. Todos os direitos reservados.
+                            </div>
+                        </div>
+                    </body>
+                </html>
+                `
                 await sendEmail(to, subject, String(body));
                 res.status(200).json({
                     data: {
@@ -365,25 +419,50 @@ export const emailValidate = async (req, res) => {
     }
 
     try {
-        const [user, profile] = await prisma.$transaction([
-            prisma.user.findUnique({ 
-                where: { id: userId, email } 
-            }),
-            prisma.profile.update({
+        const user = await prisma.user.findUnique({
+            where: { id: userId, email }
+        })
+
+        if (user) {
+            const profile = await prisma.profile.update({
                 where: { userId },
                 data: {
                     verified: true
                 }
             })
-        ])
 
-        if (user) {
             if (profile) {
                 const to = email
                 const subject = "Lavar Auto - E-mail validado com sucesso!"
-                const body = `Parabéns, ${user.name}! Agora, você faz parte da primeira plataforma dedicada a estéticas automotivas do Brasil.`
+                const body = `
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                <meta charset="UTF-8">
+                <title>Bem-vindo(a) à Lavar Auto</title>
+                </head>
+                    <body style="font-family: 'Arial', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0;">
+                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+                            <!-- Cabeçalho -->
+                            <div style="padding: 20px; text-align: center;">
+                            <img src="https://www.creativefabrica.com/wp-content/uploads/2021/02/15/Flat-car-wash-logo-background-Best-logo-Graphics-8633754-1-312x208.png" alt="Logo Lavar Auto" style="width: 120px;">
+                            </div>
+                            <!-- Conteúdo -->
+                            <div style="padding: 30px 20px; text-align: center;">
+                            <h1 style="font-size: 28px; color: #333333; margin-bottom: 20px;">Seja bem-vindo(a) à Lavar Auto!</h1>
+                            <p style="font-size: 16px; color: #555555;">Estamos muito felizes em ter você conosco. Você faz parte da primeira plataforma dedicada à estéticas automotivas do brasil.</p>
+                            </div>
+                            <!-- Rodapé -->
+                            <div style="padding: 20px; text-align: center; font-size: 12px; color: #999999;">
+                            © 2024 Lavar Auto. Todos os direitos reservados.
+                            </div>
+                        </div>
+                    </body>
+                </html>
 
-                await sendEmail(to, subject, String(body));
+                `
+
+                await sendEmail(to, subject, body);
                 res.status(200).json({
                     data: {
                         email,
@@ -393,7 +472,7 @@ export const emailValidate = async (req, res) => {
                 res.status(400).json({ erro: "Erro ao validar e-mail!" })
             }
         } else {
-            res.status(405).json({ erro: "Erro ao encontrar usuário!" })
+            res.status(404).json({ erro: "Erro ao encontrar usuário!" })
         }
     } catch (error) {
         res.status(400).json(error)

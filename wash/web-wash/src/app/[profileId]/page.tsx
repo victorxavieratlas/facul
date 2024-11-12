@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { ClienteContext } from "../context/ClienteContext";
 import ServicesProfileAccordion from "../components/ServicesProfileAccordion";
+import { slugify } from "../utils/slugify";
 
 export interface ProfileData {
 	id: number;
@@ -133,7 +134,7 @@ export default function Panel({
 	}
 	// console.log(profileData)
 	// console.log(stateData)
-	if (!profileData || !stateData) {
+	if (!profileData || !stateData || !cityData) {
 		return <div className="m-96 p-96">Carregando...</div>;
 	}
 
@@ -141,6 +142,9 @@ export default function Panel({
 	const cityName = cityData?.name
 	const stateUf = cityData?.uf
 	// const stateName = profileData.states[0].name
+
+	const stateSlug = slugify(stateData.name)
+	const citySlug = slugify(cityData.name)
 
 	return (
 		<div className="sm:ml-48 sm:mr-48 mt-4">
@@ -160,7 +164,7 @@ export default function Panel({
 								<svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
 									<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
 								</svg>
-								<Link href={`/estados/${stateData.name}/${stateData.id}`} className="ms-1 text-md sm:text-sm font-medium text-gray-700 hover:text-blue-500 md:ms-2">
+								<Link href={`/estados/${stateSlug}/${stateData.id}`} className="ms-1 text-md sm:text-sm font-medium text-gray-700 hover:text-blue-500 md:ms-2">
 									{stateData.name}
 								</Link>
 							</div>
@@ -170,7 +174,7 @@ export default function Panel({
 								<svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
 									<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
 								</svg>
-								<Link href={`/estados/${stateData.name}/${stateData.id}/cidades/${cityName}/${cityId}`} className="ms-1 text-md sm:text-sm font-medium text-gray-700 hover:text-blue-500 md:ms-2">
+								<Link href={`/estados/${stateSlug}/${stateData.id}/cidades/${citySlug}/${cityId}`} className="ms-1 text-md sm:text-sm font-medium text-gray-700 hover:text-blue-500 md:ms-2">
 									{cityName}
 								</Link>
 							</div>

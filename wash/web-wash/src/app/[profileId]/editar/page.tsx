@@ -19,6 +19,36 @@ export default function editDetails({
 
     const { mudaLogin } = useContext(ClienteContext);
 
+    async function tokenVerify() {
+        try {
+            const response = await fetch(`http://localhost:3007/token/verify`, {
+                cache: 'no-store',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${Cookies.get("x-access-token")}`
+                }
+            });
+
+            console.log(response.ok)
+
+            if (response.ok) {
+                console.log('Verified token!');
+                mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
+            } else {
+                Cookies.remove("user_login_id");
+                Cookies.remove("x-access-token");
+                Cookies.remove("x-user-name");
+                Cookies.remove("x-profile-id");
+                mudaLogin({ userId: null, userName: "" });
+                router.replace("/")
+
+                console.warn('Error verifying token:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error verifying token:', error);
+        }
+    }
+
     useEffect(() => {
         if (!Cookies.get("x-access-token") || !Cookies.get("user_login_id") || !Cookies.get("x-profile-id")) {
             router.replace("/entrar");
@@ -28,7 +58,7 @@ export default function editDetails({
             if (String(params.profileId) != String(Cookies.get("x-profile-id"))) {
                 router.replace(`/painel/${Cookies.get("user_login_id")}`);
             } else {
-                router.replace(`/${Cookies.get("x-profile-id")}/editar`);
+                tokenVerify()
                 mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
             }
         }

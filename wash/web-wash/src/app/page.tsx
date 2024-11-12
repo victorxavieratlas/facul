@@ -75,8 +75,10 @@ export default function Home() {
 			<Search states={states} />
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
-				<div className="w-full flex justify-center">
-					<h3 className="mb-10 px-4 font-bold text-xl sm:text-2xl text-gray-500">Anuncie grátis na primeira plataforma de estéticas automotivas do Brasil.</h3>
+				<div className="w-full flex flex-col items-center text-center mb-8">
+					<h3 className="mb-4 px-4 font-bold text-xl sm:text-2xl text-gray-500">
+					Anuncie grátis na primeira plataforma de estéticas automotivas do Brasil.
+					</h3>
 				</div>
 				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative sm:mx-56 ml-10">
 					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
@@ -90,13 +92,13 @@ export default function Home() {
 							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							Publique contato, preços e serviços
+							Aumente o faturamento
 						</li>
 						<li className="flex items-center sm:pb-2 pb-1">
 							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							Receba muitos clientes de graça
+							Receba contato de clientes
 						</li>
 					</ul>
 					<ul className="max-w-md space-y-1 font-semibold text-lg text-gray-500 list-inside">
@@ -104,19 +106,19 @@ export default function Home() {
 							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							Domine sua cidade e seu bairro
+							Domine a sua cidade
 						</li>
 						<li className="flex items-center sm:pb-2 pb-4">
 							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							Aumente o faturamento
+							Preços e serviços
 						</li>
 						<li className="flex items-center sm:pb-2">
 							<svg className="w-5 h-5 me-2 text-blue-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
 							</svg>
-							Faça parte de uma plataforma dedicada
+							Plataforma dedicada
 						</li>
 					</ul>
 				</div>
@@ -127,7 +129,6 @@ export default function Home() {
 					Anunciar grátis
 				</Link>
 			</div>
-
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
 				<div className="w-full flex flex-col items-center text-center">
