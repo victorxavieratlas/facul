@@ -1,8 +1,11 @@
 import { PrismaClient } from "@prisma/client"
 import { hashSync } from "bcrypt"
+import sendEmail from '../services/nodemailer';
+import { profile } from "console";
 
 const prisma = new PrismaClient()
 const userClient = new PrismaClient().user
+const profileClient = new PrismaClient().profile
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -105,12 +108,21 @@ export const createUser = async (req, res) => {
         const user = await userClient.create({
             data: { email, password: hashedPassword, name }
         })
-        res.status(201).json({
-            data: {
-                userId: user.id,
-                userName: user.name
-            }
-        })
+        if (user) {
+            const to = email
+            const subject = "Lavar Auto - Confirme seu e-mail."
+            const body = `Clique no link e confirme seu email http://localhost:3000/painel/${user.id}/${email}`
+            await sendEmail(to, subject, body)
+            res.status(201).json({
+                data: {
+                    userId: user.id,
+                    userName: user.name
+                }
+            })
+        } else {
+            res.status(400).json("Erro ao criar usuário!")
+        }
+
     } catch (error) {
         res.status(400).json(error)
     }
@@ -189,6 +201,7 @@ export const generateCode = async (req, res) => {
     //talvez adicionar verificação se existe código válido
     const randomCode = Math.floor(Math.random() * 900000) + 100000;
     console.log(email)
+
     try {
         const [user, code] = await prisma.$transaction([
             prisma.user.findUnique({ where: { email } }),
@@ -203,7 +216,10 @@ export const generateCode = async (req, res) => {
 
         if (user) {
             if (code) {
-                //Enviar código por email aqui
+                const to = email
+                const subject = "Lavar Auto - Código para alteração de senha."
+                const body = `Seu código de recuperação de senha é ${code.code}`
+                await sendEmail(to, subject, String(body));
                 res.status(200).json({
                     data: {
                         email: email,
@@ -329,6 +345,56 @@ export const userRoleUpdate = async (req, res) => {
             }
         })
         res.status(200).json({ data: user })
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+export const emailValidate = async (req, res) => {
+    const { userId, email } = req.body
+
+    if (!userId || !email) {
+        res.status(400).json({ "erro": "userId e E-mail são obrigatórios!" })
+        return
+    }
+
+    const isValidEmail = emailVerify(email)
+    if (!isValidEmail) {
+        res.status(405).json({ erro: "E-mail inválido!" })
+        return
+    }
+
+    try {
+        const [user, profile] = await prisma.$transaction([
+            prisma.user.findUnique({ 
+                where: { id: userId, email } 
+            }),
+            prisma.profile.update({
+                where: { userId },
+                data: {
+                    verified: true
+                }
+            })
+        ])
+
+        if (user) {
+            if (profile) {
+                const to = email
+                const subject = "Lavar Auto - E-mail validado com sucesso!"
+                const body = `Parabéns, ${user.name}! Agora, você faz parte da primeira plataforma dedicada a estéticas automotivas do Brasil.`
+
+                await sendEmail(to, subject, String(body));
+                res.status(200).json({
+                    data: {
+                        email,
+                    }
+                })
+            } else {
+                res.status(400).json({ erro: "Erro ao validar e-mail!" })
+            }
+        } else {
+            res.status(405).json({ erro: "Erro ao encontrar usuário!" })
+        }
     } catch (error) {
         res.status(400).json(error)
     }

@@ -60,7 +60,10 @@ export const getProfilesByCityById = async (req, res) => {
 	try {
 		const profilesInCity = await profileLocationClient.findMany({
 			where: {
-				cityId: Number(id)
+				cityId: Number(id),
+				profile: {
+					verified: true,
+				},
 			},
 			include: {
 				profile: {

@@ -101,7 +101,12 @@ export default function ChangePassword({
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Sua nova senha</label>
                         <input type="password" id="password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
                             required {...register("password")} />
-                        <ul className="ml-4 mt-3 space-y-1 font-semibold">
+                    </div>
+                    <div className="mb-10">
+                        <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900">Confirmar nova senha</label>
+                        <input type="password" id="confirm-password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
+                            required {...register("confirmPassword")} />
+                        <ul className="ml-4 mt-5 space-y-1 font-semibold">
                             <li className={`text-sm ${password || confirmPassword ? (password === confirmPassword ? 'text-green-500' : 'text-red-500') : 'text-gray-400'}`}>
                                 - As senhas devem ser iguais
                             </li>
@@ -121,14 +126,6 @@ export default function ChangePassword({
                                 - Símbolo(s): .!?#$
                             </li>
                         </ul>
-                    </div>
-                    <div className="mb-10">
-                        <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900">Confirmar nova senha</label>
-                        <input type="password" id="confirm-password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
-                            required {...register("confirmPassword")} />
-                        {password && confirmPassword && password !== confirmPassword && (
-                            <p className="text-red-500 text-sm mt-2">As senhas devem ser iguais.</p>
-                        )}
                     </div>
                     <button type="submit" className="w-full mt-12 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Alterar senha</button>
                 </form>

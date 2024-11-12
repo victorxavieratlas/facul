@@ -1,6 +1,7 @@
 import { Router } from "express"
 
-import { changeUserPassword, createUser, deleteUser, generateCode, getAllUsers, getUserById, softDeleteUser, updateUser, userRoleUpdate, validateCode } from "../controllers/users.controller"
+import { changeUserPassword, createUser, deleteUser, emailValidate, generateCode, getAllUsers, getUserById, softDeleteUser, updateUser, userRoleUpdate, validateCode } from "../controllers/users.controller"
+import { tokenVerify } from "../middlewares/tokenVerify.middleware"
 
 const usersRouter = Router()
 
@@ -9,6 +10,7 @@ usersRouter
     .get("/:id", getUserById)
     .post("/generate-code/email", generateCode)
     .post("/validate-code/email", validateCode)
+    .put("/account/email-validate", tokenVerify, emailValidate)
     .put("/change/user/password", changeUserPassword)
     .post("/", createUser)
     .delete("/:id", deleteUser)
