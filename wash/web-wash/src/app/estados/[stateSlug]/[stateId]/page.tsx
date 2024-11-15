@@ -2,21 +2,23 @@ import Link from "next/link"
 import Cities from "../../../components/Cities"
 import { slugify } from "@/app/utils/slugify"
 
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 async function getCitiesByState(stateId: string) {
-	const response = await fetch(`http://localhost:3007/search/cities-by-state/${stateId}`,
+	const response = await fetch(`${apiBaseUrl}/search/cities-by-state/${stateId}`,
 		{ cache: 'no-store' })
 	const data = await response.json()
 	return data
 }
 
 async function getState(stateId: string) {
-	const response = await fetch(`http://localhost:3007/search/state/${stateId}`, { cache: 'no-store' })
+	const response = await fetch(`${apiBaseUrl}/search/state/${stateId}`, { cache: 'no-store' })
 	const data = await response.json()
 	return data
 }
 
 // async function getCity(cityId: string) {
-// 	const response = await fetch(`http://localhost:3007/search/city/${cityId}`, { cache: 'no-store' })
+// 	const response = await fetch(`${apiBaseUrl}/search/city/${cityId}`, { cache: 'no-store' })
 // 	const data = await response.json()
 // 	return data
 // }

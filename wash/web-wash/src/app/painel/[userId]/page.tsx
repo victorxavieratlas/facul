@@ -45,6 +45,7 @@ interface Service {
 }
 
 export default function Panel() {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const router = useRouter();
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [services, setServices] = useState<Service[]>([]);
@@ -52,7 +53,7 @@ export default function Panel() {
 
     async function tokenVerify() {
         try {
-            const response = await fetch(`http://localhost:3007/token/verify`, {
+            const response = await fetch(`${apiBaseUrl}/token/verify`, {
                 cache: 'no-store',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,7 +108,7 @@ export default function Panel() {
 
     async function getProfile(profileId: string) {
         try {
-            const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
+            const response = await fetch(`${apiBaseUrl}/profiles/${profileId}`, { cache: 'no-store' });
             const data = await response.json();
             console.log('API response:', data);
 
@@ -130,7 +131,7 @@ export default function Panel() {
     }
 
     async function fetchServices(profileId: string) {
-        const response = await fetch(`http://localhost:3007/services/${profileId}`);
+        const response = await fetch(`${apiBaseUrl}/services/${profileId}`);
         const data = await response.json();
         setServices(data);
     }

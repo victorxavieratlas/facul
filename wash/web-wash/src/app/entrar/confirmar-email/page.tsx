@@ -22,6 +22,7 @@ export default function ConfirmEmail({
 }: {
 	params: { email: string }
 }) {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { register, handleSubmit, setFocus } = useForm<loginInput>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
@@ -36,7 +37,7 @@ export default function ConfirmEmail({
     }, [])
 
     async function emailVerify(data: loginInput) {
-        const response = await fetch("http://localhost:3007/users/generate-code/email", {
+        const response = await fetch(`${apiBaseUrl}/users/generate-code/email`, {
             cache: 'no-store',
             method: "POST",
             headers: { "Content-type": "application/json" },

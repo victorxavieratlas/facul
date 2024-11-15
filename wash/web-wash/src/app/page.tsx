@@ -19,6 +19,7 @@ export interface stateProps {
 }
 
 export default function Home() {
+	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 	const { mudaLogin } = useContext(ClienteContext)
 	const router = useRouter()
 
@@ -38,7 +39,7 @@ export default function Home() {
 
 	// Função para buscar os estados
 	async function getState() {
-		const statesResponse = await fetch("http://localhost:3007/search/state", { cache: 'no-store' })
+		const statesResponse = await fetch(`${apiBaseUrl}/search/state`, { cache: 'no-store' })
 		const statesData = await statesResponse.json()
 		setStates(statesData)
 	}
@@ -77,7 +78,7 @@ export default function Home() {
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
 				<div className="w-full flex flex-col items-center text-center mb-8">
 					<h3 className="mb-4 px-4 font-bold text-xl sm:text-2xl text-gray-500">
-					Anuncie grátis na primeira plataforma de estéticas automotivas do Brasil.
+						Anuncie grátis na primeira plataforma de estéticas automotivas do Brasil.
 					</h3>
 				</div>
 				<div className="flex flex-col justify-center sm:flex-row sm:justify-between gap-4 relative sm:mx-56 ml-10">

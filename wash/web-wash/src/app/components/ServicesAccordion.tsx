@@ -15,13 +15,14 @@ interface Props {
 }
 
 export default function ServicesAccordion({ services, profileId, updateServices }: Props) {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const [showAddForm, setShowAddForm] = useState(false);
     const [newService, setNewService] = useState({ title: '', description: '', value: '', time: '' });
     const [editingService, setEditingService] = useState<Service | null>(null);
     const [expandedId, setExpandedId] = useState<number | null>(null);
 
     const handleAddService = async () => {
-        const response = await fetch(`http://localhost:3007/services`, {
+        const response = await fetch(`${apiBaseUrl}/services`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ profileId, ...newService })
@@ -34,7 +35,7 @@ export default function ServicesAccordion({ services, profileId, updateServices 
     };
 
     const handleUpdateService = async (id: number) => {
-        const response = await fetch(`http://localhost:3007/services/${id}`, {
+        const response = await fetch(`${apiBaseUrl}/services/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(editingService)
@@ -46,7 +47,7 @@ export default function ServicesAccordion({ services, profileId, updateServices 
     };
 
     const handleDeleteService = async (id: number) => {
-        const response = await fetch(`http://localhost:3007/services/${id}`, {
+        const response = await fetch(`${apiBaseUrl}/services/${id}`, {
             method: 'DELETE'
         });
         if (response.ok) {

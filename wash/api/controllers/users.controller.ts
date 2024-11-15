@@ -6,6 +6,7 @@ import { profile } from "console";
 const prisma = new PrismaClient()
 const userClient = new PrismaClient().user
 const profileClient = new PrismaClient().profile
+const webBaseUrl = process.env.WEB_BASE_URL
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -128,7 +129,7 @@ export const createUser = async (req, res) => {
                         <div style="padding: 30px 20px; text-align: center;">
                         <h1 style="font-size: 24px; color: #333333; margin-bottom: 20px;">Confirme seu e-mail</h1>
                         <p style="font-size: 16px; color: #555555;">Para concluir seu cadastro na Lavar Auto, clique no botão abaixo:</p>
-                        <a href="http://localhost:3000/painel/${user.id}/${email}" style="display: inline-block; padding: 15px 25px; background-color: #437FE5; color: #ffffff; text-decoration: none; font-size: 20px; border-radius: 5px; margin: 20px 0;">Clique aqui para confirmar o e-mail</a>
+                        <a href="${webBaseUrl}/painel/${user.id}/${email}" style="display: inline-block; padding: 15px 25px; background-color: #437FE5; color: #ffffff; text-decoration: none; font-size: 20px; border-radius: 5px; margin: 20px 0;">Clique aqui para confirmar o e-mail</a>
                         <p style="font-size: 16px; color: #555555;">Se você não solicitou este e-mail, por favor ignore-o.</p>
                         </div>
                         <!-- Rodapé -->

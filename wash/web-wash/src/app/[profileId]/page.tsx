@@ -72,6 +72,7 @@ export default function Panel({
 }: {
 	params: { profileId: string }
 }) {
+	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 	const router = useRouter();
 	const [profileData, setProfileData] = useState<ProfileData | null>(null);
 	const [stateData, setStateData] = useState<State | null>(null);
@@ -103,7 +104,7 @@ export default function Panel({
 	}, [profileData]);
 
 	async function getProfile(profileId: string) {
-		const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
+		const response = await fetch(`${apiBaseUrl}/profiles/${profileId}`, { cache: 'no-store' });
 		const data = await response.json();
 		setProfileData(data.data);
 		console.log(data.data)
@@ -115,20 +116,20 @@ export default function Panel({
 	}
 
 	async function fetchServices(profileId: string) {
-		const response = await fetch(`http://localhost:3007/services/${profileId}`);
+		const response = await fetch(`${apiBaseUrl}/services/${profileId}`);
 		const data = await response.json();
 		setServices(data);
 	}
 
 	async function getCity(cityId: number) {
 		// console.log(stateId)
-		const response = await fetch(`http://localhost:3007/search/city/${cityId}`);
+		const response = await fetch(`${apiBaseUrl}/search/city/${cityId}`);
 		const city = await response.json();
 		setCityData(city);
 	}
 	async function getState(stateId: number) {
 		// console.log(stateId)
-		const response = await fetch(`http://localhost:3007/search/state/${stateId}`);
+		const response = await fetch(`${apiBaseUrl}/search/state/${stateId}`);
 		const state = await response.json();
 		setStateData(state);
 	}

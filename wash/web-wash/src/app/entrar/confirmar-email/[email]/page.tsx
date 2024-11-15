@@ -22,6 +22,7 @@ export default function ConfirmCode({
 }: {
     params: { email: string }
 }) {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { register, handleSubmit, setFocus } = useForm<codeVerify>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
@@ -54,7 +55,7 @@ export default function ConfirmCode({
     }, [])
 
     async function codeVerify(data: codeVerify) {
-        const response = await fetch("http://localhost:3007/users/validate-code/email", {
+        const response = await fetch(`${apiBaseUrl}/users/validate-code/email`, {
             cache: 'no-store',
             method: "POST",
             headers: { "Content-type": "application/json" },
@@ -70,7 +71,7 @@ export default function ConfirmCode({
     }
 
     async function generateNewCode() {
-        const response = await fetch("http://localhost:3007/users/generate-code/email", {
+        const response = await fetch(`${apiBaseUrl}/users/generate-code/email`, {
             cache: 'no-store',
             method: "POST",
             headers: { "Content-type": "application/json" },

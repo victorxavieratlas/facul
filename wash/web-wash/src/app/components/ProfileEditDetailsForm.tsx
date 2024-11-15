@@ -96,6 +96,7 @@ interface Zone {
 }
 
 const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { register, handleSubmit, setFocus, setValue } = useForm<ProfilePanelInput>();
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
     const router = useRouter();
@@ -182,19 +183,19 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
     async function getCity(cityId: number) {
         // console.log(stateId)
-        const response = await fetch(`http://localhost:3007/search/city/${cityId}`);
+        const response = await fetch(`${apiBaseUrl}/search/city/${cityId}`);
         const city = await response.json();
         setCityData(city);
     }
     async function getNeighborhood(neighborhoodId: number) {
         console.log(neighborhoodId)
-        const response = await fetch(`http://localhost:3007/search/neighborhood/${neighborhoodId}`);
+        const response = await fetch(`${apiBaseUrl}/search/neighborhood/${neighborhoodId}`);
         const neighborhood = await response.json();
         setNeighborhoodData(neighborhood);
     }
     async function getState(stateId: number) {
         // console.log(stateId)
-        const response = await fetch(`http://localhost:3007/search/state/${stateId}`);
+        const response = await fetch(`${apiBaseUrl}/search/state/${stateId}`);
         const state = await response.json();
         setStateData(state);
     }
@@ -221,7 +222,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
         formData.append('image', selectedImageFile);
         // console.log(formData)
         try {
-            const response = await fetch('http://localhost:3007/cover-image', {
+            const response = await fetch(`${apiBaseUrl}/cover-image`, {
                 method: 'POST',
                 body: formData,
             });
@@ -242,7 +243,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
     const deleteImage = async (imageFileName: string) => {
         try {
-            const response = await fetch('http://localhost:3007/cover-image', {
+            const response = await fetch(`${apiBaseUrl}/cover-image`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -341,7 +342,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
             if (inputCity.length >= 3) {
-                fetch(`http://localhost:3007/cities/search/${encodeURIComponent(inputCity)}`)
+                fetch(`${apiBaseUrl}/cities/search/${encodeURIComponent(inputCity)}`)
                     .then(response => response.json())
                     .then(data => {
                         if (Array.isArray(data)) {
@@ -377,7 +378,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
 
         const debounceTimeout = setTimeout(() => {
             if (neighborhoodInput.length >= 1) {
-                fetch(`http://localhost:3007/neighborhoods/search/${selectedCityId}/${encodeURIComponent(neighborhoodInput)}`)
+                fetch(`${apiBaseUrl}/neighborhoods/search/${selectedCityId}/${encodeURIComponent(neighborhoodInput)}`)
                     .then(response => response.json())
                     .then(data => {
                         if (Array.isArray(data)) {
@@ -599,7 +600,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     };
 
     async function getProfile(profileId: ProfileId) {
-        const response = await fetch(`http://localhost:3007/profiles/${profileId}`, { cache: 'no-store' });
+        const response = await fetch(`${apiBaseUrl}/profiles/${profileId}`, { cache: 'no-store' });
         const data = await response.json();
         if (data.data.profileLocation && data.data.profileLocation.length > 0) {
             await getState(data.data.profileLocation[0].stateId);
@@ -616,7 +617,7 @@ const ProfileEditDetailsForm = ({ profileId }: { profileId: ProfileId }) => {
     async function EditProfile(data: ProfilePanelInput) {
         // console.log(data)
         // console.log(data.oldCityId)
-        const response = await fetch(`http://localhost:3007/profiles/details/${profileId}`, {
+        const response = await fetch(`${apiBaseUrl}/profiles/details/${profileId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

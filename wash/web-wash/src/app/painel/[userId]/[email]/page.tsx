@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ClienteContext } from "../../../context/ClienteContext";
 
 export default function Panel() {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const router = useRouter();
   const params = useParams();
   const { userId, email } = params;
@@ -14,7 +15,7 @@ export default function Panel() {
 
   async function tokenVerify() {
     try {
-      const response = await fetch(`http://localhost:3007/token/verify`, {
+      const response = await fetch(`${apiBaseUrl}/token/verify`, {
         cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ export default function Panel() {
   }, [userId, email]);
 
   async function emailValidate(userId: string, email: string) {
-    const response = await fetch(`http://localhost:3007/users/account/email-validate`, {
+    const response = await fetch(`${apiBaseUrl}/users/account/email-validate`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

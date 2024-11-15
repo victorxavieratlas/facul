@@ -30,7 +30,7 @@ model User {
 
 model Profile {
   id               String            @id @default(uuid(7)) @db.Uuid
-  user             User              @relation(fields: [userId], references: [id])
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String            @unique @db.Uuid
   name             String?           @db.VarChar(30)
   phone            String?           @db.VarChar(20)
@@ -67,7 +67,7 @@ model Profile {
 
 model Image {
   id        Int       @id @default(autoincrement())
-  profile   Profile   @relation(fields: [profileId], references: [id])
+  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String    @db.Uuid
   url       String
   published Boolean   @default(false)
@@ -80,7 +80,7 @@ model Image {
 
 model Schedule {
   id           Int           @id @default(autoincrement())
-  profile      Profile       @relation(fields: [profileId], references: [id])
+  profile      Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId    String        @db.Uuid
   day          Day
   isWorkingDay Boolean       @default(false)
@@ -95,7 +95,7 @@ model Schedule {
 
 model WorkingHour {
   id          Int          @id @default(autoincrement())
-  profile     Profile      @relation(fields: [profileId], references: [id])
+  profile     Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId   String       @db.Uuid
   schedule    Schedule     @relation(fields: [scheduleId], references: [id])
   scheduleId  Int
@@ -109,7 +109,7 @@ model WorkingHour {
 
 model HourPoints {
   id            Int         @id @default(autoincrement())
-  profile       Profile     @relation(fields: [profileId], references: [id])
+  profile       Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId     String      @db.Uuid
   schedule      Schedule    @relation(fields: [scheduleId], references: [id])
   scheduleId    Int
@@ -126,7 +126,7 @@ model HourPoints {
 
 model Rating {
   id              Int       @id @default(autoincrement())
-  profile         Profile   @relation(fields: [profileId], references: [id])
+  profile         Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId       String    @db.Uuid
   comment         String
   numberOfRatings Int
@@ -181,7 +181,7 @@ model City {
 }
 
 model ProfileLocation {
-  profile           Profile       @relation(fields: [profileId], references: [id])
+  profile           Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId         String        @db.Uuid
   city              City          @relation(fields: [cityId], references: [id])
   cityId            Int

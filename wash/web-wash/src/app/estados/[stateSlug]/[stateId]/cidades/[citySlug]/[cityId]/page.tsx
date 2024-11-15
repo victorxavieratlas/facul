@@ -3,21 +3,23 @@ import Cards from "../../../../../../components/Card"
 import Link from "next/link"
 import { get } from "http"
 
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 async function getProfilesByCity(cityId: string) {
-	const response = await fetch(`http://localhost:3007/search/profiles/city/${cityId}`,
+	const response = await fetch(`${apiBaseUrl}/search/profiles/city/${cityId}`,
 		{ cache: 'no-store' })
 	const data = await response.json()
 	return data
 }
 
 async function getState(stateId: string) {
-	const response = await fetch(`http://localhost:3007/search/state/${stateId}`, { cache: 'no-store' })
+	const response = await fetch(`${apiBaseUrl}/search/state/${stateId}`, { cache: 'no-store' })
 	const data = await response.json()
 	return data
 }
 
 async function getCity(cityId: string) {
-	const response = await fetch(`http://localhost:3007/search/city/${cityId}`, { cache: 'no-store' })
+	const response = await fetch(`${apiBaseUrl}/search/city/${cityId}`, { cache: 'no-store' })
 	const data = await response.json()
 	return data
 }
@@ -65,8 +67,7 @@ export default async function cityDetails({
 
 	const state = await getState(params.stateId)
 	const city = await getCity(params.cityId)
-	console.log("AQUIIIIIIIIIIIIIIIIIII")
-	console.log(city.name)
+
 	// const decodStateName = decodeURIComponent(params.stateName)
 	const decodCityName = decodeURIComponent(params.cityName)
 

@@ -58,6 +58,7 @@ interface ProfileIncomplete {
 
 
 const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomplete }) => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { register, handleSubmit, setFocus } = useForm<ProfilePanelInput>();
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
     const router = useRouter();
@@ -113,7 +114,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         formData.append('image', selectedImageFile);
 
         try {
-            const response = await fetch('http://localhost:3007/cover-image', {
+            const response = await fetch(`${apiBaseUrl}/cover-image`, {
                 method: 'POST',
                 body: formData,
             });
@@ -133,7 +134,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
     const deleteImage = async (imageFileName: string) => {
         try {
-            const response = await fetch('http://localhost:3007/cover-image', {
+            const response = await fetch(`${apiBaseUrl}/cover-image`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,7 +156,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
             if (input.length >= 3) {
-                fetch(`http://localhost:3007/cities/search/${encodeURIComponent(input)}`)
+                fetch(`${apiBaseUrl}/cities/search/${encodeURIComponent(input)}`)
                     .then(response => response.json())
                     .then(data => {
                         if (Array.isArray(data)) {
@@ -190,7 +191,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
         const debounceTimeout = setTimeout(() => {
             if (neighborhoodInput.length >= 1) {
-                fetch(`http://localhost:3007/neighborhoods/search/${selectedCityId}/${encodeURIComponent(neighborhoodInput)}`)
+                fetch(`${apiBaseUrl}/neighborhoods/search/${selectedCityId}/${encodeURIComponent(neighborhoodInput)}`)
                     .then(response => response.json())
                     .then(data => {
                         if (Array.isArray(data)) {
@@ -295,7 +296,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
     async function EditProfile(data: ProfilePanelInput) {
         console.log(data.zoneId)
         console.log(selectedNeighborhoodId)
-        const response = await fetch(`http://localhost:3007/profiles/${profileIncomplete.id}`, {
+        const response = await fetch(`${apiBaseUrl}/profiles/${profileIncomplete.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

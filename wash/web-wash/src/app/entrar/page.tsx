@@ -19,6 +19,7 @@ interface loginInput {
 }
 
 export default function Login() {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { register, handleSubmit, setFocus } = useForm<loginInput>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
@@ -33,7 +34,7 @@ export default function Login() {
     }, [])
 
     async function loginVerify(data: loginInput) {
-        const response = await fetch("http://localhost:3007/login", {
+        const response = await fetch(`${apiBaseUrl}/login`, {
             cache: 'no-store',
             method: "POST",
             headers: { "Content-type": "application/json" },

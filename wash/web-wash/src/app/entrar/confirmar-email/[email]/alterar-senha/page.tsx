@@ -23,8 +23,7 @@ export default function ChangePassword({
 }: {
     params: { email: string }
 }) {
-
-    console.log(params.email)
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URLL;
     const { register, handleSubmit, setFocus, watch } = useForm<changePassword>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
@@ -66,7 +65,7 @@ export default function ChangePassword({
             toast.error("A senha deve conter símbolo(s)!")
             return
         }
-        const response = await fetch("http://localhost:3007/users/change/user/password", {
+        const response = await fetch(`${apiBaseUrl}/users/change/user/password`, {
             cache: 'no-store',
             method: "PUT",
             headers: { "Content-type": "application/json" },

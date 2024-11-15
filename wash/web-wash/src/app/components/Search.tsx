@@ -19,6 +19,7 @@ interface SearchProps {
 }
 
 const Search = ({ states }: SearchProps) => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const [input, setInput] = useState<string>('');
     const [results, setResults] = useState<City[]>([]);
 
@@ -26,7 +27,7 @@ const Search = ({ states }: SearchProps) => {
         const debounceTimeout = setTimeout(() => {
             if (input.length >= 3) {
                 // console.log(input)
-                fetch(`http://localhost:3007/cities/search/${encodeURIComponent(input)}`)
+                fetch(`${apiBaseUrl}/cities/search/${encodeURIComponent(input)}`)
                     .then(response => response.json())
                     .then(data => {
                         if (Array.isArray(data)) {

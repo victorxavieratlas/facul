@@ -15,13 +15,14 @@ export default function editDetails({
 }: {
     params: { profileId: ProfileId }
 }) {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const router = useRouter();
 
     const { mudaLogin } = useContext(ClienteContext);
 
     async function tokenVerify() {
         try {
-            const response = await fetch(`http://localhost:3007/token/verify`, {
+            const response = await fetch(`${apiBaseUrl}/token/verify`, {
                 cache: 'no-store',
                 headers: {
                     'Content-Type': 'application/json',

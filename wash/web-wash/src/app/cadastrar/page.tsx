@@ -20,6 +20,7 @@ interface RegisterInput {
 }
 
 export default function Login() {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { register, handleSubmit, setFocus, watch } = useForm<RegisterInput>()
     const { mudaLogin } = useContext(ClienteContext)
     const router = useRouter()
@@ -58,7 +59,7 @@ export default function Login() {
             toast.error("A senha deve conter símbolo(s)!")
             return
         }
-        const createUserResponse = await fetch("http://localhost:3007/users", {
+        const createUserResponse = await fetch(`${apiBaseUrl}/users`, {
             cache: 'no-store',
             method: "POST",
             headers: { "Content-type": "application/json" },
@@ -68,7 +69,7 @@ export default function Login() {
         if (createUserResponse.status == 201) {
             const user = await createUserResponse.json()
             console.log(user.data)
-            const createProfileResponse = await fetch("http://localhost:3007/profiles", {
+            const createProfileResponse = await fetch(`${apiBaseUrl}/profiles`, {
                 cache: 'no-store',
                 method: "POST",
                 headers: { "Content-type": "application/json" },
@@ -82,7 +83,7 @@ export default function Login() {
                 const profile = await createProfileResponse.json()
                 Cookies.set("x-profile-id", profile.data.id)
 
-                const createSessionResponse = await fetch("http://localhost:3007/login", {
+                const createSessionResponse = await fetch(`${apiBaseUrl}/login`, {
                     cache: 'no-store',
                     method: "POST",
                     headers: { "Content-type": "application/json" },
@@ -100,7 +101,7 @@ export default function Login() {
 
 
                 } else {
-                    const deleteUserResponse = await fetch("http://localhost:3007/users", {
+                    const deleteUserResponse = await fetch(`${apiBaseUrl}/users`, {
                         cache: 'no-store',
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
@@ -116,7 +117,7 @@ export default function Login() {
                 mudaLogin({ userId: String(user.data.userId), userName: user.data.userName })
                 router.push(`/painel/${user.data.userId}`)
             } else {
-                const deleteUserResponse = await fetch("http://localhost:3007/users", {
+                const deleteUserResponse = await fetch(`${apiBaseUrl}/users`, {
                     cache: 'no-store',
                     method: "DELETE",
                     headers: { "Content-type": "application/json" },

@@ -22,15 +22,22 @@ async function main() {
     ufToStateIdMap.set(uf, stateId);
   }
 
-  // Inserção dos estados
-  for (const stateIdStr in data.states) {
-    const stateId = parseInt(stateIdStr, 10);
-    const stateName = data.states[stateIdStr];
-    await prisma.state.create({
-      data: {
+  // Inserção dos estados (se necessário)
+  // Verificar se já existem estados inseridos
+  const statesCount = await prisma.state.count();
+  if (statesCount === 0) {
+    console.log('Inserindo estados...');
+    const statesData = [];
+    for (const stateIdStr in data.states) {
+      const stateId = parseInt(stateIdStr, 10);
+      const stateName = data.states[stateIdStr];
+      statesData.push({
         id: stateId,
         name: stateName,
-      },
+      });
+    }
+    await prisma.state.createMany({
+      data: statesData,
     });
   }
 
@@ -42,36 +49,38 @@ async function main() {
     skip_empty_lines: true,
   });
 
-  // Inserção das cidades
-  for (const record of citiesRecords) {
-    const id_cidade = parseInt(record.id_cidade.trim(), 10);
-    const cidade = record.cidade.trim();
-    const uf = record.uf.trim();
+  // Inserção das cidades (se necessário)
+  const citiesCount = await prisma.city.count();
+  if (citiesCount === 0) {
+    console.log('Inserindo cidades...');
+    const citiesData = [];
+    for (const record of citiesRecords) {
+      const id_cidade = parseInt(record.id_cidade.trim(), 10);
+      const cidade = record.cidade.trim();
+      const uf = record.uf.trim();
 
-    if (isNaN(id_cidade) || !uf) {
-      console.warn(`Registro de cidade inválido: ${JSON.stringify(record)}`);
-      continue;
-    }
+      if (isNaN(id_cidade) || !uf) {
+        console.warn(`Registro de cidade inválido: ${JSON.stringify(record)}`);
+        continue;
+      }
 
-    const stateId = ufToStateIdMap.get(uf);
-    if (!stateId) {
-      console.warn(`UF ${uf} não encontrado no mapeamento de estados.`);
-      continue;
-    }
+      const stateId = ufToStateIdMap.get(uf);
+      if (!stateId) {
+        console.warn(`UF ${uf} não encontrado no mapeamento de estados.`);
+        continue;
+      }
 
-    try {
-      await prisma.city.create({
-        data: {
-          id: id_cidade, // Usando 'id_cidade' como 'id' da cidade
-          uf: uf,
-          name: cidade,
-          state: { connect: { id: stateId } },
-          // Removemos 'id_city' se não for mais necessário
-        },
+      citiesData.push({
+        id: id_cidade, // Usando 'id_cidade' como 'id' da cidade
+        uf: uf,
+        name: cidade,
+        stateId: stateId,
       });
-    } catch (error) {
-      console.error(`Erro ao inserir a cidade ${cidade}: ${error.message}`);
     }
+    await prisma.city.createMany({
+      data: citiesData,
+      skipDuplicates: true, // Ignora registros duplicados
+    });
   }
 
   // Leitura e parsing do arquivo CSV de bairros
@@ -85,68 +94,94 @@ async function main() {
     skip_empty_lines: true,
   });
 
-  // Mapeamento de id_city para cityId no banco (agora id_cidade para cityId)
-  const citiesInDb = await prisma.city.findMany({
-    select: {
-      id: true, // id agora é o id_cidade do CSV
-    },
+  // Mapeamento de id_cidade para cityId no banco
+  const cityIdsInDb = new Set<number>(
+    (await prisma.city.findMany({ select: { id: true } })).map((city) => city.id)
+  );
+
+  // Obter o último id de bairro inserido
+  const lastNeighborhood = await prisma.neighborhoods.findFirst({
+    orderBy: { id: 'desc' },
+    select: { id: true },
   });
 
-  const cityIdSet = new Set<number>();
-
-  for (const city of citiesInDb) {
-    cityIdSet.add(city.id);
+  let startIndex = 0;
+  if (lastNeighborhood) {
+    // Encontrar o índice do próximo bairro a ser inserido
+    startIndex = neighborhoodsRecords.findIndex(
+      (record) => parseInt(record.id_bairro.trim(), 10) === lastNeighborhood.id
+    );
+    if (startIndex !== -1) {
+      startIndex += 1; // Começar no próximo registro
+    } else {
+      startIndex = 0; // Se não encontrar, começar do início
+    }
   }
 
-  // Inserção dos bairros
-  for (const record of neighborhoodsRecords) {
-    const id_bairro = parseInt(record.id_bairro.trim(), 10);
-    const bairro = record.bairro.trim();
-    const id_cidade = parseInt(record.id_cidade.trim(), 10);
+  console.log(`Iniciando inserção de bairros a partir do índice ${startIndex}...`);
 
-    if (isNaN(id_bairro) || isNaN(id_cidade)) {
-      console.warn(`Registro de bairro inválido: ${JSON.stringify(record)}`);
-      continue;
-    }
+  // Inserção dos bairros em lotes
+  const batchSize = 1000; // Tamanho do lote para inserção em massa
 
-    if (!cityIdSet.has(id_cidade)) {
-      console.warn(`Cidade com id ${id_cidade} não encontrada no banco de dados.`);
-      continue;
-    }
+  for (let i = startIndex; i < neighborhoodsRecords.length; i += batchSize) {
+    const batch = neighborhoodsRecords.slice(i, i + batchSize);
+    const neighborhoodsData = [];
 
-    try {
-      await prisma.neighborhoods.create({
-        data: {
-          id: id_bairro,
-          idCity: id_cidade,
-          city: { connect: { id: id_cidade } },
-          name: bairro,
-        },
+    for (const record of batch) {
+      const id_bairro = parseInt(record.id_bairro.trim(), 10);
+      const bairro = record.bairro.trim();
+      const id_cidade = parseInt(record.id_cidade.trim(), 10);
+
+      if (isNaN(id_bairro) || isNaN(id_cidade)) {
+        console.warn(`Registro de bairro inválido: ${JSON.stringify(record)}`);
+        continue;
+      }
+
+      if (!cityIdsInDb.has(id_cidade)) {
+        console.warn(`Cidade com id ${id_cidade} não encontrada no banco de dados.`);
+        continue;
+      }
+
+      neighborhoodsData.push({
+        id: id_bairro,
+        idCity: id_cidade,
+        cityId: id_cidade,
+        name: bairro,
       });
-    } catch (error) {
-      console.error(`Erro ao inserir o bairro ${bairro}: ${error.message}`);
+    }
+
+    if (neighborhoodsData.length > 0) {
+      try {
+        await prisma.neighborhoods.createMany({
+          data: neighborhoodsData,
+          skipDuplicates: true, // Ignora registros duplicados
+        });
+        console.log(`Inseridos ${neighborhoodsData.length} bairros.`);
+      } catch (error) {
+        console.error(`Erro ao inserir bairros: ${error.message}`);
+      }
     }
   }
 
-  // Definir um array com os nomes das zonas
-  const zones = [
-    { name: 'Central' },
-    { name: 'Norte' },
-    { name: 'Sul' },
-    { name: 'Leste' },
-    { name: 'Oeste' },
-  ];
+  // Inserção das zonas (se necessário)
+  const zonesCount = await prisma.zone.count();
+  if (zonesCount === 0) {
+    console.log('Inserindo zonas...');
+    const zones = [
+      { name: 'Central' },
+      { name: 'Norte' },
+      { name: 'Sul' },
+      { name: 'Leste' },
+      { name: 'Oeste' },
+    ];
 
-  // Inserir as zonas no banco de dados
-  for (const zone of zones) {
     try {
-      await prisma.zone.create({
-        data: {
-          name: zone.name,
-        },
+      await prisma.zone.createMany({
+        data: zones,
+        skipDuplicates: true,
       });
     } catch (error: any) {
-      console.error(`Erro ao inserir a zona ${zone.name}: ${error.message}`);
+      console.error(`Erro ao inserir zonas: ${error.message}`);
     }
   }
 }
