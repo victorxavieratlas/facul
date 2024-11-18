@@ -155,13 +155,13 @@ export default function Panel() {
                                         <line x1="12" y1="16" x2="12" y2="12"></line>
                                         <line x1="12" y1="8" x2="12" y2="8"></line>
                                     </svg>
+                                    Seja bem-vindo(a) a Lavar Auto!
+                                </p>
+                                <p className="mx-6 mt-4 font-semibold text-gray-600">
                                     Confirmação de e-mail
                                 </p>
                                 <p className="mx-6 mt-2 font-semibold text-gray-600">
-                                    Seja bem-vindo(a) a Lavar Auto!
-                                </p>
-                                <p className="mx-6 mt-2 font-semibold text-gray-600">
-                                    Acesse seu e-mail e clique no link do e-mail enviado pela Lavar Auto. É necessário ter o e-mail confirmado para receber contato de clientes.
+                                    Acesse o e-mail cadastrado e siga as instruções do e-mail enviado pela Lavar Auto. É necessário ter o e-mail confirmado para receber contato de clientes.
                                 </p>
                             </div>
                             :

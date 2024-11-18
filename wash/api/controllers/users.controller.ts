@@ -123,12 +123,12 @@ export const createUser = async (req, res) => {
                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
                         <!-- Cabeçalho -->
                         <div style="padding: 20px; text-align: center;">
-                        <img src="https://www.creativefabrica.com/wp-content/uploads/2021/02/15/Flat-car-wash-logo-background-Best-logo-Graphics-8633754-1-312x208.png" alt="Logo Lavar Auto" style="width: 120px;">
+                        <img src="wash/api/public/logo2.svg" alt="Logo Lavar Auto" style="width: 120px;">
                         </div>
                         <!-- Conteúdo -->
                         <div style="padding: 30px 20px; text-align: center;">
                         <h1 style="font-size: 24px; color: #333333; margin-bottom: 20px;">Confirme seu e-mail</h1>
-                        <p style="font-size: 16px; color: #555555;">Para concluir seu cadastro na Lavar Auto, clique no botão abaixo:</p>
+                        <p style="font-size: 16px; color: #555555;">Clique no botão abaixo para concluir o cadastro na Lavar Auto:</p>
                         <a href="${webBaseUrl}/painel/${user.id}/${email}" style="display: inline-block; padding: 15px 25px; background-color: #437FE5; color: #ffffff; text-decoration: none; font-size: 20px; border-radius: 5px; margin: 20px 0;">Clique aqui para confirmar o e-mail</a>
                         <p style="font-size: 16px; color: #555555;">Se você não solicitou este e-mail, por favor ignore-o.</p>
                         </div>
