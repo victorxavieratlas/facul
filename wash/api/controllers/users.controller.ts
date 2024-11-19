@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import { hashSync } from "bcrypt"
+import { hashSync, genSaltSync } from "bcrypt"
 import sendEmail from '../services/nodemailer';
 import { profile } from "console";
 
@@ -103,7 +103,8 @@ export const createUser = async (req, res) => {
         return
     }
 
-    const hashedPassword = hashSync(password, 10)
+    const salt = genSaltSync(12)
+    const hashedPassword = hashSync(password, salt)
 
     try {
         const user = await userClient.create({

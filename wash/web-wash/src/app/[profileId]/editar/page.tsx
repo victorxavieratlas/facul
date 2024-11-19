@@ -55,7 +55,6 @@ export default function editDetails({
             router.replace("/entrar");
             return;
         } else {
-
             if (String(params.profileId) != String(Cookies.get("x-profile-id"))) {
                 router.replace(`/painel/${Cookies.get("user_login_id")}`);
             } else {

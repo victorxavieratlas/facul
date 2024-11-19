@@ -1,7 +1,5 @@
-import { getStateAndCityData } from "@/app/[profileId]/page"
 import Cards from "../../../../../../components/Card"
 import Link from "next/link"
-import { get } from "http"
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 

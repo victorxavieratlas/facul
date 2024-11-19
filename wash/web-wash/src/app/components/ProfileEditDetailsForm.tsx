@@ -7,6 +7,7 @@ import { Toaster, toast } from 'sonner'
 import Cookies from 'js-cookie'
 import UploadImageDetailsFormInput from './UploadImageDetailsFormInput';
 import { Fredoka } from "next/font/google";
+import Skeleton from "./Skeleton";
 
 const fredoka = Fredoka({
     subsets: ['latin'],

@@ -18,6 +18,7 @@ const fredoka = Fredoka({
 
 
 export default function Header() {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
@@ -28,6 +29,42 @@ export default function Header() {
         // Fechar o menu sempre que a rota mudar ou o cliente logado mudar
         setIsMenuOpen(false);
     }, [pathname, idClienteLogado]);
+
+    async function tokenVerify() {
+        try {
+            const response = await fetch(`${apiBaseUrl}/token/verify`, {
+                cache: 'no-store',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${Cookies.get("x-access-token")}`
+                }
+            });
+
+            console.log(response)
+
+            if (response.ok) {
+                mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
+            } else {
+                Cookies.remove("user_login_id");
+                Cookies.remove("x-access-token");
+                Cookies.remove("x-user-name");
+                Cookies.remove("x-profile-id");
+                mudaLogin({ userId: null, userName: "" });
+            }
+        } catch (error) {
+            console.error('Error verifying token:', error);
+        }
+    }
+
+    useEffect(() => {
+        async function initialize() {
+
+            await tokenVerify()
+
+        }
+
+        initialize();
+    }, [router]);
 
     useEffect(() => {
         setIsMenuOpen(false)
@@ -191,10 +228,10 @@ export default function Header() {
                                 </>
                             )}
                             <div className="h-96 max-h-screen"></div>
-                                <div className="flex justify-center h-screen bg-gray-200 items-center align-bottom space-x-3 rtl:space-x-reverse mt-6">
-                                    <Image src="/logo2.svg" width={30} height={30} alt="Logotipo da CarWash em azul claro" />
-                                    <span className={`self-center ml-6 text-2xl font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top ${fredoka.className}`}>lavar auto</span>
-                                </div>
+                            <div className="flex justify-center h-screen bg-gray-200 items-center align-bottom space-x-3 rtl:space-x-reverse mt-6">
+                                <Image src="/logo2.svg" width={30} height={30} alt="Logotipo da CarWash em azul claro" />
+                                <span className={`self-center ml-6 text-2xl font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 align-top ${fredoka.className}`}>lavar auto</span>
+                            </div>
                         </div>
                     )}
                     {!isMobile && !idClienteLogado && (

@@ -1,11 +1,12 @@
-"use client";
-import { useEffect, useState, useContext } from "react";
 import Link from "next/link"
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import { ClienteContext } from "../context/ClienteContext";
+import Image from "next/image"
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 import ServicesProfileAccordion from "../components/ServicesProfileAccordion";
 import { slugify } from "../utils/slugify";
+import Skeleton from '../components/Skeleton';
+import ContactButton from "../components/ContactButton";
+import ContactButton2 from "../components/ContactButton2";
 
 export interface ProfileData {
 	id: number;
@@ -57,98 +58,56 @@ interface City {
 	uf: string;
 }
 
-export async function getStateAndCityData(stateId: string, stateName: string, cityId: string, cityName: string) {
-	const stateAndCityData = {
-		stateId,
-		stateName,
-		cityId,
-		cityName
-	}
-	return stateAndCityData
-}
-
-export default function Panel({
-	params
-}: {
-	params: { profileId: string }
-}) {
+export default async function Panel({ params }: { params: { profileId: string } }) {
 	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-	const router = useRouter();
-	const [profileData, setProfileData] = useState<ProfileData | null>(null);
-	const [stateData, setStateData] = useState<State | null>(null);
-	const [cityData, setCityData] = useState<City | null>(null);
-	const [services, setServices] = useState<Service[]>([]);
-	const { mudaLogin } = useContext(ClienteContext);
 
-	useEffect(() => {
-		if (Cookies.get("x-access-token") || Cookies.get("user_login_id") || Cookies.get("x-profile-id")) {
-			mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
-		}
+	// Fetch profile data
+	const profileResponse = await fetch(`${apiBaseUrl}/profiles/${params.profileId}`, { cache: 'no-store' });
+	const profileJson = await profileResponse.json();
+	const profileData: ProfileData = profileJson.data;
 
-		getProfile(params.profileId)
-		fetchServices(params.profileId)
-	}, [router]);
+	// Check for missing fields and redirect
+	const missingFields =
+		!profileData.name ||
+		!profileData.bio ||
+		!profileData.profileLocation;
 
-	useEffect(() => {
-		if (profileData) {
-			// Verifique se os campos obrigatórios estão preenchidos
-			const missingFields =
-				!profileData.name ||
-				!profileData.bio ||
-				!profileData.profileLocation
-
-			if (missingFields) {
-				router.replace(`/painel/${Cookies.get("user_login_id")}`);
-			}
-		}
-	}, [profileData]);
-
-	async function getProfile(profileId: string) {
-		const response = await fetch(`${apiBaseUrl}/profiles/${profileId}`, { cache: 'no-store' });
-		const data = await response.json();
-		setProfileData(data.data);
-		console.log(data.data)
-		// Quando o profileData é obtido, buscamos as informações do estado
-		if (data.data.profileLocation && data.data.profileLocation.length > 0) {
-			getState(data.data.profileLocation[0].stateId);
-			getCity(data.data.profileLocation[0].cityId);
-		}
+	if (missingFields) {
+		const userId = cookies().get('user_login_id')?.value;
+		redirect(`/painel/${userId}`);
 	}
 
-	async function fetchServices(profileId: string) {
-		const response = await fetch(`${apiBaseUrl}/services/${profileId}`);
-		const data = await response.json();
-		setServices(data);
+	// Fetch services
+	const servicesResponse = await fetch(`${apiBaseUrl}/services/${params.profileId}`);
+	const services: Service[] = await servicesResponse.json();
+
+	// Fetch state and city data
+	let stateData: State | null = null;
+	let cityData: City | null = null;
+
+	if (profileData.profileLocation && profileData.profileLocation.length > 0) {
+		const stateId = profileData.profileLocation[0].stateId;
+		const cityId = profileData.profileLocation[0].cityId;
+
+		const stateResponse = await fetch(`${apiBaseUrl}/search/state/${stateId}`);
+		stateData = await stateResponse.json();
+
+		const cityResponse = await fetch(`${apiBaseUrl}/search/city/${cityId}`);
+		cityData = await cityResponse.json();
 	}
 
-	async function getCity(cityId: number) {
-		// console.log(stateId)
-		const response = await fetch(`${apiBaseUrl}/search/city/${cityId}`);
-		const city = await response.json();
-		setCityData(city);
-	}
-	async function getState(stateId: number) {
-		// console.log(stateId)
-		const response = await fetch(`${apiBaseUrl}/search/state/${stateId}`);
-		const state = await response.json();
-		setStateData(state);
-	}
-	// console.log(profileData)
-	// console.log(stateData)
 	if (!profileData || !stateData || !cityData) {
-		return <div className="m-96 p-96">Carregando...</div>;
+		return <Skeleton />; // Replace with your Skeleton component
 	}
 
-	const cityId = cityData?.id
-	const cityName = cityData?.name
-	const stateUf = cityData?.uf
-	// const stateName = profileData.states[0].name
-
-	const stateSlug = slugify(stateData.name)
-	const citySlug = slugify(cityData.name)
+	const cityId = cityData.id;
+	const cityName = cityData.name;
+	const stateUf = cityData.uf;
+	const stateSlug = slugify(stateData.name);
+	const citySlug = slugify(cityData.name);
 
 	return (
-		<div className="sm:ml-48 sm:mr-48 mt-4">
+		<div className="sm:ml-64 sm:mr-64 mt-4">
 			<div className="w-full">
 				<nav className="pl-3 lg:mb-1 mt-4 flex" aria-label="Breadcrumb">
 					<ol className="inline-flex flex-wrap items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -194,7 +153,7 @@ export default function Panel({
 			</div>
 			<div className="max-w-full min-w-full">
 				{profileData.images && profileData.images[0] ?
-					<img className="object-cover h-96 w-full rounded-t-lg" src={profileData.images[0].url} alt="" /> : <></>
+					<Image className="object-cover h-96 w-full rounded-t-lg" src={profileData.images[0].url} alt="" width={800} height={600} /> : <></>
 				}
 				<div className="p-5 pt-4 mb-6 shadow rounded-b-lg">
 					<h2 className="mb-3 text-2xl font-semibold text-gray-600">{profileData.name}</h2>
@@ -238,35 +197,13 @@ export default function Panel({
 
 					{/* Botão de ação */}
 					<div className="w-full flex justify-center mt-5">
-						<button
-							className="inline-flex items-center w-full p-3 text-sm font-medium justify-center text-center text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-300"
-							onClick={() => {
-								const message = encodeURIComponent("Olá! Vi seu anúncio na Lavar Auto e gostaria de saber os horários disponíveis.");
-								const whatsappLink = `https://wa.me/55${profileData.phone}?text=${message}`;
-								const newWindow = window.open(whatsappLink, '_blank', 'noopener,noreferrer');
-								if (newWindow) newWindow.opener = null;
-							}}
-						>
-							<svg className="inline mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#ffffff" fill="none">
-								<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.3789 2.27907 14.6926 2.78382 15.8877C3.06278 16.5481 3.20226 16.8784 3.21953 17.128C3.2368 17.3776 3.16334 17.6521 3.01642 18.2012L2 22L5.79877 20.9836C6.34788 20.8367 6.62244 20.7632 6.87202 20.7805C7.12161 20.7977 7.45185 20.9372 8.11235 21.2162C9.30745 21.7209 10.6211 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-								<path d="M8.58815 12.3773L9.45909 11.2956C9.82616 10.8397 10.2799 10.4153 10.3155 9.80826C10.3244 9.65494 10.2166 8.96657 10.0008 7.58986C9.91601 7.04881 9.41086 7 8.97332 7C8.40314 7 8.11805 7 7.83495 7.12931C7.47714 7.29275 7.10979 7.75231 7.02917 8.13733C6.96539 8.44196 7.01279 8.65187 7.10759 9.07169C7.51023 10.8548 8.45481 12.6158 9.91948 14.0805C11.3842 15.5452 13.1452 16.4898 14.9283 16.8924C15.3481 16.9872 15.558 17.0346 15.8627 16.9708C16.2477 16.8902 16.7072 16.5229 16.8707 16.165C17 15.8819 17 15.5969 17 15.0267C17 14.5891 16.9512 14.084 16.4101 13.9992C15.0334 13.7834 14.3451 13.6756 14.1917 13.6845C13.5847 13.7201 13.1603 14.1738 12.7044 14.5409L11.6227 15.4118" stroke="currentColor" stroke-width="1.5" />
-							</svg>
-							Entrar em contato
-						</button>
+						<ContactButton phone={String(profileData.phone)} />
 					</div>
 				</div>
-				<ServicesProfileAccordion services={services} profileId={profileData.id} updateServices={fetchServices} />
+				<ServicesProfileAccordion initialServices={services} profileId={profileData.id} />
 
-				<div className="w-full flex justify-center">
-					<div className="w-3/4 sm:w-1/3 flex justify-center my-8 sm:my-14">
-						<button className="inline-flex items-center w-full p-3 text-sm font-medium justify-center text-center text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-300">
-							<svg className="inline mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#ffffff" fill="none">
-								<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.3789 2.27907 14.6926 2.78382 15.8877C3.06278 16.5481 3.20226 16.8784 3.21953 17.128C3.2368 17.3776 3.16334 17.6521 3.01642 18.2012L2 22L5.79877 20.9836C6.34788 20.8367 6.62244 20.7632 6.87202 20.7805C7.12161 20.7977 7.45185 20.9372 8.11235 21.2162C9.30745 21.7209 10.6211 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-								<path d="M8.58815 12.3773L9.45909 11.2956C9.82616 10.8397 10.2799 10.4153 10.3155 9.80826C10.3244 9.65494 10.2166 8.96657 10.0008 7.58986C9.91601 7.04881 9.41086 7 8.97332 7C8.40314 7 8.11805 7 7.83495 7.12931C7.47714 7.29275 7.10979 7.75231 7.02917 8.13733C6.96539 8.44196 7.01279 8.65187 7.10759 9.07169C7.51023 10.8548 8.45481 12.6158 9.91948 14.0805C11.3842 15.5452 13.1452 16.4898 14.9283 16.8924C15.3481 16.9872 15.558 17.0346 15.8627 16.9708C16.2477 16.8902 16.7072 16.5229 16.8707 16.165C17 15.8819 17 15.5969 17 15.0267C17 14.5891 16.9512 14.084 16.4101 13.9992C15.0334 13.7834 14.3451 13.6756 14.1917 13.6845C13.5847 13.7201 13.1603 14.1738 12.7044 14.5409L11.6227 15.4118" stroke="currentColor" stroke-width="1.5" />
-							</svg>
-							Agendar
-						</button>
-					</div>
+				<div className="w-full flex justify-center my-5">
+					<ContactButton2 phone={String(profileData.phone)} />
 				</div>
 				<div className=" w-full p-5 mb-6 shadow rounded-lg">
 					<h3 className="font-semibold text-gray-500">
