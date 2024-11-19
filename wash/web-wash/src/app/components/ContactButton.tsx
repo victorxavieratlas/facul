@@ -1,6 +1,25 @@
 'use client';
 
-export default function ContactButton({ phone }: { phone: string }) {
+import { useState, useEffect } from 'react';
+import SkeletonButton from './SkeletonContactButton';
+
+interface ContactButtonProps {
+    phone?: string;
+}
+
+const ContactButton: React.FC<ContactButtonProps> = ({ phone }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (phone) {
+            setIsLoading(false);
+        }
+    }, [phone]);
+
+    if (isLoading) {
+        return <SkeletonButton className="w-full" />;
+    }
+
     return (
         <button
             className="inline-flex items-center w-full p-3 text-sm font-medium justify-center text-center text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-300"
@@ -17,4 +36,6 @@ export default function ContactButton({ phone }: { phone: string }) {
             Entrar em contato
         </button>
     );
-}
+};
+
+export default ContactButton;

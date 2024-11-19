@@ -11,6 +11,7 @@ import Skeleton from "./Skeleton";
 
 const fredoka = Fredoka({
     subsets: ['latin'],
+    preload: true
 })
 
 interface City {

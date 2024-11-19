@@ -1,58 +1,29 @@
-"use client"
-import { useEffect, useContext, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Cookies from 'js-cookie'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ClienteContext } from "./context/ClienteContext"
-import States from "./components/States";
-import Search from "./components/Search";
-import { Fredoka } from "next/font/google";
+import Image from 'next/image';
+import Link from 'next/link';
+import States from './components/States';
+import Search from './components/Search';
+import { Fredoka } from 'next/font/google';
 
 const fredoka = Fredoka({
 	subsets: ['latin'],
-})
+	preload: true,
+	display: 'swap'
+});
 
-export interface stateProps {
-	id: number
-	name: string
+export interface StateProps {
+	id: number;
+	name: string;
 }
 
-export default function Home() {
+export default async function Home() {
 	const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-	const { mudaLogin } = useContext(ClienteContext)
-	const router = useRouter()
 
-	// Estado para armazenar os estados
-	const [states, setStates] = useState<stateProps[]>([])
+	const statesResponse = await fetch(`${apiBaseUrl}/search/state`, { cache: 'no-store' });
+	const statesData: StateProps[] = await statesResponse.json();
 
-	// Verificar cookies e redirecionar se necessário
-	useEffect(() => {
-		if (Cookies.get("x-access-token") && Cookies.get("user_login_id")) {
-			router.replace(`/`)
-			mudaLogin({
-				userId: String(Cookies.get("user_login_id")) || null,
-				userName: Cookies.get("x-user-name") || ""
-			})
-		}
-	}, [router, mudaLogin])
-
-	// Função para buscar os estados
-	async function getState() {
-		const statesResponse = await fetch(`${apiBaseUrl}/search/state`, { cache: 'no-store' })
-		const statesData = await statesResponse.json()
-		setStates(statesData)
-	}
-
-	// Chamada da função `getState` apenas uma vez
-	useEffect(() => {
-		getState()
-	}, []) // Executa apenas uma vez no carregamento do componente
-
-	// Mapear estados após a chamada da API
-	const listStates = states.map((state: stateProps) => (
+	const listStates = statesData.map((state: StateProps) => (
 		<States key={state.id} state={state} />
-	))
+	));
 
 	return (
 		<div>
@@ -73,7 +44,7 @@ export default function Home() {
 			</div>
 
 			{/* Passando os estados para o componente Search */}
-			<Search states={states} />
+			<Search states={statesData} />
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto relative mt-20 mb-4 sm:mb-4">
 				<div className="w-full flex flex-col items-center text-center mb-8">

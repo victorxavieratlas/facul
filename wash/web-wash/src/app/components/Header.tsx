@@ -1,6 +1,5 @@
 'use client'
 import { useContext, useState, useEffect } from "react"
-import { RxExit } from "react-icons/rx"
 import { IoIosMenu, IoMdClose } from 'react-icons/io';
 import Swal from "sweetalert2"
 import Cookies from 'js-cookie'
@@ -9,19 +8,18 @@ import { ClienteContext } from "../context/ClienteContext"
 import Link from "next/link"
 import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
-import { profile } from "console";
 import { Fredoka } from "next/font/google";
 
 const fredoka = Fredoka({
     subsets: ['latin'],
+    preload: true,
+    display: 'swap'
 })
-
 
 export default function Header() {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const { idClienteLogado, nomeClienteLogado, mudaLogin } = useContext(ClienteContext);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
 
@@ -58,25 +56,13 @@ export default function Header() {
 
     useEffect(() => {
         async function initialize() {
-
-            await tokenVerify()
-
+            if (Cookies.get("x-access-token")) {
+                await tokenVerify()
+            }
         }
 
         initialize();
     }, [router]);
-
-    useEffect(() => {
-        setIsMenuOpen(false)
-        const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-
-        window.addEventListener('resize', handleResize);
-        handleResize();
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const panelRoute = `/painel/${idClienteLogado}`;
     const isOnPanelPage = idClienteLogado && pathname === panelRoute;
@@ -104,7 +90,6 @@ export default function Header() {
                 Cookies.remove("x-profile-id");
                 mudaLogin({ userId: null, userName: "" });
                 router.replace("/")
-                // window.location.reload();
             }
         });
     }
@@ -119,11 +104,21 @@ export default function Header() {
                     </div>
                 </Link>
                 <div className="flex items-center justify-end">
-                    {(isMobile || idClienteLogado) && (
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 sm:mr-24 hover:bg-gray-100 rounded-md">
-                            {isMenuOpen ? <IoMdClose className="w-6 h-6" /> : <IoIosMenu className="w-6 h-6" />}
-                        </button>
+                    {/* Botão do menu para dispositivos móveis ou quando o usuário está logado */}
+                    {(idClienteLogado) ? (
+                        <div>
+                            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 sm:mr-24 hover:bg-gray-100 rounded-md">
+                                {isMenuOpen ? <IoMdClose className="w-6 h-6" /> : <IoIosMenu className="w-6 h-6" />}
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="md:hidden">
+                            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 sm:mr-24 hover:bg-gray-100 rounded-md">
+                                {isMenuOpen ? <IoMdClose className="w-6 h-6" /> : <IoIosMenu className="w-6 h-6" />}
+                            </button>
+                        </div>
                     )}
+                    {/* Menu lateral */}
                     {isMenuOpen && (
                         <div className="absolute top-full right-0 min-h-full h-screen bg-gray-200 shadow-lg z-10 sm:min-w-72 divide-y">
                             {idClienteLogado ? (
@@ -234,8 +229,9 @@ export default function Header() {
                             </div>
                         </div>
                     )}
-                    {!isMobile && !idClienteLogado && (
-                        <ul className="flex flex-col p-4 md:p-0 mt-4 mr-12 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-gray-200">
+                    {/* Menu desktop visível apenas para usuários não logados em telas médias ou maiores */}
+                    {!idClienteLogado && (
+                        <ul className="hidden md:flex flex-col p-4 md:p-0 mt-4 mr-12 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-gray-200">
                             <li className="block py-2 px-3 text-white hover:bg-gray-300 rounded-lg">
                                 <Link href="/cadastrar" className="block py-2 px-3 bg-blue-500 rounded md:bg-transparent md:text-blue-500 md:p-0 text-blue-500" aria-current="page">
                                     CADASTRE-SE GRÁTIS

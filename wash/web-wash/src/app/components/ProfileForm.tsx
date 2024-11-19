@@ -10,6 +10,7 @@ import { Fredoka } from "next/font/google";
 
 const fredoka = Fredoka({
     subsets: ['latin'],
+    preload: true
 })
 
 interface City {

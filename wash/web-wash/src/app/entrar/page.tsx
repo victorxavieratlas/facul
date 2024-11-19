@@ -11,6 +11,7 @@ import Link from 'next/link'
 
 const fredoka = Fredoka({
     subsets: ['latin'],
+    preload: true
 })
 
 interface loginInput {
