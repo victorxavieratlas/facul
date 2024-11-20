@@ -35,7 +35,7 @@ export default async function Home() {
 						na <span className={`font-extrabold sm:pl-3 pl-1 tracking-wide text-blue-500 ${fredoka.className}`}>lavar auto</span>
 					</h1>
 					<h2 className="text-1xl sm:text-2xl font-semibold text-gray-600 text-balance mt-4">
-						<span className="clear-left block">A maior plataforma de estéticas automotivas</span>
+						<span className="clear-left block">A primeira plataforma de estéticas automotivas</span>
 						do Brasil.
 					</h2>
 				</div>
