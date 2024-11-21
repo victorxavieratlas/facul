@@ -30,10 +30,7 @@ export default function editDetails({
                 }
             });
 
-            console.log(response.ok)
-
             if (response.ok) {
-                console.log('Verified token!');
                 mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
             } else {
                 Cookies.remove("user_login_id");

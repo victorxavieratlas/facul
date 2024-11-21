@@ -69,41 +69,76 @@ export default function Login() {
                 toast.error("A senha deve conter símbolo(s)!")
                 return
             }
-            const createUserResponse = await fetch(`${apiBaseUrl}/users`, {
-                cache: 'no-store',
-                method: "POST",
-                headers: { "Content-type": "application/json" },
-                body: JSON.stringify({ email: data.email, password: data.password, name: data.name })
-            })
 
-            if (createUserResponse.status == 201) {
-                const user = await createUserResponse.json()
-                const createProfileResponse = await fetch(`${apiBaseUrl}/profiles`, {
+                const createUserResponse = await fetch(`${apiBaseUrl}/users`, {
                     cache: 'no-store',
                     method: "POST",
-                    headers: { "Content-type": "application/json" },
-                    body: JSON.stringify({
-                        userId: user.data.userId,
-                        name: user.data.userName
-                    })
+                    headers: { 
+                        "Content-type": "application/json"
+                     },
+                    body: JSON.stringify({ email: data.email, password: data.password, name: data.name })
                 })
-                if (createProfileResponse.status == 201) {
-                    const profile = await createProfileResponse.json()
-                    Cookies.set("x-profile-id", profile.data.id)
 
-                    const createSessionResponse = await fetch(`${apiBaseUrl}/login`, {
+                if (createUserResponse.status == 201) {
+                    const user = await createUserResponse.json()
+                    const createProfileResponse = await fetch(`${apiBaseUrl}/profiles`, {
                         cache: 'no-store',
                         method: "POST",
                         headers: { "Content-type": "application/json" },
-                        body: JSON.stringify({ email: data.email, password: data.password })
+                        body: JSON.stringify({
+                            userId: user.data.userId,
+                            name: user.data.userName
+                        })
                     })
+                    if (createProfileResponse.status == 201) {
+                        const profile = await createProfileResponse.json()
+                        Cookies.set("x-profile-id", profile.data.id)
 
-                    if (createSessionResponse.status == 201) {
-                        const userSession = await createSessionResponse.json()
-                        Cookies.set("user_login_id", userSession.userId)
-                        Cookies.set("x-access-token", userSession.token)
-                        Cookies.set("x-user-name", userSession.userName)
+                        const createSessionResponse = await fetch(`${apiBaseUrl}/login`, {
+                            cache: 'no-store',
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                            body: JSON.stringify({ email: data.email, password: data.password })
+                        })
 
+                        if (createSessionResponse.status == 201) {
+                            const userSession = await createSessionResponse.json()
+                            Cookies.set("user_login_id", userSession.userId)
+                            Cookies.set("x-access-token", userSession.token)
+                            Cookies.set("x-user-name", userSession.userName)
+
+                            mudaLogin({ userId: String(user.data.userId), userName: user.data.userName })
+                            router.push(`/painel/${user.data.userId}`)
+                        } else {
+                            const deleteUserResponse = await fetch(`${apiBaseUrl}/users/${user.id}`, {
+                                cache: 'no-store',
+                                method: "DELETE",
+                                headers: { "Content-type": "application/json" }
+                            })
+
+                            if (deleteUserResponse.status == 200) {
+
+                                const deleteProfileResponse = await fetch(`${apiBaseUrl}/profiles/${profile.data.id}`, {
+                                    cache: 'no-store',
+                                    method: "DELETE",
+                                    headers: { "Content-type": "application/json" }
+                                })
+
+                                if (deleteProfileResponse.status == 200) {
+                                    setLoading(false)
+                                    toast.error("Ocorreu um erro! Cadastre novamente")
+                                    setFocus("email")
+                                } else {
+                                    setLoading(false)
+                                    toast.error("Ocorreu um erro! Entre em contato com o suporte. Erro: 4243")
+                                    setFocus("email")
+                                }
+                            } else {
+                                setLoading(false)
+                                toast.error("Ocorreu um erro! Entre em contato com o suporte. Erro: 4242")
+                                setFocus("email")
+                            }
+                        }
                     } else {
                         const deleteUserResponse = await fetch(`${apiBaseUrl}/users`, {
                             cache: 'no-store',
@@ -116,32 +151,17 @@ export default function Login() {
                             toast.error("Ocorreu um erro! Cadastre novamente")
                             setFocus("email")
                         }
+                        setLoading(false)
+                        Cookies.remove("user_login_id")
+                        Cookies.remove("x-access-token")
+                        Cookies.remove("x-user-name")
+                        Cookies.remove("x-profile-id")
                     }
-
-                    mudaLogin({ userId: String(user.data.userId), userName: user.data.userName })
-                    router.push(`/painel/${user.data.userId}`)
                 } else {
-                    const deleteUserResponse = await fetch(`${apiBaseUrl}/users`, {
-                        cache: 'no-store',
-                        method: "DELETE",
-                        headers: { "Content-type": "application/json" },
-                        body: JSON.stringify({ id: user.id })
-                    })
-
-                    if (deleteUserResponse.status == 200) {
-                        toast.error("Ocorreu um erro! Cadastre novamente")
-                        setFocus("email")
-                    }
-
-                    Cookies.remove("user_login_id")
-                    Cookies.remove("x-access-token")
-                    Cookies.remove("x-user-name")
-                    Cookies.remove("x-profile-id")
+                    setLoading(false)
+                    toast.error("E-mail já existe ou digite um email válido.")
+                    setFocus("email")
                 }
-            } else {
-                toast.error("Email cadastrado já existe ou digite um email válido.")
-                setFocus("email")
-            }
         } catch (error) {
             console.error("Erro ao registrar:", error)
         }

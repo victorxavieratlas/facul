@@ -15,6 +15,7 @@ datasource db {
 
 model User {
   id        String    @id @default(uuid(7)) @db.Uuid
+  status    Int?      @default(0)
   profile   Profile?
   role      Role      @default(USER)
   email     String    @unique
@@ -30,6 +31,7 @@ model User {
 
 model Profile {
   id               String            @id @default(uuid(7)) @db.Uuid
+  status           Int?              @default(0)
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String            @unique @db.Uuid
   name             String?           @db.VarChar(30)

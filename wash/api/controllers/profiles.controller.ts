@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 const profileClient = new PrismaClient().profile
 const profileLocationClient = new PrismaClient().profileLocation
+const logClient = new PrismaClient().log
 
 export const getAllProfiles = async (req, res) => {
     try {
@@ -213,6 +214,26 @@ export const softDeleteProfile = async (req, res) => {
     }
 }
 
+export const deleteProfile = async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const profile = await profileClient.delete({
+            where: { id: String(id) }
+        })
+
+        await logClient.create({
+            data: {
+                description: "Usuário deletado!",
+                userId: id
+            }
+        })
+        res.status(200).json({ msg: "Perfil deletado!" })
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
 export const updateProfile = async (req, res) => {
     const { id } = req.params
     const {
@@ -235,9 +256,6 @@ export const updateProfile = async (req, res) => {
         imageURL
     } = req.body
 
-    console.log(req.body)
-
-     // Função auxiliar para verificar se um valor é nulo ou string vazia
      function isEmpty(value) {
         return value == null || (typeof value === 'string' && value.trim() === '');
     }
@@ -264,8 +282,6 @@ export const updateProfile = async (req, res) => {
         return res.status(400).json({ error: "Todos os campos são obrigatórios!" });
     }
 
-
-    
     try {
         const profile = await profileClient.update({
             where: { id: String(id) },
@@ -332,8 +348,6 @@ export const updateProfileEditDetails = async (req, res) => {
     if (!bio || !phone || !startDay || !finalDay || !openHour || !closeHour ||!minPrice || !maxPrice || !neighborhoodId || !address || !addressNumber || !addressCEP || !addressComplement || !cityId || !oldCityId || !stateId || !oldStateId || !imageURL || !oldImageId) {
         return res.status(400).json({ error: "Todos os campos são obrigatórios!" })
     }
-
-    console.log(req.body)
     
     try {
         const profile = await profileClient.update({

@@ -6,7 +6,7 @@ import { tokenVerify } from "../middlewares/tokenVerify.middleware"
 const usersRouter = Router()
 
 usersRouter
-    .get("/", getAllUsers)
+    // .get("/", getAllUsers)
     .get("/:id", getUserById)
     .post("/generate-code/email", generateCode)
     .post("/validate-code/email", validateCode)
@@ -15,7 +15,7 @@ usersRouter
     .post("/", createUser)
     .delete("/:id", deleteUser)
     .put("/delete/:id", softDeleteUser)
-    .put("/:id", updateUser)
+    .put("/:id", tokenVerify, updateUser)
     .put("/role-update/:id", userRoleUpdate)
 
 export default usersRouter

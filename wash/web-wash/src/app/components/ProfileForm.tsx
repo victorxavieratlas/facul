@@ -152,9 +152,9 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             });
 
             if (!response.ok) {
-                console.error('Error deleting image:', response.statusText);
-            } else {
                 console.log('Image deleted successfully');
+            } else {
+                console.error('Error deleting image:', response.statusText);
             }
         } catch (error) {
             console.error('Error deleting image:', error);
@@ -281,11 +281,9 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
         }
 
         if (!selectedImageFile) {
-            // Handle the case when the image is not changed
             console.log('aguardando upload da imagem')
         } else {
             const imageData = await uploadImage();
-            console.log(imageData)
             if (!imageData) {
                 toast.error("Erro ao enviar a imagem.");
                 return;
@@ -604,7 +602,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                         </span>
                                         {/* Caixa com a explicação */}
                                         {showTooltipAddressNumber && (
-                                            <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                            <div className="absolute pl-16 sm:pl-3 ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                                 Número de endereço e localização na rua ou avenida - Ex: 1234.
                                             </div>
                                         )}
@@ -743,7 +741,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                             </span>
                                             {/* Caixa com a explicação */}
                                             {showTooltipLowerPrice && (
-                                                <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                                <div className="absolute pl-16 sm:pl-3 ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                                     Preço mais baixo de um serviço independente do tipo de veículo, no formato de valor em números - Ex: 80.
                                                 </div>
                                             )}
@@ -811,13 +809,13 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                             </span>
                                             {/* Caixa com a explicação */}
                                             {showTooltipOpenDay && (
-                                                <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                                <div className="absolute pl-16 sm:pl-3 ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                                     Dia em que o serviço começa a operar, no formato de nome do dia em texto - Ex: Segunda.
                                                 </div>
                                             )}
                                         </div>
                                         <label htmlFor="startDay" className="block mb-2 text-sm font-medium text-gray-500">
-                                            Dia de abetura
+                                            Dia de abrir
                                         </label>
                                         <input type="string" id="startDay" placeholder="Segunda" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                                             required {...register("startDay")} />
@@ -845,7 +843,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                             )}
                                         </div>
                                         <label htmlFor="finalDay" className="block mb-2 text-sm font-medium text-gray-500">
-                                            Dia de fechamento
+                                            Dia de fechar
                                         </label>
                                         <input type="string" id="finalDay" placeholder="Sexta" className="mb-10 bg-gray-50 border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                                             required {...register("finalDay")} />
@@ -868,7 +866,7 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                                             </span>
                                             {/* Caixa com a explicação */}
                                             {showTooltipOpenHour && (
-                                                <div className="absolute ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
+                                                <div className="absolute pl-16 sm:pl-3 ml-10 mt-6 bg-gray-100 text-gray-700 text-xs rounded-lg p-3 shadow-lg z-10 w-64">
                                                     Horário em que o serviço começa a operar, no formato 24 horas - Ex: 09:00
                                                 </div>
                                             )}

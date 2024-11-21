@@ -55,7 +55,7 @@ export default function Header() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="#" className="hover:underline">
+                                    <Link href="/termos-e-condicoes" className="hover:underline">
                                         Termos &amp; Condições
                                     </Link>
                                 </li>

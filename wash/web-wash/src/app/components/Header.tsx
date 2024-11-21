@@ -24,7 +24,6 @@ export default function Header() {
     const router = useRouter();
 
     useEffect(() => {
-        // Fechar o menu sempre que a rota mudar ou o cliente logado mudar
         setIsMenuOpen(false);
     }, [pathname, idClienteLogado]);
 
@@ -37,8 +36,6 @@ export default function Header() {
                     'Authorization': `${Cookies.get("x-access-token")}`
                 }
             });
-
-            console.log(response)
 
             if (response.ok) {
                 mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });

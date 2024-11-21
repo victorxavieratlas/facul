@@ -160,8 +160,6 @@ export const createUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     const { id } = req.params
 
-
-
     try {
         const user = await userClient.delete({
             where: { id: String(id) }
@@ -173,7 +171,7 @@ export const deleteUser = async (req, res) => {
                 userId: id
             }
         })
-        res.status(200).json({ data: user })
+        res.status(200).json({ msg: "Usuário deletado!" })
     } catch (error) {
         res.status(400).json(error)
     }

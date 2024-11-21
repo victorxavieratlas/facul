@@ -63,10 +63,7 @@ export default function Panel() {
                 }
             });
 
-            console.log(response.ok)
-
             if (response.ok) {
-                console.log('Verified token!');
                 router.replace(`/painel/${Cookies.get("user_login_id")}`);
                 mudaLogin({ userId: String(Cookies.get("user_login_id")) || null, userName: Cookies.get("x-user-name") || "" });
             } else {
@@ -115,7 +112,7 @@ export default function Panel() {
         try {
             const response = await fetch(`${apiBaseUrl}/profiles/${profileId}`, { cache: 'no-store' });
             const data = await response.json();
-            console.log('API response:', data);
+            // console.log('API response:', data);
 
             if (!response.ok) {
                 console.log('Error fetching profile:', data.error || response.statusText);

@@ -10,8 +10,6 @@ const userClient = new PrismaClient().user
 export const userLogin = async (req, res) => {
     const { email, password } = req.body
 
-    console.log(email, password)
-
     const incorrectLoginMessage = {
         id: 0,
         msg: "Erro: Email ou senha incorretos!"
@@ -30,14 +28,13 @@ export const userLogin = async (req, res) => {
                     include: {
                         images: true,
                         states: true,
-                        // cities: true,
                         schedules: true,
                         workingHours: true
                     }
                 }
             }
         })
-        // console.log(user)
+
         if (user == null) {
             res.status(400).json(incorrectLoginMessage)
             return
@@ -51,8 +48,7 @@ export const userLogin = async (req, res) => {
                 process.env.JWT_KEY,
                 { expiresIn: "1h" }
             )
-            console.log(user)
-            console.log(`token: ${token}, userId: ${user.id}, userName: ${user.name}, profileId: ${user.profile.id}`)
+
             res.status(201).json({ token: token, userId: user.id, userName: user.name, profileId: user.profile.id })
         }
         else {
