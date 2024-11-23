@@ -131,10 +131,12 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             if (response.ok) {
                 return data; // Retorne image URL e image File Name
             } else {
+                setLoading(false)
                 console.error(data.error);
                 return null;
             }
         } catch (error) {
+            setLoading(false)
             console.error('Error uploading image:', error);
             return null;
         }
@@ -154,9 +156,11 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
             if (!response.ok) {
                 console.log('Image deleted successfully');
             } else {
+                setLoading(false)
                 console.error('Error deleting image:', response.statusText);
             }
         } catch (error) {
+            setLoading(false)
             console.error('Error deleting image:', error);
         }
     };
@@ -282,6 +286,9 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
 
         if (!selectedImageFile) {
             console.log('aguardando upload da imagem')
+            setLoading(false)
+            toast.error("Por favor, selecione uma imagem válida!");
+            return
         } else {
             const imageData = await uploadImage();
             if (!imageData) {
@@ -985,6 +992,8 @@ const ProfileForm = ({ profileIncomplete }: { profileIncomplete: ProfileIncomple
                     </div>
                 </div>
             )}
+            <Toaster richColors position='top-right' />
+            <Toaster richColors position='bottom-right' />
         </div>
     );
 };

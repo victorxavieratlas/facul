@@ -31,7 +31,7 @@ export default function Header() {
                                     <a href="https://flowbite.com/" className="hover:underline">Informações da empresa</a>
                                 </li>
                                 <li>
-                                    <a href="https://tailwindcss.com/" className="hover:underline">Contato</a>
+                                    <a href="https://tailwindcss.com/" className="hover:underline">Fale Conosco</a>
                                 </li>
                             </ul>
                         </div>

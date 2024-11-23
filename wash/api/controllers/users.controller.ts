@@ -124,7 +124,7 @@ export const createUser = async (req, res) => {
                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
                         <!-- Cabeçalho -->
                         <div style="padding: 20px; text-align: center;">
-                        <img src="wash/api/public/logo2.svg" alt="Logo Lavar Auto" style="width: 120px;">
+                        <img src="https://br-lv-image-logo.s3.us-east-1.amazonaws.com/logo-on.png" alt="Logo Lavar Auto" style="width: 120px;">
                         </div>
                         <!-- Conteúdo -->
                         <div style="padding: 30px 20px; text-align: center;">
@@ -256,7 +256,7 @@ export const generateCode = async (req, res) => {
                         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
                             <!-- Cabeçalho -->
                             <div style="padding: 20px; text-align: center;">
-                            <img src="https://www.creativefabrica.com/wp-content/uploads/2021/02/15/Flat-car-wash-logo-background-Best-logo-Graphics-8633754-1-312x208.png" alt="Logo Lavar Auto" style="width: 120px;">
+                            <img src="https://br-lv-image-logo.s3.us-east-1.amazonaws.com/logo-on.png" alt="Logo Lavar Auto" style="width: 120px;">
                             </div>
                             <!-- Conteúdo -->
                             <div style="padding: 30px 20px; text-align: center;">
@@ -445,7 +445,7 @@ export const emailValidate = async (req, res) => {
                         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
                             <!-- Cabeçalho -->
                             <div style="padding: 20px; text-align: center;">
-                            <img src="https://www.creativefabrica.com/wp-content/uploads/2021/02/15/Flat-car-wash-logo-background-Best-logo-Graphics-8633754-1-312x208.png" alt="Logo Lavar Auto" style="width: 120px;">
+                            <img src="https://br-lv-image-logo.s3.us-east-1.amazonaws.com/logo-on.png" alt="Logo Lavar Auto" style="width: 120px;">
                             </div>
                             <!-- Conteúdo -->
                             <div style="padding: 30px 20px; text-align: center;">
