@@ -3,6 +3,7 @@ import "./globals.css"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import ClienteProvider from "./context/ClienteContext"
+import ModalCookieConsent from "./components/ModalCookieConsent"
 
 export const metadata: Metadata = {
   title: "Estéticas automotivas - Lavar Auto",
@@ -42,6 +43,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <ModalCookieConsent />
         </ClienteProvider>
       </body>
     </html>
