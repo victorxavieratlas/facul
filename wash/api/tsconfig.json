@@ -20,6 +20,6 @@
       "resolveJsonModule": true,
       "baseUrl": "api"
     },
-    "include": ["**/*.ts", "**/**.*.ts", "index.ts"],
+    "include": ["**/*.ts", "**/**.*.ts", "index.ts", "src/types/custom.d.ts"],
     "exclude": ["node_modules"]
   }

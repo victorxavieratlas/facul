@@ -21,7 +21,19 @@ export const userLogin = async (req, res) => {
     }
 
     try {
-        const user = await userClient.findUnique({ where: { email } })
+        const user = await userClient.findUnique({ 
+            where: { email },
+            include: {
+                profile: {
+                    include: {
+                        images: true,
+                        states: true,
+                        schedules: true,
+                        workingHours: true
+                    }
+                }
+            }
+        })
 
         if (user == null) {
             res.status(400).json(incorrectLoginMessage)
@@ -32,12 +44,12 @@ export const userLogin = async (req, res) => {
             const token = jwt.sign({
                 userId: user.id,
                 userName: user.name
-              },
+            },
                 process.env.JWT_KEY,
                 { expiresIn: "1h" }
-              )
+            )
 
-            res.status(200).json({data: token})
+            res.status(201).json({ token: token, userId: user.id, userName: user.name, profileId: user.profile.id })
         }
         else {
             res.status(400).json(incorrectLoginMessage)

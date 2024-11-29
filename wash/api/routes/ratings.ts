@@ -51,7 +51,7 @@ router.get("/profile/:profileId", async (req, res) => {
   try {
       const ratings = await prisma.rating.findMany({
           where: {
-              profileId: Number(profileId)
+              profileId: String(profileId)
           }
       })
       res.status(200).json(ratings)

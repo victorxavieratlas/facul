@@ -9,17 +9,19 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(uuid(7)) @db.Uuid
+  status    Int?      @default(0)
   profile   Profile?
   role      Role      @default(USER)
   email     String    @unique
   password  String
   name      String?
+  logs      Log[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -28,31 +30,38 @@ model User {
 }
 
 model Profile {
-  id               Int            @id @default(autoincrement())
-  user             User           @relation(fields: [userId], references: [id])
-  userId           Int            @unique
-  phone            String?        @db.VarChar(20)
-  bio              String?
-  startDay         String?        @db.VarChar(30)
-  finalDay         String?        @db.VarChar(30)
-  minPrice         Decimal?       @db.Decimal(9, 2)
-  maxPrice         Decimal?       @db.Decimal(9, 2)
-  verified         Boolean        @default(false)
+  id               String            @id @default(uuid(7)) @db.Uuid
+  status           Int?              @default(0)
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String            @unique @db.Uuid
+  name             String?           @db.VarChar(30)
+  phone            String?           @db.VarChar(20)
+  bio              String?           @db.Text
+  openHour         String?           @db.VarChar(5)
+  closeHour        String?           @db.VarChar(5)
+  startDay         String?           @db.VarChar(30)
+  finalDay         String?           @db.VarChar(30)
+  minPrice         Decimal?          @db.Decimal(9, 2)
+  maxPrice         Decimal?          @db.Decimal(9, 2)
+  verified         Boolean           @default(false)
   images           Image[]
   schedules        Schedule[]
   workingHours     WorkingHour[]
   hoursPoints      HourPoints[]
   states           State[]
-  cities           City[]
+  profileLocation  ProfileLocation[]
   citiesZones      CityZone[]
   districts        District[]
   districtsZones   DistrictZone[]
   ratings          Rating[]
   categories       Category[]
   plans            Plan[]
+  services         Service[]
   totalPointsPlans Int?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  numberOfRatings  Int?
+  totalOfRatings   Int?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   deletedAt        DateTime?
 
   @@map("profiles")
@@ -60,8 +69,8 @@ model Profile {
 
 model Image {
   id        Int       @id @default(autoincrement())
-  profile   Profile   @relation(fields: [profileId], references: [id])
-  profileId Int
+  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String    @db.Uuid
   url       String
   published Boolean   @default(false)
   createdAt DateTime  @default(now())
@@ -73,8 +82,8 @@ model Image {
 
 model Schedule {
   id           Int           @id @default(autoincrement())
-  profile      Profile       @relation(fields: [profileId], references: [id])
-  profileId    Int
+  profile      Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId    String        @db.Uuid
   day          Day
   isWorkingDay Boolean       @default(false)
   workingHours WorkingHour[]
@@ -88,8 +97,8 @@ model Schedule {
 
 model WorkingHour {
   id          Int          @id @default(autoincrement())
-  profile     Profile      @relation(fields: [profileId], references: [id])
-  profileId   Int
+  profile     Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId   String       @db.Uuid
   schedule    Schedule     @relation(fields: [scheduleId], references: [id])
   scheduleId  Int
   hoursPoints HourPoints[]
@@ -102,8 +111,8 @@ model WorkingHour {
 
 model HourPoints {
   id            Int         @id @default(autoincrement())
-  profile       Profile     @relation(fields: [profileId], references: [id])
-  profileId     Int
+  profile       Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId     String      @db.Uuid
   schedule      Schedule    @relation(fields: [scheduleId], references: [id])
   scheduleId    Int
   workingHour   WorkingHour @relation(fields: [workingHourId], references: [id])
@@ -117,11 +126,10 @@ model HourPoints {
   @@map("hour-points")
 }
 
-//Adicionar o numberOfRatings e o totalOfRatings na tabela profile e talvez alterar o nome nessa
 model Rating {
   id              Int       @id @default(autoincrement())
-  profile         Profile   @relation(fields: [profileId], references: [id])
-  profileId       Int
+  profile         Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId       String    @db.Uuid
   comment         String
   numberOfRatings Int
   totalOfRatings  Int
@@ -144,31 +152,81 @@ model Category {
 }
 
 model State {
-  id        Int       @id @default(autoincrement())
-  name      String
-  cities    City[]
-  profiles  Profile[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id              Int               @id
+  name            String
+  cities          City[]
+  profiles        Profile[]
+  profileLocation ProfileLocation[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
 
   @@map("states")
 }
 
 model City {
-  id             Int            @id @default(autoincrement())
-  name           String
-  state          State          @relation(fields: [stateId], references: [id])
-  stateId        Int
-  cityZones      CityZone[]
-  districts      District[]
-  districtsZones DistrictZone[]
-  profiles       Profile[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  deletedAt      DateTime?
+  id              Int               @id
+  uf              String            @db.VarChar(2)
+  name            String
+  state           State             @relation(fields: [stateId], references: [id])
+  stateId         Int
+  profileLocation ProfileLocation[]
+  cityZones       CityZone[]
+  districts       District[]
+  districtsZones  DistrictZone[]
+  neighborhoods   Neighborhoods[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
 
   @@map("cities")
+}
+
+model ProfileLocation {
+  profile           Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId         String        @db.Uuid
+  city              City          @relation(fields: [cityId], references: [id])
+  cityId            Int
+  neighborhood      Neighborhoods @relation(fields: [neighborhoodsId], references: [id])
+  neighborhoodsId   Int
+  zone              Zone          @relation(fields: [zoneId], references: [id])
+  zoneId            Int
+  state             State         @relation(fields: [stateId], references: [id])
+  stateId           Int
+  address           String?
+  addressNumber     String?
+  addressCEP        String?
+  addressComplement String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  deletedAt         DateTime?
+
+  @@id([profileId, cityId, stateId]) // Chave composta para garantir unicidade
+}
+
+model Zone {
+  id              Int               @id @default(autoincrement())
+  name            String
+  profileLocation ProfileLocation[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+
+  @@map("zones")
+}
+
+model Neighborhoods {
+  id              Int               @id
+  idCity          Int
+  city            City              @relation(fields: [cityId], references: [id])
+  cityId          Int
+  name            String
+  profileLocation ProfileLocation[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+
+  @@map("neighborhoods")
 }
 
 model CityZone {
@@ -257,4 +315,40 @@ enum PointType {
   Out
 
   @@map("point-type")
+}
+
+model Code {
+  id        Int       @id @default(autoincrement())
+  email     String
+  code      String    @db.VarChar(6)
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  @@map("codes")
+}
+
+model Log {
+  id          Int      @id @default(autoincrement())
+  description String   @db.VarChar(80)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @db.Uuid
+
+  @@map("logs")
+}
+
+model Service {
+  id          Int       @id @default(autoincrement())
+  profile     Profile   @relation(fields: [profileId], references: [id])
+  profileId   String    @db.Uuid
+  title       String
+  description String
+  value       String    @db.VarChar(5)
+  time        String    @db.VarChar(5)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@map("service")
 }

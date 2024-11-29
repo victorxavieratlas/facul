@@ -106,7 +106,7 @@ router.get("/profile/:profileId", async (req, res) => {
     try {
         const schedule = await prisma.schedule.findMany({
             where: {
-                profileId: Number(profileId)
+                profileId: String(profileId)
             },
             include: {
                 workingHours: true,
@@ -130,7 +130,7 @@ router.get("/day/profile/:profileId/list", async (req, res) => {
     try {
         const schedule = await prisma.schedule.findMany({
             where: {
-                profileId: Number(profileId),
+                profileId: String(profileId),
                 day: DayEnum[day]
             },
             include: {
@@ -159,7 +159,7 @@ router.get("/days/profile/:profileId/list", async (req, res) => {
     try {
         const schedule = await prisma.schedule.findMany({
             where: {
-                profileId: Number(profileId),
+                profileId: String(profileId),
                 day: {
                     in: days.map(day => DayEnum[day]) // Use the 'in' operator to filter by multiple days
                 }
@@ -211,7 +211,7 @@ router.post("/create/:profileId", async (req, res) => {
             prisma.schedule.create({
                 data: {
                     day: DayEnum[day],
-                    profileId: Number(profileId)
+                    profileId: String(profileId)
                 }
             })
         );
