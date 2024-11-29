@@ -74,7 +74,6 @@ export default async function cityDetails({
 	const listProfiles = profiles.map((profile: profileProps) => (
 		<Cards key={profile.id} profile={profile} />
 	))
-	console.log(listProfiles)
 	return (
 		<div className="ml-4 sm:ml-48 mt-4">
 			<nav className="flex" aria-label="Breadcrumb">
@@ -118,7 +117,7 @@ export default async function cityDetails({
 
 			<div>
 				{!listProfiles.length ?
-					<div className="w-full flex flex-col items-center text-center pr-5 sm:pr-48 mb-48">
+					<div className="w-full flex flex-col items-center text-center pr-5 sm:pr-48 mb-60">
 						<h2 className="text-md sm:text-lg font-semibold text-gray-600 mt-16 mb-12">
 							Nenhuma estética automotiva encontrada.
 						</h2>
@@ -127,14 +126,14 @@ export default async function cityDetails({
 							Seja o primeiro e domine a cidade!
 						</h3>
 
-						<div className="mt-8">
-							<Link href="/cadastrar" className="bg-blue-500 text-white font-bold py-3 px-20 rounded-lg hover:bg-blue-600 transition duration-300">
+						<div className="mt-8 min-w-60 sm:min-w-72">
+							<Link href="/cadastrar" className="bg-blue-500 text-white font-bold py-3 px-14 sm:px-20 rounded-lg hover:bg-blue-600 transition duration-300">
 								Anunciar grátis
 							</Link>
 						</div>
 					</div>
 					:
-					<ul className=" grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-5 sm:mr-20 sm:pr-28 mb-10 ml-2 mr-4">
+					<ul className=" grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-5 sm:mr-20 sm:pr-28 mb-60 ml-2 mr-4">
 						{listProfiles}
 					</ul>
 				}

@@ -193,20 +193,20 @@ export default function Login() {
                     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
                         <form className="space-y-6"
                             onSubmit={handleSubmit(registerVerify)}>
-                            <h5 className="text-xl font-medium text-gray-900 text-center">Cadastre-se grátis na <span className={`text-2xl text-blue-500 ${fredoka.className}`}> lavar auto</span></h5>
+                            <h5 className="text-xl font-medium text-gray-900 text-center">Cadastre-se grátis na <span className={`text-2xl font-bold tracking-wide text-balance whitespace-nowrap text-blue-500 ${fredoka.className}`}> lavar auto</span></h5>
                             <div>
-                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Seu email</label>
+                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Digite seu e-mail</label>
                                 <input type="email" id="email" className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="email@email.com"
                                     required {...register("email")} />
                             </div>
                             <div>
-                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Sua senha</label>
+                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Digite sua senha</label>
                                 <input type="password" id="password" placeholder="••••••••" className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                                     required {...register("password")} />
                             </div>
 
                             <div className="mb-10">
-                                <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900">Confirmar nova senha</label>
+                                <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900">Confirme sua senha</label>
                                 <input type="password" id="confirm-password" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out" placeholder="********"
                                     required {...register("confirmPassword")} />
                                 <ul className="ml-4 mt-3 space-y-1 font-semibold">
@@ -232,8 +232,8 @@ export default function Login() {
                             </div>
 
                             <div>
-                                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">Nome da estética</label>
-                                <input type="string" id="name" placeholder="Estética Lav..." className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
+                                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">Digite o nome da estética automotiva</label>
+                                <input type="string" id="name" placeholder="Lavar Auto..." className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 border-2 hover:border-blue-500 focus:outline-none transition duration-300 ease-in-out"
                                     required {...register("name")} />
                             </div>
 

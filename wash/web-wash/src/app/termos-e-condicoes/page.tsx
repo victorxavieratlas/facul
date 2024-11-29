@@ -16,7 +16,7 @@ export default async function PrivacyPolicy() {
                         <span className={`font-extrabold tracking-wide text-blue-500 ${fredoka.className}`}>lavar auto</span>
                     </h1>
                     <h2 className="text-lg sm:text-1xl font-semibold text-gray-600 text-balance mt-4 mb-4">
-                        <span className="clear-left block">Bem-vindo(a) à Lavar Auto, a maior plataforma de estéticas automotivas do Brasil. Ao utilizar nossos serviços, você concorda com os termos e condições aqui estabelecidos. A Lavar Auto atua exclusivamente como um local de anúncios, conectando estéticas automotivas (anunciantes) a clientes interessados. Não nos responsabilizamos pelos serviços prestados pelos anunciantes.</span>
+                        <span className="clear-left block">Bem-vindo(a) à Lavar Auto, a primeira plataforma de estéticas automotivas do Brasil. Ao utilizar nossos serviços, você concorda com os termos e condições aqui estabelecidos. A Lavar Auto atua exclusivamente como um local de anúncios, conectando estéticas automotivas (anunciantes) a clientes interessados. Não nos responsabilizamos pelos serviços prestados pelos anunciantes.</span>
                     </h2>
                     <div className="">
                         <p className="text-lg text-gray-700 m-2">

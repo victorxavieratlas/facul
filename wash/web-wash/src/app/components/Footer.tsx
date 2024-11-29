@@ -21,17 +21,17 @@ export default function Header() {
                             alt="logotipo da CarWash em azul claro"
                         />
                         {/* <img src="./logo2.svg" className="h-8" alt="Logo e logotipo da CarWash e azul claro" /> */}
-                        <span className={`self-center text-2xl font-semibold tracking-wide text-blue-500 ${fredoka.className}`}>lavar auto</span>
+                        <span className={`self-center min-w-32 text-2xl font-semibold tracking-wide text-blue-500 ${fredoka.className}`}>lavar auto</span>
                     </Link>
-                    <div className="flex justify-center sm:grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 sm:ml-64">
-                        <div className="">
+                    <div className="flex justify-center sm:grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2 md:ml-64 pt-4 pd:pt-0">
+                        <div className="text-center md:text-left">
                             <h2 className="mb-6 text-sm font-semibold uppercase text-white">Recursos</h2>
                             <ul className="text-gray-400 font-medium">
                                 <li className="mb-4">
-                                    <a href="https://flowbite.com/" className="hover:underline">Informações da empresa</a>
+                                    <a href="/informacoes-da-empresa" className="hover:underline">Informações da Empresa</a>
                                 </li>
                                 <li>
-                                    <a href="https://tailwindcss.com/" className="hover:underline">Fale Conosco</a>
+                                    <a href="fale-conosco" className="hover:underline">Fale Conosco</a>
                                 </li>
                             </ul>
                         </div>
@@ -46,7 +46,7 @@ export default function Header() {
                                 </li>
                             </ul>
                         </div> */}
-                        <div className="ml-4">
+                        <div className="md:ml-4 text-center md:text-left">
                             <h2 className="mb-6 text-sm font-semibold uppercase text-white">Legal</h2>
                             <ul className="text-gray-400 font-medium">
                                 <li className="mb-4">

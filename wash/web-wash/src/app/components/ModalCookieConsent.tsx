@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Cookies from "js-cookie";
 import Image from 'next/image'
 import { Fredoka } from "next/font/google";
+import { usePathname } from 'next/navigation';
 
 const fredoka = Fredoka({
   subsets: ['latin'],
@@ -14,14 +15,24 @@ const fredoka = Fredoka({
 
 export default function CookieConsent() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  const excludedPaths = ['/politica-de-privacidade', '/termos-e-condicoes'];
 
   useEffect(() => {
     const consent = Cookies.get("cookie_consent");
-    if (!consent) {
+
+    if (excludedPaths.includes(pathname)) {
+      setIsOpen(false);
+      document.body.style.overflow = "auto";
+    } else if (!consent) {
       setIsOpen(true);
       document.body.style.overflow = "hidden";
+    } else {
+      setIsOpen(false);
+      document.body.style.overflow = "auto";
     }
-  }, []);
+  }, [pathname]);
 
   const handleAccept = () => {
     Cookies.set("cookie_consent", "true", { expires: 365 });

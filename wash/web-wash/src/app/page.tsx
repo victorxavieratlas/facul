@@ -163,42 +163,70 @@ export default async function Home() {
 
 			<div className="w-full sm:w-[100%] max-w-[1180px] mx-auto flex flex-col lg:flex-row lg:justify-between gap-4 relative lg:flex lg:flex-wrap sm:mt-20 mt-14 mb-4 sm:mb-4">
 				<h3 className="ml-4 max-w-sm sm:max-w-md font-bold text-xl sm:text-2xl text-gray-500">
-					Maior plataforma de estéticas automotivas do Brasil
+					Primeira Plataforma de Estéticas Automotivas do Brasil
 				</h3>
 				<div className="w-full m-4 ml-0 mt-0">
 					<h4 className="font-bold text-lg text-gray-500 mt-2 ml-2 p-2 px-2 sm:px-4">
 						Apresentação
 					</h4>
+
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
-						A Lavar Carro foi fundada em 2024 e é a primeira plataforma de estéticas automotivas do Brasil.
-						A paixão por automóveis limpos com os devidos e necessários cuidados é o foco princípal da
-						plataforma que visa transformar e melhorar a relação entre estéticas automotivas e clientes,
-						dando mais visibilidade para este mercado tão importante e em constante crescimento.
+						Fundada em 2024, a Lavar Auto é a primeira e mais completa plataforma de estéticas automotivas do Brasil. Movida pela paixão por carros limpos e bem cuidados, nosso objetivo principal é revolucionar e aprimorar a relação entre estéticas automotivas, lavagens de carro e clientes, oferecendo mais visibilidade a este mercado tão importante e em constante crescimento.
 					</p>
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
-						Desde o início, a plataforma oferece uma experiência única para estéticas automotivas e clientes,
-						onde as estéticas automotivas podem criar anúncios com informações de contato, serviços oferecidos e
-						dados importantes do negócio, e clientes podem fazer buscas por estados e cidades para escolher as
-						melhores estéticas automotivas confiáveis que supram suas necessidades.
+						Desde o início, a Lavar Auto proporciona uma experiência única para estéticas automotivas e clientes. As estéticas automotivas podem criar anúncios detalhados com informações de contato, serviços oferecidos como lavagem de carro, polimento, enceramento, detalhamento automotivo e limpeza interna, e dados importantes do negócio. Por outro lado, os clientes podem realizar buscas por estados e cidades, comparando preços, horários de atendimento e serviços disponíveis, garantindo a escolha das melhores estéticas automotivas confiáveis que atendam às suas necessidades.
 					</p>
+
 					<h4 className="font-bold text-lg text-gray-500 mt-4 p-2 px-2 sm:px-4">
-						Escontre estéticas automotivas por todo o Brasil
+						Encontre Estéticas Automotivas por Todo o Brasil
 					</h4>
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
-						A Lavar Carro oferece uma busca poderosa que permite encontrar as melhores estéticas automotivas
-						da cidade escolhida. Ao acessar a busca de uma cidade e o perfil da estética automotiva, é possível comparar valores, horários de
-						atendimento e serviços, garantindo as estéticas automotivas que encontrem mais clientes e que
-						clientes consigam ter certeza de qual estética automotiva vão escolher.
+						A Lavar Auto oferece uma poderosa ferramenta de busca que permite encontrar as melhores estéticas automotivas, lavagens de carro e serviços similares em qualquer cidade do Brasil. Ao acessar a busca de uma cidade e o perfil da estética automotiva, é possível comparar valores, horários de atendimento e serviços como lavagem de carro, polimento, enceramento, limpeza interna, hidratação de couro e cristalização de pintura, entre outros. Assim, garantimos que as estéticas automotivas alcancem mais clientes e que os clientes tenham a certeza de qual estética automotiva escolher.
 					</p>
+
 					<h4 className="font-bold text-lg text-gray-500 mt-4 p-2 px-2 sm:px-4">
-						Segurança é uma prioridade
+						Segurança e Confiança são Prioridades
 					</h4>
 					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
-						A plataforma preza por estéticas automotivas e clientes confiáveis e sérios, também,
-						contamos com diversos integrações de segurança para garantir a melhor experiência.
+						Nossa plataforma valoriza a segurança e confiabilidade tanto das estéticas automotivas quanto dos clientes. Contamos com diversas integrações de segurança e sistemas de avaliação para garantir a melhor experiência possível.
+					</p>
+
+					<h4 className="font-bold text-lg text-gray-500 mt-4 p-2 px-2 sm:px-4">
+						Por Que Escolher a Lavar Auto
+					</h4>
+					<p className="text-gray-500 text-lg mx-8 my-2 font-semibold">
+						Rede Ampla:
+					</p>
+					<p className="font-semibold text-lg text-gray-500 mx-10 mb-6">
+						- Com estéticas automotivas e lavagens de carro cadastradas em todo o Brasil, você tem acesso a uma vasta gama de opções.
+					</p>
+					<p className="text-gray-500 text-lg mx-8 mt-6 mb-2 font-semibold">
+						Comparação Fácil:
+					</p>
+					<p className="font-semibold text-lg text-gray-500 mx-10 mb-6">
+						- Compare preços, serviços e avaliações de clientes para encontrar a melhor opção para você.
+					</p>
+					<p className="text-gray-500 text-lg mx-8 mt-6 mb-2 font-semibold">
+						Agendamento Rápido:
+					</p>
+					<p className="font-semibold text-lg text-gray-500 mx-10 mb-6">
+						- Agende sua lavagem de carro ou serviço de detalhamento automotivo diretamente no contato da loja.
+					</p>
+
+					<h4 className="font-bold text-lg text-gray-500 mt-4 p-2 px-2 sm:px-4">
+						Experimente o Melhor em Estética Automotiva
+					</h4>
+					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
+						Seja para uma simples lavagem de carro ou um serviço completo de detalhamento automotivo, a Lavar Auto conecta você com profissionais que podem deixar seu carro como novo. Nossa plataforma é dedicada a ajudá-lo a encontrar serviços de alta qualidade, como polimento, enceramento, limpeza interna, hidratação de couro e muito mais.
+					</p>
+
+					<h4 className="font-bold text-lg text-gray-500 mt-4 p-2 px-2 sm:px-4">
+						Junte-se à Lavar Auto Hoje Mesmo
+					</h4>
+					<p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
+						Se você é proprietário de uma estética automotiva ou lava jato, cadastre-se agora e aumente a visibilidade do seu negócio. Se você é um cliente em busca dos melhores serviços de lavagem de carro e estética automotiva, comece sua busca conosco e encontre a melhor opção na sua cidade.
 					</p>
 				</div>
-
 			</div>
 
 			{/* Renderizando a lista de estados */}
