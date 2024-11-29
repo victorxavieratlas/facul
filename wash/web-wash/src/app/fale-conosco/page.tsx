@@ -16,16 +16,14 @@ export default async function Contact() {
                         <span className={`font-extrabold tracking-wide text-blue-500 ${fredoka.className}`}>lavar auto</span>
                     </h1>
                     <h2 className="text-lg sm:text-1xl font-semibold text-gray-600 text-balance mb-4 mt-4">
-                        <span className="clear-left block">A Lavar Auto é a primeira e mais completa plataforma de estéticas automotivas do Brasil, conectando clientes a serviços como lavagem de carro, polimento e detalhamento. Com uma ferramenta de busca poderosa, os usuários podem comparar preços, serviços e localizações para encontrar a melhor opção em sua cidade. Estéticas automotivas podem se cadastrar para aumentar a visibilidade do negócio e alcançar mais clientes.</span>
+                        <span className="clear-left block">Estamos aqui para ouvir você!</span>
+                        {/* <span className="clear-left block mt-2">Entre em contato pelo formulário de atendimento abaixo e responderemos em até três dias úteis.</span> */}
+                        <span className="clear-left block mt-2">Envie um e-mail para o contato abaixo e responderemos em até três dias úteis.</span>
                     </h2>
-                    <div className="w-full m-4 ml-0 mt-0">
+                    <div className="w-full m-4 ml-0 mt-0 mb-40">
                         <h4 className="font-bold text-lg text-gray-500 mt-2 ml-2 p-2 px-2 sm:px-4">
-                            Apresentação
+                            contato@lavarauto.com
                         </h4>
-
-                        <p className="font-semibold text-lg text-gray-500 p-2 px-4 sm:px-8">
-                            Fundada em 2024, a Lavar Auto é a primeira e mais completa plataforma de estéticas automotivas do Brasil. Movida pela paixão por carros limpos e bem cuidados, nosso objetivo principal é revolucionar e aprimorar a relação entre estéticas automotivas, lavagens de carro e clientes, oferecendo mais visibilidade a este mercado tão importante e em constante crescimento.
-                        </p>
 
                     </div>
                 </div>
